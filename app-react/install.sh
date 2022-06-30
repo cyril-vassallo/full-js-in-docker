@@ -1,7 +1,7 @@
 #!/bin/bash
 
 npm install
-npm run start
+npm run dev
 
 date=$(date)
 echo "$date !" >> install.log
