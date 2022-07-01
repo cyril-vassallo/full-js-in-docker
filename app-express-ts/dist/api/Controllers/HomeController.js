@@ -9,7 +9,9 @@ const home = function (id) {
     return {
         title: "homepage",
         authors: config_1.default.endpoint + "/authors",
-        author: config_1.default.endpoint + "/authors/" + id
+        author: config_1.default.endpoint + "/authors/" + id,
+        endpoint: config_1.default.endpoint,
+        linkLabel: "See the api here"
     };
 };
 exports.home = home;

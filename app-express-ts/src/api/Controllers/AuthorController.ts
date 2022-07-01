@@ -5,5 +5,7 @@ export const getAuthors: GetAuthors = function () {
 
 type GetAuthor  = (id: number) => object
 export const getAuthor: GetAuthor = function (id: number){
-    return { "author":  `author with id: ${id} was fetch, you can change the id in the url, all values accepted`}
+    return {
+        "author": `author with id: ${id} was fetch, you can change the id in the url, all values accepted`,
+    }
 }

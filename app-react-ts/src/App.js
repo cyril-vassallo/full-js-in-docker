@@ -1,30 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
-import React, { useEffect, useState } from 'react'
-
-
+import logo from "./logo.svg";
+import "./App.css";
+import React, { useEffect, useState } from "react";
 
 function App() {
-  const [apiResult, setApiResult ] = useState({ 
-    linkLabel: 'See express api here', 
-    endpoint: null
-  })
+  const [apiResult, setApiResult] = useState({
+    linkLabel: null,
+    endpoint: null,
+  });
 
-  const getAuthor = () => {
+  const getHome = () => {
     fetch("http://localhost:8080")
-      .then(function(response) { 
-        return response.json()
-      }).then(function(data) {
-        console.log(data)
-        setApiResult(data)
+      .then(function (response) {
+        return response.json();
       })
-
-  }
+      .then(function (data) {
+        console.log(data);
+        setApiResult(data);
+      });
+  };
 
   useEffect(() => {
-    getAuthor();
-  },[]);
-
+    getHome();
+  }, []);
 
   return (
     <div className="App">
@@ -39,7 +36,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-            {apiResult.linkLabel}
+          {apiResult.linkLabel}
         </a>
       </header>
     </div>

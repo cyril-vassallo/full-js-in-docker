@@ -6,6 +6,8 @@ const getAuthors = function () {
 };
 exports.getAuthors = getAuthors;
 const getAuthor = function (id) {
-    return { "author": `author with id: ${id} was fetch, you can change the id in the url, all values accepted` };
+    return {
+        "author": `author with id: ${id} was fetch, you can change the id in the url, all values accepted`,
+    };
 };
 exports.getAuthor = getAuthor;
