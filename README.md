@@ -3,13 +3,12 @@
 ## Content
 
 - app-express node/express backend
-- app-react react/typescript frontend  
+- app-react react/typescript frontend
 
 ## Commandes
 
 - install: make up
 - stop: make stop
 - restart: make start
-
-
-
+- compile TS: make watch
+- open pgAdmin : make pgadmin

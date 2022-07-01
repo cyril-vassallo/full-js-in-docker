@@ -1,39 +1,71 @@
-version: '3.9'
+version: "3.9"
 
-services: 
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-replaceme}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - app-fullstack-ts
+    restart: unless-stopped
 
-  app-express: 
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin:/root/.pgadmin
+
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    networks:
+      - app-fullstack-ts
+    restart: unless-stopped
+
+  app-express-ts:
     image: "node:14.15.4"
-    container_name: app-express
+    container_name: app-express-ts
     working_dir: /usr/www/app
     env_file:
-      - ./app-express/.env
-    ports: 
-      - ${EXPOSE_PORT_EXPRESS}:${EXPOSE_PORT_EXPRESS}
-    volumes: 
-      - "./app-express:/usr/www/app"
+      - app-express-ts/.env
+    ports:
+      - ${EXPOSE_PORT_EXPRESS:-8080}:${EXPOSE_PORT_EXPRESS:-8080}
+    volumes:
+      - "./app-express-ts:/usr/www/app"
     command: "/bin/sh install.sh"
-    networks: 
-      - app-fullstack
+    networks:
+      - app-fullstack-ts
 
-  app-react: 
+  app-react-ts:
     image: "node:14.15.4"
-    container_name: app-react
+    container_name: app-react-ts
     working_dir: /usr/www/app
     env_file:
-      - ./app-react/.env
-    ports: 
-      - ${EXPOSE_PORT_REACT}:${EXPOSE_PORT_REACT}
-    volumes: 
-      - "./app-react:/usr/www/app/"
+      - ./app-react-ts/.env
+    ports:
+      - ${EXPOSE_PORT_REACT:-3000}:${EXPOSE_PORT_REACT:-3000}
+    volumes:
+      - "./app-react-ts:/usr/www/app/"
     command: "/bin/sh  install.sh"
-    networks: 
-      - app-fullstack
+    networks:
+      - app-fullstack-ts
     depends_on:
-      - app-express
-
-
-
+      - app-express-ts
 
 networks:
-  app-fullstack:
+  app-fullstack-ts:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
