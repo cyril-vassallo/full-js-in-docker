@@ -1,16 +1,16 @@
 version: "3.9"
 
 services:
-  app-express:
+  app-nest:
     image: "node:14.15.4"
-    container_name: app-express
+    container_name: app-nest
     working_dir: /usr/www/app
     env_file:
-      - ./app-express/.env
+      - ./app-nest/.env
     ports:
-      - ${EXPOSE_PORT_EXPRESS:-8080}:${EXPOSE_PORT_EXPRESS:-8080}
+      - ${EXPOSE_PORT_NEST:-8080}:${EXPOSE_PORT_NEST:-8080}
     volumes:
-      - "./app-express:/usr/www/app"
+      - "./app-nest:/usr/www/app"
     command: "/bin/sh install.sh"
     networks:
       - app-fullstack
@@ -29,7 +29,7 @@ services:
     networks:
       - app-fullstack
     depends_on:
-      - app-express
+      - app-nest
 
 networks:
   app-fullstack:

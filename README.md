@@ -2,7 +2,7 @@
 
 ## Content
 
-- app-express node/express backend
+- app-express node/nestjs backend
 - app-next nextjs/tailwindcss frontend
 
 ## Commandes

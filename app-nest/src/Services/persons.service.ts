@@ -1,12 +1,11 @@
-const express = require("express");
-const router = express.Router();
+import { Injectable } from '@nestjs/common';
+import { PersonInterface } from '../Interfaces/person.interface'
 
-/**
- * GET request to /authors
- */
-router.get("/", (req, res, next) => {
-  res.status(200).json({
-    persons: [
+
+@Injectable()
+export class PersonsService {
+  getPersons(): PersonInterface[] {
+    return [
       {
         name: "Cyril Vassallo",
         job: "Web Developer",
@@ -35,19 +34,6 @@ router.get("/", (req, res, next) => {
           "I have been notice in million of code line just because nobody know who i am",
         photo: "/images/john-doe.png",
       },
-    ],
-    to_nextjs: "http://localhost:3000/persons",
-  });
-});
-
-/**
- * GET request to /author/:id
- */
-router.get("/:id", (req, res, next) => {
-  res.status(200).json({
-    message: `author with id: ${req.params.id} was fetch, you can change the id in the url, all values accepted`,
-    id: req.params.id,
-  });
-});
-
-module.exports = router;
+    ];
+  }
+}
