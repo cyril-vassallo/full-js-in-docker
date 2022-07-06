@@ -1,39 +1,35 @@
-version: '3.9'
+version: "3.9"
 
-services: 
-
-  app-express: 
+services:
+  app-express:
     image: "node:14.15.4"
     container_name: app-express
     working_dir: /usr/www/app
     env_file:
       - ./app-express/.env
-    ports: 
-      - ${EXPOSE_PORT_EXPRESS}:${EXPOSE_PORT_EXPRESS}
-    volumes: 
+    ports:
+      - ${EXPOSE_PORT_EXPRESS:-8080}:${EXPOSE_PORT_EXPRESS:-8080}
+    volumes:
       - "./app-express:/usr/www/app"
     command: "/bin/sh install.sh"
-    networks: 
+    networks:
       - app-fullstack
 
-  app-react: 
+  app-next:
     image: "node:14.15.4"
-    container_name: app-react
+    container_name: app-next
     working_dir: /usr/www/app
     env_file:
-      - ./app-react/.env
-    ports: 
-      - ${EXPOSE_PORT_REACT}:${EXPOSE_PORT_REACT}
-    volumes: 
-      - "./app-react:/usr/www/app/"
+      - ./app-next/.env
+    ports:
+      - ${EXPOSE_PORT_NEXT:-3000}:${EXPOSE_PORT_NEXT:-3000}
+    volumes:
+      - "./app-next:/usr/www/app/"
     command: "/bin/sh  install.sh"
-    networks: 
+    networks:
       - app-fullstack
     depends_on:
       - app-express
-
-
-
 
 networks:
   app-fullstack:

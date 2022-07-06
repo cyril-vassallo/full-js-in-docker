@@ -1,15 +1,13 @@
-# Javascript home made stack
+# Javascript home made boiler plate
 
 ## Content
 
 - app-express node/express backend
-- app-react react/typescript frontend  
+- app-next nextjs/tailwindcss frontend
 
 ## Commandes
 
-- install: make up
-- stop: make stop
-- restart: make start
-
-
-
+- start and create container: make up
+- kill containers: make down
+- stop containers: make stop
+- restart containers: make start
