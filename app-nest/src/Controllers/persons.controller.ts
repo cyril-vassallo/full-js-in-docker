@@ -1,13 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { PersonsService } from '../Services/persons.service';
-import { PersonInterface } from '../Interfaces/person.interface';
+import { PersonsAndMeta } from '../Types/types';
 import { ConfigService } from '@nestjs/config';
 
-
-type PersonsAndMeta = {
-  persons: PersonInterface[]
-  toNextJs : string
-}
 
 @Controller('/persons')
 export class PersonsController {
@@ -15,6 +10,6 @@ export class PersonsController {
 
   @Get('/')
   getPersons(): PersonsAndMeta {
-    return { persons: this.personsService.getPersons(), toNextJs: this.configService.get<string>('NEXTJS')+ '/persons' };
+    return { data: this.personsService.getPersons(), meta: { sourceName: "Persons", frontEndUrl: this.configService.get<string>('NEXTJS') + '/persons' } } ;
   }
 }

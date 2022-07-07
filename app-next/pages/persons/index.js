@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from "react";
-import SingleCard from "../../components/cards/singleCard";
+import SingleCard from "../../components/cards/ProfileCard";
+import DataFetch from "../../services/DataFetch";
 
 export default function Persons() {
   const [persons, setPersons] = useState([]);
 
-  const fetchPersons = async () => {
-    await fetch("http://localhost:8080/persons")
-      .then((response) => response.json())
-      .then((fetchedData) => {
-        setPersons(fetchedData.persons);
-      });
-  };
-
   useEffect(() => {
-    fetchPersons();
+    DataFetch.updateState("get", setPersons, "/persons");
   }, []);
 
   return (
     <div className="bg-slate-100">
-      <h1 className="text-3xl text-center  p-5">
+      <h1 className="text-3xl text-center p-5">
         <span className="text-purple-500">Tailwindcss </span>
-        example in
-        <span className="text-blue-500"> Next.js</span>
+        styling example
       </h1>
+      <p className="mt-3 text-2xl text-center my-5">
+        Path to the component{" "}
+        <code className="p-3 font-mono text-lg bg-white rounded-md">
+          pages/persons/index.js
+        </code>
+      </p>
       <p className="text-center">
         See{" "}
         <a
@@ -31,9 +29,9 @@ export default function Persons() {
         >
           here
         </a>{" "}
-        the local api running on express server providing data{" "}
+        the local api running on nest.js providing data{" "}
       </p>
-      <p className="text-center">
+      <p className="text-center my-5">
         <a className="underline text-blue-500" href="http://localhost:3000">
           back to home
         </a>{" "}

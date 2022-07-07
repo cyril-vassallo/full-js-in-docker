@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { HomeController } from './Controllers/home.controller';
 import { PersonsController } from './Controllers/persons.controller';
-import { AppService } from './app.service'
+import { HomeService } from './Services/home.service'
 import { PersonsService } from './Services/persons.service';
 import { ConfigModule } from '@nestjs/config';
 
@@ -9,7 +9,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [ConfigModule.forRoot({
     isGlobal : true
   })],
-  controllers: [AppController, PersonsController],
-  providers: [AppService, PersonsService],
+  controllers: [HomeController, PersonsController],
+  providers: [HomeService, PersonsService],
 })
 export class AppModule {}

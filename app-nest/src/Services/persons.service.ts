@@ -21,7 +21,7 @@ export class PersonsService {
         photo: "/images/sarah-dayan.jpg",
       },
       {
-        name: "Grafiart",
+        name: "Grafikart",
         job: "Web Developer",
         intro:
           "See my Tailwindcss tutorial on  you tube : https://www.youtube.com/watch?v=D6-g6JgiUIs",

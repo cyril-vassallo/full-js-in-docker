@@ -1,4 +1,4 @@
-export default function SingleCard({ person }) {
+export default function ProfileCard({ person }) {
   return (
     <figure className="p-6 bg-white mt-6 text-left border w-96 rounded-xl hover:text-blue-600 shadow-lg shadow-zinc-300 focus:text-blue-600 h-auto mb-6 grayscale hover:grayscale-0">
       <img
