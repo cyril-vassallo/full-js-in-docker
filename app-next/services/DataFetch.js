@@ -18,6 +18,13 @@ const DataFetch = {
       throw new Error(e);
     }
   },
-};
+
+
+
+  post: async function (path = null, callback = null, payload = {}) {
+    //let you enjoy to dev this one 
+  }
+
+},
 
 export default DataFetch;
