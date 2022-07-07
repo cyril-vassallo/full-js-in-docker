@@ -1,17 +1,15 @@
 const DataFetch = {
   domaine: "http://localhost:8080",
 
-  updateState: async function (
-    method = "get",
-    useEffectSetHookMethod = null,
-    path = ""
-  ) {
+  get: async function (path = null, callback = null) {
     try {
-      if (method.toLowerCase() === "get" && useEffectSetHookMethod !== null) {
+      if (path !== null && callback !== null) {
         await fetch(this.domaine + path)
           .then((response) => response.json())
           .then((fetched) => {
-            useEffectSetHookMethod(fetched.data);
+            if (callback !== null) {
+              callback(fetched.data);
+            }
           });
       } else {
         throw new Error("Invalid parameter pass to the method");

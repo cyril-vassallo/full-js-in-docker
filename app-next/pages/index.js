@@ -8,9 +8,15 @@ export default function Home() {
   const [features, setFeatures] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const getResult = (features = null) => {
+    if (features != null) {
+      setIsLoading(false);
+      setFeatures(features);
+    }
+  };
+
   useEffect(() => {
-    DataFetch.updateState("get", setFeatures);
-    setIsLoading(false);
+    DataFetch.get("/", getResult);
   }, []);
 
   return (
@@ -42,10 +48,13 @@ export default function Home() {
         </p>
 
         <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <Loader isLoading={isLoading} />
-          {features.map((feature) => {
-            return <FeatureCard feature={feature} />;
-          })}
+          {isLoading ? (
+            <Loader />
+          ) : (
+            features.map((feature, index) => {
+              return <FeatureCard feature={feature} key={index} />;
+            })
+          )}
         </div>
       </main>
 

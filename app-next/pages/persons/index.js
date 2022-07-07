@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
 import SingleCard from "../../components/cards/ProfileCard";
 import DataFetch from "../../services/DataFetch";
+import { Loader } from "../../components/commons/Loader";
 
 export default function Persons() {
   const [persons, setPersons] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getResult = (persons = null) => {
+    if (persons != null) {
+      setIsLoading(false);
+      setPersons(persons);
+    }
+  };
 
   useEffect(() => {
-    DataFetch.updateState("get", setPersons, "/persons");
+    DataFetch.get("/persons", getResult);
   }, []);
 
   return (
@@ -36,10 +45,15 @@ export default function Persons() {
           back to home
         </a>{" "}
       </p>
+
       <div className="flex m-auto flex-wrap justify-around max-w-4xl mt-6 sm:w-full">
-        {persons.map((person, index) => {
-          return <SingleCard className="w-1/2" person={person} key={index} />;
-        })}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          persons.map((person, index) => {
+            return <SingleCard className="w-1/2" person={person} key={index} />;
+          })
+        )}
       </div>
     </div>
   );
