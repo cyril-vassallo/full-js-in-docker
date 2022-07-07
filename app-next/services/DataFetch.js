@@ -19,12 +19,9 @@ const DataFetch = {
     }
   },
 
-
-
   post: async function (path = null, callback = null, payload = {}) {
-    //let you enjoy to dev this one 
-  }
-
-},
+    //let you enjoy to dev this one
+  },
+};
 
 export default DataFetch;
