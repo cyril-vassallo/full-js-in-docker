@@ -6,14 +6,18 @@ const DataFetch = {
     useEffectSetHookMethod = null,
     path = ""
   ) {
-    if (method.toLowerCase() === "get" && useEffectSetHookMethod !== null) {
-      await fetch(this.domaine + path)
-        .then((response) => response.json())
-        .then((fetched) => {
-          useEffectSetHookMethod(fetched.data);
-        });
-    } else {
-      throw new Error("Invalid parameter pass to fetchData");
+    try {
+      if (method.toLowerCase() === "get" && useEffectSetHookMethod !== null) {
+        await fetch(this.domaine + path)
+          .then((response) => response.json())
+          .then((fetched) => {
+            useEffectSetHookMethod(fetched.data);
+          });
+      } else {
+        throw new Error("Invalid parameter pass to the method");
+      }
+    } catch (e) {
+      throw new Error(e);
     }
   },
 };

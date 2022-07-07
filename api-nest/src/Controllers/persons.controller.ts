@@ -10,6 +10,6 @@ export class PersonsController {
 
   @Get('/')
   getPersons(): PersonsAndMeta {
-    return { data: this.personsService.getPersons(), meta: { sourceName: "Persons", frontEndUrl: this.configService.get<string>('NEXTJS') + '/persons' } } ;
+    return { data: this.personsService.getPersons(), meta: { sourceName: "Persons", frontEndUrl: this.configService.get<string>('API_ENDPOINT') + '/persons' } } ;
   }
 }

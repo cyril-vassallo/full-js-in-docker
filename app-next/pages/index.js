@@ -2,12 +2,15 @@ import Head from "next/head";
 import React, { useState, useEffect } from "react";
 import DataFetch from "../services/DataFetch";
 import { FeatureCard } from "../components/cards/FeatureCard";
+import { Loader } from "../components/commons/Loader";
 
 export default function Home() {
   const [features, setFeatures] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     DataFetch.updateState("get", setFeatures);
+    setIsLoading(false);
   }, []);
 
   return (
@@ -39,6 +42,7 @@ export default function Home() {
         </p>
 
         <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
+          <Loader isLoading={isLoading} />
           {features.map((feature) => {
             return <FeatureCard feature={feature} />;
           })}

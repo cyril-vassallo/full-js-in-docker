@@ -1,16 +1,16 @@
 version: "3.9"
 
 services:
-  app-nest:
+  api-nest:
     image: "node:14.15.4"
-    container_name: app-nest
-    working_dir: /usr/www/app
+    container_name: api-nest
+    working_dir: /usr/www/api
     env_file:
-      - ./app-nest/.env
+      - ./api-nest/.env
     ports:
       - ${EXPOSE_PORT_NEST:-8080}:${EXPOSE_PORT_NEST:-8080}
     volumes:
-      - "./app-nest:/usr/www/app"
+      - "./api-nest:/usr/www/api"
     command: "/bin/sh install.sh"
     networks:
       - app-fullstack
@@ -29,7 +29,7 @@ services:
     networks:
       - app-fullstack
     depends_on:
-      - app-nest
+      - api-nest
 
 networks:
   app-fullstack:
