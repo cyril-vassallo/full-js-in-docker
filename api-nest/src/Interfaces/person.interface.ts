@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export interface PersonInterface  {
   name: string;
   job: string;
