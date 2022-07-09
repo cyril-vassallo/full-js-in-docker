@@ -1,4 +1,4 @@
 export interface MetaInterface {
-    sourceName: string;
-    frontEndUrl: string;
+  sourceName: string;
+  frontEndUrl: string;
 }

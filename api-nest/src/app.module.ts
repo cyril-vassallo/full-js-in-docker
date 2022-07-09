@@ -6,9 +6,11 @@ import { PersonsService } from './Services/persons.service';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    isGlobal : true
-  })],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+  ],
   controllers: [HomeController, PersonsController],
   providers: [HomeService, PersonsService],
 })
