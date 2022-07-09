@@ -1,4 +1,4 @@
-# Javascript home made boiler plate
+# Javascript home made boilerplate
 
 ## Content
 
