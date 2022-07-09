@@ -1,3 +1,5 @@
 **/node_modules
 /app-next/.next
 /api-nest/dist
+.vscode
+**/.vscode
