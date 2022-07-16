@@ -2,3 +2,4 @@
 /api-nest/dist
 .vscode
 **/.vscode
+**/.DS_Store

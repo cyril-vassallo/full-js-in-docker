@@ -1,0 +1,9 @@
+<div *ngFor="let task of tasks" class="card my-3 shadow p-4 m-5">
+    <p class="text-primary fs-5">Date: {{ task.date}} <span *ngFor="let commitHash of task.commitHashes" class="badge text-bg-success mx-2">{{ commitHash }}</span></p>
+    <ul class="">
+        <li *ngFor="let item of task.list" class="text-secondary">
+            {{ item }}
+        </li>
+    </ul>
+</div>
+
