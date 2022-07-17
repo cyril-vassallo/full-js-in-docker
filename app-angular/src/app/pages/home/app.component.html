@@ -1,18 +1,20 @@
-<app-navigation [navigation]="navigationState" [isAuth]="isAuthState" [handleLoginClick]="onClickLogin" [handleNavItemClick]="onClickNavItem"></app-navigation>
-<div id="app-home">
-    <!-- here home element -->
-</div>
-<div id="app-my-history">
-    <div class="row row-cols-1 row-cols-md-3 g-4 d-flex justify-content-center my-5">
-        <div class="col">
-            <app-profile *ngIf="isAuthState" [user]="userState"></app-profile>
+<main class="spa">
+    <app-navigation [navigation]="navigationState"  [handleLogoutClick]="onClickLogout" [isAuth]="isAuthState"  [handleNavItemClick]="onClickNavItem"></app-navigation>
+    <h1 class="text-center m-5 fs-2 fw-semibold text-secondary">{{ titleState }}</h1> 
+    <div *ngIf="!isAuthState" id="app-home">
+        <app-login [handleLoginClick]="onClickLogin"  [user]="userState"></app-login>
+    </div>
+    <div *ngIf="isAuthState" id="app-my-history" >
+        <div class="row row-cols-1 row-cols-md-3 g-4 d-flex justify-content-center my-5">
+            <div class="col">
+                <app-profile [user]="userState"></app-profile>
+            </div>
+        </div>
+        <div>
+            <app-daily-task  [tasks]= "tasksState"></app-daily-task>
         </div>
     </div>
-    <h1 class="text-center m-5 fs-2 fw-semibold">{{ titleState }}</h1> 
-    <div>
-        <app-daily-task  [tasks]= "tasksState"></app-daily-task>
+    <div id="app-my-team">
+    <!-- here team element -->
     </div>
-</div>
-<div id="app-my-team">
-<!-- here team element -->
-</div>
+</main>

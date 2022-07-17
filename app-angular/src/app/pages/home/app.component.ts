@@ -8,15 +8,15 @@ import { NavigationInterface, UserInterface, TaskInterface } from '../../Interfa
 })
 export class AppComponent {
   
-  titleState: string = 'My Daily Working History';
+  titleState: string = 'Fill your information';
 
-  isAuthState: boolean = true;
+  isAuthState: boolean = false;
 
   userState: UserInterface = {
-    firstName: 'Cyril',
-    lastName:  'Vassallo',
-    password: "123",
-    email: "cvassallo@public-service.fr",
+    firstName: 'John',
+    lastName:  'Doe',
+    password: "demo",
+    email: "jd@demo.fr",
     job: 'Javascript Web Developer',
     photo: 'tpdne-1',
     description: "I'am a web developer and i really enjoy Javascript Ecosystem. In the future i hope to become JS Expert "
@@ -44,17 +44,10 @@ export class AppComponent {
 
   navigationState: NavigationInterface[] = [
     {
-      label: "Home",
-      path: "/home",
-      isActive: false,
-      title: 'Accueil',
-      componentId: 'app-home'
-    },
-    {
       label: "My History",
       path: "/my-history",
       isActive: true,
-      title: 'My Daily Working History',
+      title: 'Fill your information',
       componentId: 'app-my-history'
     },
     {
@@ -67,14 +60,20 @@ export class AppComponent {
   ];
 
 
-  constructor() { }
+  constructor() {
+    this.onClickLogin =  this.onClickLogin.bind(this)
+  }
 
   ngOnInit(): void {
   }
 
   onClickLogin(): void {
+    console.log(this);
     console.log('login')
+    console.log(this.isAuthState) 
     this.isAuthState = true;
+    this.titleState = 'My Working History'
+    console.log(this.isAuthState)
   }
 
   onClickNavItem(event?: MouseEvent): void {

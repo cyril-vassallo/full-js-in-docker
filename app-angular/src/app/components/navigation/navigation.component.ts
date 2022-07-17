@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NavigationInterface } from '../../Interfaces/Interfaces';
+import { NavigationInterface, UserInterface } from '../../Interfaces/Interfaces';
 
 
 @Component({
@@ -10,9 +10,8 @@ import { NavigationInterface } from '../../Interfaces/Interfaces';
 export class NavigationComponent implements OnInit {
 
   @Input() navigation!: NavigationInterface[];
-  @Input() isAuth!: boolean;
-  @Input() handleLoginClick!:() => void;
   @Input() handleNavItemClick!:(event?: MouseEvent) => void;
+  @Input() isAuth!: boolean;
 
 
   constructor() { 
@@ -20,5 +19,10 @@ export class NavigationComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  handleLogoutClick(): void {
+    this.onClickLogout()
+  }
+
 
 }

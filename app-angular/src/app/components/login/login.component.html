@@ -1,0 +1,15 @@
+<div class="app-login d-flex flex-column justify-content-center container-sm">
+    <div class="mb-3 app-input">
+        <label for="app-email" class="form-label text-primary">Email address</label>
+        <input [(ngModel)]="email" value="{{ email }}" type="email" class="form-control" id="app-email" placeholder="{{ user.email }}"/>
+    </div>
+    <div class="mb-3 app-input">
+        <label for="app-password" class="form-label text-primary">Password</label>
+        <input [(ngModel)]="password" value="{{ password }}" type="password" class="form-control" id="app-password" placeholder="{{ user.password }}"/>
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="nav-item">
+            <button (click)="onSubmitUser($event)" class="btn btn-outline-success" type="button">Login</button>
+        </div>
+    </div>    
+</div>

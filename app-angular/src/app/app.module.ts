@@ -6,13 +6,15 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { FormsModule } from '@angular/forms';
 import { ProfileComponent } from './components/profile/profile.component';
 import { DailyTaskComponent } from './components/daily-task/daily-task.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
     ProfileComponent,
-    DailyTaskComponent
+    DailyTaskComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
