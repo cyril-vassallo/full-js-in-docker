@@ -1,5 +1,5 @@
 <main class="spa">
-    <app-navigation [navigation]="navigationState"  [handleLogoutClick]="onClickLogout" [isAuth]="isAuthState"  [handleNavItemClick]="onClickNavItem"></app-navigation>
+    <app-navigation [navigation]="navigationState"  [isAuth]="isAuthState"  [handleNavItemClick]="onClickNavItem" [logout]="logout"></app-navigation>
     <h1 class="text-center m-5 fs-2 fw-semibold text-secondary">{{ titleState }}</h1> 
     <div *ngIf="!isAuthState" id="app-home">
         <app-login [handleLoginClick]="onClickLogin"  [user]="userState"></app-login>

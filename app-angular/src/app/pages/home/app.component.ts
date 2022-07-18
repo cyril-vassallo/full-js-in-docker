@@ -62,6 +62,7 @@ export class AppComponent {
 
   constructor() {
     this.onClickLogin =  this.onClickLogin.bind(this)
+    this.logout =  this.logout.bind(this)
   }
 
   ngOnInit(): void {
@@ -79,6 +80,10 @@ export class AppComponent {
   onClickNavItem(event?: MouseEvent): void {
     console.log('Clicked nav item! ')
     console.log(event)
+  }
+
+  logout(): void {
+    this.isAuthState  = false
   }
 
 }

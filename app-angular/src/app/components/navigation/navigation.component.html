@@ -8,7 +8,7 @@
         </ul>
         <div class="d-flex justify-content-end">
             <div class="nav-item">
-                <button (click)="handleLogoutClick()" class="btn btn-outline-danger" type="button" [disabled]="isAuth">Logout</button>
+                <button (click)="handleLogoutClick()" class="btn btn-outline-danger" type="button" [hidden]="!isAuth">Logout</button>
             </div>
         </div>         
         </div>

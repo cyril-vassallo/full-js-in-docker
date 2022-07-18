@@ -1,9 +1,14 @@
-import { PersonInterface } from '../Interfaces/person.interface';
+import { UserInterface } from '../Interfaces/user.interface';
 import { FeatureInterface } from '../Interfaces/feature.interface';
 import { MetaInterface } from '../Interfaces/meta.interface';
 
-export type PersonsAndMeta = {
-  data: PersonInterface[];
+export type UsersAndMeta = {
+  data: UserInterface[];
+  meta: MetaInterface;
+};
+
+export type UserAndMeta = {
+  data: UserInterface;
   meta: MetaInterface;
 };
 

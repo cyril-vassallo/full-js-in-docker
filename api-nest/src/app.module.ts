@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { HomeController } from './Controllers/home.controller';
-import { PersonsController } from './Controllers/persons.controller';
+import { UserController } from './Controllers/user.controller';
 import { HomeService } from './Services/home.service';
-import { PersonsService } from './Services/persons.service';
+import { UserService } from './Services/user.service';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -11,7 +11,7 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
     }),
   ],
-  controllers: [HomeController, PersonsController],
-  providers: [HomeService, PersonsService],
+  controllers: [HomeController, UserController],
+  providers: [HomeService, UserService],
 })
 export class AppModule {}
