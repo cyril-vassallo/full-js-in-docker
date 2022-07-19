@@ -1,8 +1,9 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post } from '@nestjs/common';
 import { UserService } from '../Services/user.service';
 import { UsersAndMeta } from '../Types/types';
 import { UserAndMeta } from '../Types/types';
 import { ConfigService } from '@nestjs/config';
+import { UserDto } from '../dto/user.dto';
 
 @Controller('/User')
 export class UserController {
@@ -14,10 +15,10 @@ export class UserController {
   @Get('/')
   getUsers(): UsersAndMeta {
     return {
-      data: this.usersService.getUsers(),
+      data: this.usersService.getAllUsers(),
       meta: {
-        sourceName: 'user',
-        frontEndUrl:
+        urn: 'user',
+        uri:
           this.configService.get<string>('API_ENDPOINT') + '/user',
       },
     };
@@ -26,24 +27,24 @@ export class UserController {
   @Get('/:id')
   getUser(@Param('id') id: number): UserAndMeta {
     return {
-      data: this.usersService.getUser(id),
+      data: this.usersService.getUserById(id),
       meta: {
-        sourceName: 'user/' + id,
-        frontEndUrl:
+        urn: 'user/' + id,
+        uri:
           this.configService.get<string>('API_ENDPOINT') + '/user/' + id,
       },
     };
   }
 
 
-  @Post()
-  getUseAccount(@Body() body: UserDTO): UserAndMeta {
+  @Post('/login')
+  login(@Body() userDto: UserDto): UserAndMeta {
     return {
-      data: this.usersService.getUserAccount(email, password),
+      data: this.usersService.getUserByAccount(userDto),
       meta: {
-        sourceName: 'user/',
-        frontEndUrl:
-          this.configService.get<string>('API_ENDPOINT') + '/user/,
+        urn: 'user/login',
+        uri:
+          this.configService.get<string>('API_ENDPOINT') + '/user/login',
       },
     };
   }

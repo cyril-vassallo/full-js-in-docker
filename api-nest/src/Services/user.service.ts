@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { UserInterface } from '../Interfaces/user.interface';
+import { AccountDto } from '../dto/account.dto'
 
 @Injectable()
 export class UserService {
@@ -13,7 +14,7 @@ export class UserService {
         "I've tried Tailwindcss and it is fun and very powerful, discover here my pre-configured Next-js and Tailwindcss boiler plate in docker container",
       photo: '/images/cyril-vassallo.JPG',
       email: '',
-      password: ''
+      password: null
     },
     {
       firstName: 'Sarah',
@@ -23,7 +24,7 @@ export class UserService {
         "Tailwind CSS is the only framework that I've seen scale on large teams. It’s easy to customize, adapts to any design, and the build size is tiny.",
       photo: '/images/sarah-dayan.jpg',
       email: '',
-      password: ''
+      password: null
     },
     {
       firstName: 'Grafikart',
@@ -33,7 +34,7 @@ export class UserService {
         'See my Tailwindcss tutorial on  you tube : https://www.youtube.com/watch?v=D6-g6JgiUIs',
       photo: '/images/grafikart.jpg',
       email: '',
-      password: ''
+      password: null
     },
     {
       firstName: 'John',
@@ -43,26 +44,31 @@ export class UserService {
         'I have been notice in million of code line just because nobody know who i am',
       photo: '/images/john-doe.png',
       email: 'jd@demo.fr',
-      password: '123'
+      password: 123
     },
   ];
 
 
-  getUsers(): UserInterface[] {
+  getAllUsers(): UserInterface[] {
     return this.usersFromDB;
   }
 
-  getUser(id: number): UserInterface {
+  getUserById(id: number): UserInterface {
     const user = this.usersFromDB.filter(( user, index) => { 
       return id - 1 == index
      })[0];
     return user 
   }
 
-  getUserAccount(email: string, password: string ): UserInterface {
-    const user = this.usersFromDB.filter( user => { 
-      return user.email == email && user.password == password
-     })[0];
-    return user 
+  getUserByAccount(AccountDto: AccountDto): UserInterface {
+    const accounts = this.usersFromDB.filter(user => {
+      return user.email == AccountDto.email && user.password == AccountDto.password && AccountDto.email != '' &&  AccountDto.password != null 
+    });
+
+    if (accounts.length === 1) {
+      return accounts[0]
+    } else {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
   }
 }
