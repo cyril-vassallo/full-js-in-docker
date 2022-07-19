@@ -22,3 +22,8 @@ export interface TaskInterface {
     date: string,
     commitHashes: string[]
 }
+
+export interface LoginFormInterface {
+    email: string;
+    password: string;
+}

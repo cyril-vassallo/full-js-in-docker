@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { UserInterface } from '../../Interfaces/Interfaces';
+import { UserInterface, LoginFormInterface } from '../../Interfaces/Interfaces';
 
 @Component({
   selector: 'app-login',
@@ -11,28 +11,28 @@ export class LoginComponent implements OnInit {
 
   email: string = '';
   password: string = '';
-  users: UserInterface[] = []
+
 
   @Input() handleLoginClick!:() => void;
-  @Input() user!: UserInterface;
+  @Input() user!: UserInterface | null;
 
-  constructor(private loginService: UserService) {
-    this.loginService = loginService;
+  constructor(private userService: UserService) {
+    this.userService = userService;
   }
 
   ngOnInit(): void {
   }
 
-  onClickSubmitUser(data: any) {
-    this.loginService.getAllUsers(data, this.updateUser)
-    if (this.users.length > 0 ) {
+  onClickSubmitUser(loginForm: LoginFormInterface) {
+    this.userService.login(loginForm, this.updateUser)
+    if (this.user) {
       this.handleLoginClick()
     }
   }
 
-  updateUser(users: UserInterface[]) {
-    console.log(users)
-    this.users = users;
+  updateUser(user: UserInterface | null = null) {
+    console.log(user)
+    this.user = user;
   }
 
 }
