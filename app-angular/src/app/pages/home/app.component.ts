@@ -19,7 +19,7 @@ export class AppComponent {
     email: "jd@demo.fr",
     job: 'Javascript Web Developer',
     photo: 'tpdne-1',
-    description: "I'am a web developer and i really enjoy Javascript Ecosystem. In the future i hope to become JS Expert "
+    description: "I'am a web developer and i really enjoy Javascript ecosystem. In the future i hope to become JS Expert "
   };
 
   tasksState: TaskInterface[] = [ 
@@ -61,29 +61,36 @@ export class AppComponent {
 
 
   constructor() {
-    this.onClickLogin =  this.onClickLogin.bind(this)
+    this.login =  this.login.bind(this)
     this.logout =  this.logout.bind(this)
+    this.updateUserState =  this.updateUserState.bind(this)
   }
 
   ngOnInit(): void {
   }
 
-  onClickLogin(): void {
-    console.log(this);
-    console.log('login')
-    console.log(this.isAuthState) 
-    this.isAuthState = true;
-    this.titleState = 'My Working History'
-    console.log(this.isAuthState)
-  }
 
   onClickNavItem(event?: MouseEvent): void {
-    console.log('Clicked nav item! ')
-    console.log(event)
+    console.log('Clicked nav item! ');
+    console.log(event);
+  }
+
+  login(): void {
+    console.log('login')
+    this.isAuthState = true;
+    this.titleState = 'My Working History'
   }
 
   logout(): void {
-    this.isAuthState  = false
+    this.isAuthState = false;
   }
+
+  updateUserState(user: UserInterface|null) {
+    if(user !== null ){
+      this.userState = user;
+      console.log(this.userState)
+    }
+  }
+
 
 }

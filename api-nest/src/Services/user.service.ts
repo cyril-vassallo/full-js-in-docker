@@ -39,10 +39,10 @@ export class UserService {
     {
       firstName: 'John',
       lastName: 'Doe',
-      job: 'undefined',
+      job: 'Web Developer',
       description:
         'I have been notice in million of code line just because nobody know who i am',
-      photo: '/images/john-doe.png',
+      photo: 'tpdne-1',
       email: 'jd@demo.fr',
       password: 123
     },
@@ -55,9 +55,9 @@ export class UserService {
 
   getUserById(id: number): UserInterface {
     const user = this.usersFromDB.filter(( user, index) => { 
-      return id - 1 == index
+      return id - 1 == index;
      })[0];
-    return user 
+    return user ;
   }
 
   getUserByAccount(AccountDto: AccountDto): UserInterface {
@@ -66,7 +66,8 @@ export class UserService {
     });
 
     if (accounts.length === 1) {
-      return accounts[0]
+      let userAccount: UserInterface = accounts[0]
+      return userAccount;
     } else {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
