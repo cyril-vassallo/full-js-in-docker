@@ -1,11 +1,15 @@
 #!/bin/bash
 
-npm install @angular/cli -g
-npm --version
-node --version
+npm install -g @angular/cli
 npm install
-npm run start
 
 date=$(date)
-echo "$date !" >> install.log
-echo  "Installation done!" >> install.log
+echo "*** npm version: ***" 
+npm --version
+echo "*** node version:  ***" 
+node --version
+
+
+echo  "Installation Angular 14 done at $date !" >> install.log
+
+npm run start

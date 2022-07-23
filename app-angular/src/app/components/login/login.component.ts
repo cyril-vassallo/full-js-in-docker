@@ -11,6 +11,8 @@ export class LoginComponent implements OnInit {
 
   email: string = '';
   password: string = '';
+  errorMessage: string = 'E-Mail address or password is incorrect !'
+  isLoginFailed: boolean = false
 
 
   @Input() handleLoginClick!:() => void;
@@ -25,14 +27,16 @@ export class LoginComponent implements OnInit {
 
   onClickSubmitUser(loginForm: LoginFormInterface) {
     this.userService.login(loginForm, this.updateUser)
-    if (this.user) {
-      this.handleLoginClick()
-    }
   }
 
   updateUser(user: UserInterface | null = null) {
-    console.log(user)
+    console.log(this.isLoginFailed);
     this.user = user;
+    if (this.user?.email) {
+      this.handleLoginClick()
+    } else {
+      this.isLoginFailed = true;
+    }
   }
 
 }

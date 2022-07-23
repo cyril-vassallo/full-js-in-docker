@@ -8,7 +8,7 @@ import { NavigationInterface, UserInterface, TaskInterface } from '../../Interfa
 })
 export class AppComponent {
   
-  titleState: string = 'Fill your information';
+  titleState: string = 'Login';
 
   isAuthState: boolean = false;
 

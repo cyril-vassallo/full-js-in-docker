@@ -27,3 +27,8 @@ export interface LoginFormInterface {
     email: string;
     password: string;
 }
+
+export interface MetaInterface {
+  urn: string;
+  uri: string;
+}
