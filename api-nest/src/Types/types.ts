@@ -1,4 +1,5 @@
 import { ReturnedUserInterface } from '../Interfaces/user.interface';
+import { TaskInterface } from '../Interfaces/task.interface';
 import { FeatureInterface } from '../Interfaces/feature.interface';
 import { MetaInterface } from '../Interfaces/meta.interface';
 
@@ -9,6 +10,11 @@ export type UsersAndMeta = {
 
 export type UserAndMeta = {
   data: ReturnedUserInterface;
+  meta: MetaInterface;
+};
+
+export type TasksAndMeta = {
+  data: TaskInterface[];
   meta: MetaInterface;
 };
 

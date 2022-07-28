@@ -4,6 +4,8 @@ import { UserController } from './Controllers/user.controller';
 import { HomeService } from './Services/home.service';
 import { UserService } from './Services/user.service';
 import { ConfigModule } from '@nestjs/config';
+import { TaskController } from './Controllers/task.controller';
+import { TaskService } from './Services/task.service';
 
 @Module({
   imports: [
@@ -11,7 +13,7 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
     }),
   ],
-  controllers: [HomeController, UserController],
-  providers: [HomeService, UserService],
+  controllers: [HomeController, UserController, TaskController],
+  providers: [HomeService, UserService, TaskService],
 })
 export class AppModule {}

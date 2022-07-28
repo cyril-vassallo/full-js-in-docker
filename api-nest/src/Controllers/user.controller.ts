@@ -5,7 +5,7 @@ import { UserAndMeta } from '../Types/types';
 import { ConfigService } from '@nestjs/config';
 import { AccountDto } from '../dto/account.dto';
 
-@Controller('/User')
+@Controller('/user')
 export class UserController {
   constructor(
     private readonly usersService: UserService,
