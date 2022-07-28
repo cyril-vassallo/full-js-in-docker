@@ -10,17 +10,15 @@ export interface NavigationInterface {
 export interface UserInterface {
     firstName: string;
     lastName: string;
-    password: string;
-    email: string;
     job: string;
     photo: string;
     description: string
 }
 
 export interface TaskInterface {
-    list: string [],
     date: string,
-    commitHashes: string[]
+    list: string [],
+    commits: Commit[]
 }
 
 export interface LoginFormInterface {
@@ -31,4 +29,9 @@ export interface LoginFormInterface {
 export interface MetaInterface {
   urn: string;
   uri: string;
+}
+
+export interface Commit {
+    url: string;
+    hash: string;
 }

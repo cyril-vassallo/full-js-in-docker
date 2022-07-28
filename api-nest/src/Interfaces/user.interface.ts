@@ -7,3 +7,12 @@ export interface UserInterface {
   description: string;
   photo: string;
 }
+
+
+export interface ReturnedUserInterface {
+  lastName: string;
+  firstName: string;
+  job: string;
+  description: string;
+  photo: string;
+}

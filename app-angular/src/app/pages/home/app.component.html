@@ -2,7 +2,7 @@
     <app-navigation [navigation]="navigationState" [isAuth]="isAuthState" [handleNavItemClick]="onClickNavItem" [logout]="logout"></app-navigation>
     <h1 class="text-center m-5 fs-2 fw-semibold text-secondary">{{ titleState }}</h1>
     <div *ngIf="!isAuthState" id="app-home">
-        <app-login [handleLogin]="login" [handleUpdateUser]="updateUserState" [user]="userState"></app-login>
+        <app-login [handleLogin]="login"  [user]="userState"></app-login>
     </div>
     <div *ngIf="isAuthState" id="app-my-history">
         <div class="row row-cols-1 row-cols-md-3 g-4 d-flex justify-content-center my-5">

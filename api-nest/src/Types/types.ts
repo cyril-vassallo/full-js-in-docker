@@ -1,14 +1,14 @@
-import { UserInterface } from '../Interfaces/user.interface';
+import { ReturnedUserInterface } from '../Interfaces/user.interface';
 import { FeatureInterface } from '../Interfaces/feature.interface';
 import { MetaInterface } from '../Interfaces/meta.interface';
 
 export type UsersAndMeta = {
-  data: UserInterface[];
+  data: ReturnedUserInterface[];
   meta: MetaInterface;
 };
 
 export type UserAndMeta = {
-  data: UserInterface;
+  data: ReturnedUserInterface;
   meta: MetaInterface;
 };
 

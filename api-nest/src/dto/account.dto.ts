@@ -1,12 +1,13 @@
 
-import { IsInt, IsEmail } from 'class-validator';
+import { IsInt, IsEmail, IsString } from 'class-validator';
 
 export class AccountDto {
 
     @IsEmail()
+    @IsString()
     email: string;
 
-    @IsInt()
-    password: number;
+    @IsString()
+    password: string;
 
 }

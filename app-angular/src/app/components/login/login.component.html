@@ -1,4 +1,4 @@
-<form #userLogin="ngForm" (ngSubmit)="onClickSubmitUser(userLogin.value)" class="app-login d-flex flex-column justify-content-center container-sm">
+<form #loginForm="ngForm" (ngSubmit)="onSubmitLogin(loginForm.value)" class="app-login d-flex flex-column justify-content-center container-sm">
     <div class="mb-3 app-input">
         <label for="app-email" class="form-label text-primary">Email address</label>
         <input type="email" name="email" id="app-email" class="form-control" [ngModel]="email"/>

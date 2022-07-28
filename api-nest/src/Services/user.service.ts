@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { UserInterface } from '../Interfaces/user.interface';
+import { ReturnedUserInterface, UserInterface,  } from '../Interfaces/user.interface';
 import { AccountDto } from '../dto/account.dto'
 
 @Injectable()
@@ -12,9 +12,9 @@ export class UserService {
       job: 'Web Developer',
       description:
         "I've tried Tailwindcss and it is fun and very powerful, discover here my pre-configured Next-js and Tailwindcss boiler plate in docker container",
-      photo: '/images/cyril-vassallo.JPG',
-      email: '',
-      password: null
+      photo: 'tpdne-2',
+      email: 'cyrilvssll34@gmail.com',
+      password: 456
     },
     {
       firstName: 'Sarah',
@@ -49,24 +49,33 @@ export class UserService {
   ];
 
 
-  getAllUsers(): UserInterface[] {
+  getAllUsers(): ReturnedUserInterface[] {
+    const users = this.usersFromDB.map((user)=> {
+      delete user.password;
+      delete user.email;
+      return user;
+    })
     return this.usersFromDB;
   }
 
-  getUserById(id: number): UserInterface {
-    const user = this.usersFromDB.filter(( user, index) => { 
+  getUserById(id: number): ReturnedUserInterface {
+    let user = this.usersFromDB.filter(( user, index) => { 
       return id - 1 == index;
      })[0];
+    delete user.password;
+    delete user.email;
     return user ;
   }
 
-  getUserByAccount(AccountDto: AccountDto): UserInterface {
+  getUserByAccount(accountDto: AccountDto): ReturnedUserInterface {
     const accounts = this.usersFromDB.filter(user => {
-      return user.email == AccountDto.email && user.password == AccountDto.password && AccountDto.email != '' &&  AccountDto.password != null 
+      return user.email == accountDto.email && user.password == parseInt(accountDto.password) && accountDto.email != '' &&  accountDto.password != null 
     });
 
     if (accounts.length === 1) {
-      let userAccount: UserInterface = accounts[0]
+      let userAccount: UserInterface = {...accounts[0]}
+      delete userAccount.password;
+      delete userAccount.email;
       return userAccount;
     } else {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);

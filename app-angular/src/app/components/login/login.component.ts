@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { UserInterface, LoginFormInterface } from '../../Interfaces/Interfaces';
+import { LoginFormInterface, UserInterface } from '../../Interfaces/Interfaces';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -17,9 +17,8 @@ export class LoginComponent implements OnInit {
   isLoginFailed: boolean = false
   errorMsg: string = '';
   
-  @Input() handleLogin!:() => void;
-  @Input() handleUpdateUser!: (user: UserInterface|null) => void;
-  @Input() user!: UserInterface | null;
+  @Input() handleLogin!:(user: UserInterface|null) => void;
+  @Input() user!: UserInterface|null;
 
   constructor(private userService: UserService) {
     this.userService = userService;
@@ -28,14 +27,17 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onClickSubmitUser(loginForm: LoginFormInterface) {
+  onSubmitLogin(loginForm: LoginFormInterface) {
+    console.log(parseInt(loginForm.password))
     const UserAndMeta$ = this.userService.login(loginForm)
       .pipe(
         catchError(error => {
             if (error.error instanceof ErrorEvent) {
                 this.errorMsg = `Error: ${error.error.message}`;
+                console.log(this.errorMsg)
             } else {
                 this.errorMsg = `Error: ${error.message}`;
+                console.log(this.errorMsg)
             }
             return of([]);
         })
@@ -45,8 +47,7 @@ export class LoginComponent implements OnInit {
         if(_observer.data) {
           this.isLoginFailed = false 
           this.user = _observer.data
-          this.handleLogin()
-          this.handleUpdateUser(this.user)
+          this.handleLogin(this.user)
         }else {
           this.isLoginFailed = true
         }

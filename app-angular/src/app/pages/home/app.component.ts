@@ -15,8 +15,6 @@ export class AppComponent {
   userState: UserInterface = {
     firstName: 'John',
     lastName:  'Doe',
-    password: "demo",
-    email: "jd@demo.fr",
     job: 'Javascript Web Developer',
     photo: 'tpdne-1',
     description: "I'am a web developer and i really enjoy Javascript ecosystem. In the future i hope to become JS Expert "
@@ -29,7 +27,12 @@ export class AppComponent {
         'add bootstrap as UI dependency'
       ],
       date: '2022-14-07',
-      commitHashes :['ab14f15e7145']
+      commits :[ 
+        {
+          url: "#",
+          hash :'ab14f15e7145'
+        }
+      ]
     },
     {
       list: [
@@ -38,7 +41,16 @@ export class AppComponent {
         'add new images in asset'
       ],
       date: '2022-15-07',
-      commitHashes :['ae11b15e719', 'a4578bef5g4']
+      commits :[
+        {
+          url: "#",
+          hash :'ac24f15e7125'
+        },
+        {
+          url: "#",
+          hash :'ce14f25e7441'
+        }
+      ]
     }
   ] 
 
@@ -75,8 +87,9 @@ export class AppComponent {
     console.log(event);
   }
 
-  login(): void {
+  login(user: UserInterface|null): void {
     console.log('login')
+    this.updateUserState(user)
     this.isAuthState = true;
     this.titleState = 'My Working History'
   }

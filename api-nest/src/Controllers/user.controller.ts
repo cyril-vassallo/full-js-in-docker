@@ -3,7 +3,7 @@ import { UserService } from '../Services/user.service';
 import { UsersAndMeta } from '../Types/types';
 import { UserAndMeta } from '../Types/types';
 import { ConfigService } from '@nestjs/config';
-import { UserDto } from '../dto/user.dto';
+import { AccountDto } from '../dto/account.dto';
 
 @Controller('/User')
 export class UserController {
@@ -36,11 +36,10 @@ export class UserController {
     };
   }
 
-
   @Post('/login')
-  login(@Body() userDto: UserDto): UserAndMeta {
+  login(@Body() accountDto: AccountDto): UserAndMeta {
     return {
-      data: this.usersService.getUserByAccount(userDto),
+      data: this.usersService.getUserByAccount(accountDto),
       meta: {
         urn: 'user/login',
         uri:
