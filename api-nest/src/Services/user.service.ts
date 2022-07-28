@@ -7,6 +7,7 @@ export class UserService {
 
   private usersFromDB:  UserInterface[] =  [
     {
+      id: 1,
       firstName: 'Cyril',
       lastName: 'Vassallo',
       job: 'Web Developer',
@@ -17,6 +18,7 @@ export class UserService {
       password: 456
     },
     {
+      id: 2,
       firstName: 'Sarah',
       lastName: 'Dayan',
       job: 'Web Developer',
@@ -27,6 +29,7 @@ export class UserService {
       password: null
     },
     {
+      id: 3,
       firstName: 'Grafikart',
       lastName: '',
       job: 'Web Developer',
@@ -37,6 +40,7 @@ export class UserService {
       password: null
     },
     {
+      id: 4,
       firstName: 'John',
       lastName: 'Doe',
       job: 'Web Developer',
@@ -59,8 +63,8 @@ export class UserService {
   }
 
   getUserById(id: number): ReturnedUserInterface {
-    let user = this.usersFromDB.filter(( user, index) => { 
-      return id - 1 == index;
+    let user = this.usersFromDB.filter(( user) => { 
+      return id == user.id;
      })[0];
     delete user.password;
     delete user.email;

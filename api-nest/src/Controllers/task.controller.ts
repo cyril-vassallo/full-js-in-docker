@@ -12,13 +12,13 @@ export class TaskController {
 
 
   @Get('/user/:id')
-  getUser(@Param('id') id: number): TasksAndMeta {
+  getTasks(@Param('id') id: number): TasksAndMeta {
     return {
       data: this.taskService.getTasksByUserId(id),
       meta: {
-        urn: 'task/' + id,
+        urn: 'task/user/' + id,
         uri:
-          this.configService.get<string>('API_ENDPOINT') + '/task/' + id,
+          this.configService.get<string>('API_ENDPOINT') + '/task/user/' + id,
       },
     };
   }

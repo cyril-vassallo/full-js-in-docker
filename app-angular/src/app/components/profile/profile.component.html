@@ -1,4 +1,4 @@
-<div class="card app-profile">
+<div *ngIf="user !== null" class="card app-profile">
     <img src="assets/images/{{ user.photo }}.jpg" class="card-img-top" alt="this person do not exist">
     <div class="card-body">
         <h5 class="card-title">{{ user.firstName }} {{ user.lastName }}</h5>

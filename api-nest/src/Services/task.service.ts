@@ -5,8 +5,10 @@ import {  TaskInterface,} from '../Interfaces/task.interface';
 @Injectable()
 export class TaskService {
 
-  private tasks:  TaskInterface[] =  [
+  private tasksFromDb:  TaskInterface[] =  [
     {
+      id: 1,
+      userId: 1,
       date: '2022-07-07',
       list: ['task1', "Task2"],
       commits: [
@@ -18,15 +20,46 @@ export class TaskService {
           url: "/task2",
           hash: "GUFUGIHOILKSJJFTFY2"
         }
+      ],
+    },
+    {
+      id: 2,
+      userId: 1,
+      date: '2022-07-08',
+      list: ['task1', "Task2"],
+      commits: [
+        {
+          url: "/task1",
+          hash: "GUFUSSkGIHOHKHLLFYT4"
+        },
+          {
+          url: "/task2",
+          hash: "GUKJDINIKSKSJJFTFY3"
+        }
+      ]
+    },
+    {
+      id: 4,
+      userId: 2,
+      date: '2022-05-01',
+      list: ['task1', "Task2"],
+      commits: [
+        {
+          url: "/task1",
+          hash: "GUFUSSkGIHOHKHLLFYT4"
+        },
+          {
+          url: "/task2",
+          hash: "GUKJDINIKSKSJJFTFY3"
+        }
       ]
      
     },
-   
   ];
 
 
   getTasksByUserId(id: number): TaskInterface[] {
-    return this.tasks ;
+    return this.tasksFromDb.filter(task => task.userId == id) ;
   }
 
 

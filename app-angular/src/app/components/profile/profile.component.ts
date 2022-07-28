@@ -8,7 +8,7 @@ import { UserInterface } from '../../Interfaces/Interfaces';
 })
 export class ProfileComponent implements OnInit {
 
-@Input() user!: UserInterface;
+@Input() user!: UserInterface|null;
 
   constructor() { }
 

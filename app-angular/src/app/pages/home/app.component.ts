@@ -12,47 +12,9 @@ export class AppComponent {
 
   isAuthState: boolean = false;
 
-  userState: UserInterface = {
-    firstName: 'John',
-    lastName:  'Doe',
-    job: 'Javascript Web Developer',
-    photo: 'tpdne-1',
-    description: "I'am a web developer and i really enjoy Javascript ecosystem. In the future i hope to become JS Expert "
-  };
+  userState: UserInterface|null = null;
 
-  tasksState: TaskInterface[] = [ 
-    {
-      list: [
-        'fix stack starting',
-        'add bootstrap as UI dependency'
-      ],
-      date: '2022-14-07',
-      commits :[ 
-        {
-          url: "#",
-          hash :'ab14f15e7145'
-        }
-      ]
-    },
-    {
-      list: [
-        'upgrade node version',
-        'fix depreciation in code',
-        'add new images in asset'
-      ],
-      date: '2022-15-07',
-      commits :[
-        {
-          url: "#",
-          hash :'ac24f15e7125'
-        },
-        {
-          url: "#",
-          hash :'ce14f25e7441'
-        }
-      ]
-    }
-  ] 
+  tasksState: TaskInterface[]|null = null
 
   navigationState: NavigationInterface[] = [
     {
@@ -87,7 +49,7 @@ export class AppComponent {
     console.log(event);
   }
 
-  login(user: UserInterface|null): void {
+  login(user: UserInterface|null|null): void {
     console.log('login')
     this.updateUserState(user)
     this.isAuthState = true;
@@ -98,7 +60,7 @@ export class AppComponent {
     this.isAuthState = false;
   }
 
-  updateUserState(user: UserInterface|null) {
+  updateUserState(user: UserInterface|null|null) {
     if(user !== null ){
       this.userState = user;
       console.log(this.userState)

@@ -8,6 +8,7 @@ export interface NavigationInterface {
 }
 
 export interface UserInterface {
+    id: number;
     firstName: string;
     lastName: string;
     job: string;
@@ -29,6 +30,19 @@ export interface LoginFormInterface {
 export interface MetaInterface {
   urn: string;
   uri: string;
+}
+
+export interface Commit {
+    url: string;
+    hash: string;
+}
+
+export interface TaskInterface {
+    id: number;
+    userId: number; 
+    date: string,
+    list: string [],
+    commits: Commit[]
 }
 
 export interface Commit {

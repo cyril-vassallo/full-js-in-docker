@@ -8,7 +8,7 @@ import { TaskInterface } from 'src/app/Interfaces/Interfaces';
 })
 export class DailyTaskComponent implements OnInit {
 
-@Input() tasks! : TaskInterface[];
+@Input() tasks! : TaskInterface[]|null;
 
   constructor() { }
 

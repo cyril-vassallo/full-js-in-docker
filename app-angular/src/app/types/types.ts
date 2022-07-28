@@ -1,4 +1,4 @@
-import { UserInterface, MetaInterface } from '../Interfaces/Interfaces';
+import { MetaInterface, UserInterface, TaskInterface } from '../Interfaces/Interfaces';
 
 export type UsersAndMeta = {
   data: UserInterface[];
@@ -10,3 +10,7 @@ export type UserAndMeta = {
   meta: MetaInterface;
 };
 
+export type TasksAndMeta = {
+  data: TaskInterface[];
+  meta: MetaInterface;
+}

@@ -2,6 +2,9 @@
 import { IsString, MaxLength, IsInt, IsOptional, IsEmail } from 'class-validator';
 
 export class UserDto  {
+    @IsInt()
+    id: number;
+
     @IsString()
     @MaxLength(70)
     firstName: string;

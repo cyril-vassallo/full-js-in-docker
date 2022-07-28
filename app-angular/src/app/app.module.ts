@@ -9,6 +9,7 @@ import { DailyTaskComponent } from './components/daily-task/daily-task.component
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';
+import { TaskService } from './services/task.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +24,7 @@ import { UserService } from './services/user.service';
     AppRoutingModule,
     FormsModule,
   ],
-  providers: [UserService],
+  providers: [UserService, TaskService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
