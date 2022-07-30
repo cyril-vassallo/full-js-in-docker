@@ -1,8 +1,7 @@
 import { Component, Input, OnInit, ɵɵtrustConstantResourceUrl } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { TaskInterface } from 'src/app/Interfaces/Interfaces';
-import { TaskService } from 'src/app/services/task.service';
-import { LoginComponent } from '../login/login.component';
+ 
 
 @Component({
   selector: 'app-task-form',
@@ -17,7 +16,7 @@ export class TaskFormComponent implements OnInit {
   isTodayTaskExist: boolean  = false;
   taskInput = new FormControl('');
   commitInput = new FormControl('');
-  date: string = new Date().toLocaleString('fr').split(',')[0].trim();
+  date: string = new Date().toLocaleString('fr').split(' ')[0];
   @Input() hasTask: boolean = false;
   @Input() handleTaskState!: (task: TaskInterface[]|null) => void;
   @Input() tasks: TaskInterface[]|null = null;
@@ -27,15 +26,17 @@ export class TaskFormComponent implements OnInit {
 
   onAddTask(): void {
 
-    this.checkIfTodayTaskExist();
+    this.isTodayTaskExist = this.checkIfTodayTaskExist(this.tasks, this.date);
 
     if (!this.isTodayTaskExist) {
        this.createTask();
     }
 
-    this.updateTaskList()
+    this.task = this.updateTaskList(this.task, this.taskInput.value)
    
-    this.tasks = this.mergeTasks();
+    if (this.tasks !== null && this.task !== null && !this.isTodayTaskExist) {
+      this.tasks = this.mergeTasks(this.tasks, this.task);
+    }
   
     this.handleTaskState(this.tasks)
 
@@ -43,30 +44,31 @@ export class TaskFormComponent implements OnInit {
 
   }
 
-  mergeTasks(): TaskInterface[]|null{
-    if (this.tasks !== null && this.task !== null && !this.isTodayTaskExist) {
-      return this.tasks.concat([this.task]);
-    }
-    return this.tasks;
+  mergeTasks( tasks: TaskInterface[], task: TaskInterface): TaskInterface[]{
+    tasks.unshift(task);
+    return tasks;
   }
-  checkIfTodayTaskExist(): void {
-    if (this.tasks) {
-      const tasks: TaskInterface[] = this.tasks.filter((task) => {
-        return task.date == this.date;
+
+  checkIfTodayTaskExist(tasks: TaskInterface[]|null, date: string): boolean {
+    if (tasks) {
+      const todayTasks: TaskInterface[] = tasks.filter((task) => {
+        return task.date == date;
       });
 
-      if (tasks.length > 0) {
+      if (todayTasks.length > 0) {
         console.log("TASK EXIST")
-        this.task = tasks[0];
-        this.isTodayTaskExist = true;
+        this.task = todayTasks[0];
+        return true;
       } 
     }
+    return false;
   }
 
-  updateTaskList(): void {
-    if (this.task && this.taskInput.value !== null) {
-      this.task.list.push(this.taskInput.value);
+  updateTaskList(task: TaskInterface|null, taskInputValue: string|null): TaskInterface|null {
+    if (task !== null && taskInputValue !== null) {
+      task.list.push(taskInputValue);
     }
+    return task;
   }
 
   createTask(): void {

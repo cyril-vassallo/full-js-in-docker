@@ -6,6 +6,7 @@ import { UserService } from './Services/user.service';
 import { ConfigModule } from '@nestjs/config';
 import { TaskController } from './Controllers/task.controller';
 import { TaskService } from './Services/task.service';
+import { FormateService } from './Services/formate.service';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { TaskService } from './Services/task.service';
     }),
   ],
   controllers: [HomeController, UserController, TaskController],
-  providers: [HomeService, UserService, TaskService],
+  providers: [HomeService, UserService, TaskService, FormateService],
 })
 export class AppModule {}

@@ -120,7 +120,6 @@ export class AppComponent implements OnInit  {
   assignNewTaskState(tasks: TaskInterface[] | null) {
     console.log('TASKS UPDATED');
     this.tasksState = tasks;
-    console.log(this.tasksState);
   }
 
 }

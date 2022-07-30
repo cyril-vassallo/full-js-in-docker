@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import {  TaskInterface,} from '../Interfaces/task.interface';
+import { TaskInterface} from '../Interfaces/task.interface';
+import { FormateService } from './formate.service';
+
+
 
 
 @Injectable()
 export class TaskService {
+
+  constructor(private format: FormateService){
+  }
 
   private tasksFromDb:  TaskInterface[] =  [
     {
@@ -74,7 +80,15 @@ export class TaskService {
 
 
   getTasksByUserId(id: number): TaskInterface[] {
-    return this.tasksFromDb.filter(task => task.userId == id) ;
+    const tasks: TaskInterface[] = this.tasksFromDb.filter(task => task.userId == id) ;
+    const sortedTasksByMostRecentDate = [...tasks]
+    sortedTasksByMostRecentDate.sort((aTask: TaskInterface, bTask: TaskInterface) => {
+      const aDate: any = new Date(this.format.DateFrToEn(aTask.date)).getTime();
+      const bDate: any = new Date(this.format.DateFrToEn(bTask.date)).getTime();
+      return  aDate - bDate
+  }).reverse();
+
+    return sortedTasksByMostRecentDate;
   }
 
 
