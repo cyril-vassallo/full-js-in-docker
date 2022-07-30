@@ -24,9 +24,9 @@ export class UserService {
       job: 'Web Developer',
       description:
         "Tailwind CSS is the only framework that I've seen scale on large teams. It’s easy to customize, adapts to any design, and the build size is tiny.",
-      photo: '/images/sarah-dayan.jpg',
-      email: '',
-      password: null
+      photo: 'tpdne-3',
+      email: 'sd@demo.fr',
+      password: 789
     },
     {
       id: 3,
@@ -35,9 +35,9 @@ export class UserService {
       job: 'Web Developer',
       description:
         'See my Tailwindcss tutorial on  you tube : https://www.youtube.com/watch?v=D6-g6JgiUIs',
-      photo: '/images/grafikart.jpg',
-      email: '',
-      password: null
+      photo: 'tpdne-4',
+      email: 'ga@demo.fr',
+      password: 321
     },
     {
       id: 4,

@@ -12,7 +12,7 @@ export class TaskService {
 
     constructor(private http: HttpClient) {}
     
-    public getTaskByUser(user: UserInterface): Observable<TasksAndMeta> {
+    public getTasksByUser(user: UserInterface): Observable<TasksAndMeta> {
         return this.http.get<TasksAndMeta>(config.apiUrl + config.tasks + user.id)
     }
 

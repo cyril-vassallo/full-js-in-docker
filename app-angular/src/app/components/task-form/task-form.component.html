@@ -1,0 +1,14 @@
+<form class="container">
+    <div class="mb-3  d-flex flex-column">
+        <label for="taskInput" class="form-label">Task:</label>
+        <input id="taskInput" type="text" [formControl]="taskInput" class="form-control  form-control-lg"/>
+        <div id="taskHelp" class="form-text">You can add an other Task for today after validation of this one !</div>
+        <button (click)="onAddTask()" type="button" class="btn btn-success">Add this Task for today!</button>
+    </div>
+    <div *ngIf="hasTask" class="mb-3 d-flex flex-column">
+        <label for="commitInput" class="form-label">Commit:</label>
+        <input id="commitInput" type="text" [formControl]="commitInput" class="form-control  form-control-lg"/>
+        <div id="commitHelp" class="form-text">You can add an other Commit for today after validation of this one !</div>
+        <button type="button" class="btn btn-success">Add this Commit for today!</button>
+    </div>
+</form>

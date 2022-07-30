@@ -45,19 +45,6 @@ export class LoginComponent implements OnInit {
         })
     );
 
-    const TasksAndMeta$ = this.taskService.getTaskByUser(this.user)
-    .pipe(
-      catchError(error => {
-          if (error.error instanceof ErrorEvent) {
-              this.errorMsg = `Error: ${error.error.message}`;
-              console.log(this.errorMsg)
-          } else {
-              this.errorMsg = `Error: ${error.message}`;
-              console.log(this.errorMsg)
-          }
-          return of([]);
-      })
-  );
 
     UserAndMeta$.subscribe((_observer: any) => {
         if(_observer.data) {
@@ -69,7 +56,6 @@ export class LoginComponent implements OnInit {
         }
     });
 
-    TasksAndMeta$.
   }
 
 }
