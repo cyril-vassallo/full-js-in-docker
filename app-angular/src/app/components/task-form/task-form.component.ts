@@ -29,30 +29,26 @@ export class TaskFormComponent implements OnInit {
 
     this.checkIfTodayTaskExist();
 
-
     if (!this.isTodayTaskExist) {
        this.createTask();
     }
 
     this.updateTaskList()
    
-
-    if (this.tasks !== null && this.task !== null) {
-      const newTasksState = this.mergeTasks();
-      this.handleTaskState(newTasksState);
-    }
+    this.tasks = this.mergeTasks();
+  
+    this.handleTaskState(this.tasks)
 
     this.taskInput.setValue("");
 
   }
 
-  mergeTasks(): any {
-    if (this.tasks && this.task && !this.isTodayTaskExist) {
-      const updatedTasks = this.tasks.concat([this.task]);
-      return updatedTasks;
+  mergeTasks(): TaskInterface[]|null{
+    if (this.tasks !== null && this.task !== null && !this.isTodayTaskExist) {
+      return this.tasks.concat([this.task]);
     }
+    return this.tasks;
   }
-
   checkIfTodayTaskExist(): void {
     if (this.tasks) {
       const tasks: TaskInterface[] = this.tasks.filter((task) => {
