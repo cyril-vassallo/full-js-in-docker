@@ -1,0 +1,42 @@
+export interface MetaInterface {
+    urn: string;
+    uri: string;
+}
+  
+export interface FeatureInterface {
+    title: string;
+    url: string;
+    description: string;
+}
+
+export interface TaskInterface {
+    id: number;
+    userId: number; 
+    date: string,
+    list: string [],
+    commits: Commit[]
+}
+
+export interface Commit {
+    url: string;
+    hash: string;
+}
+
+export interface UserInterface {
+    id: number;
+    lastName: string;
+    firstName: string;
+    email: string;
+    password: number| null;
+    job: string;
+    description: string;
+    photo: string;
+}
+  
+export interface ReturnedUserInterface {
+    lastName: string;
+    firstName: string;
+    job: string;
+    description: string;
+    photo: string;
+}

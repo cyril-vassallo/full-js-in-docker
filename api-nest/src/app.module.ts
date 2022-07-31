@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { HomeController } from './Controllers/home.controller';
 import { UserController } from './Controllers/user.controller';
+import { TaskController } from './Controllers/task.controller';
 import { HomeService } from './Services/home.service';
 import { UserService } from './Services/user.service';
-import { ConfigModule } from '@nestjs/config';
-import { TaskController } from './Controllers/task.controller';
 import { TaskService } from './Services/task.service';
-import { FormateService } from './Services/formate.service';
+import { FormatService } from './Services/format.service';
 
 @Module({
   imports: [
@@ -15,6 +15,6 @@ import { FormateService } from './Services/formate.service';
     }),
   ],
   controllers: [HomeController, UserController, TaskController],
-  providers: [HomeService, UserService, TaskService, FormateService],
+  providers: [HomeService, UserService, TaskService, FormatService],
 })
 export class AppModule {}

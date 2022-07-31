@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { ReturnedUserInterface, UserInterface,  } from '../Interfaces/user.interface';
+import { ReturnedUserInterface, UserInterface,  } from '../Interfaces/interfaces';
 import { AccountDto } from '../dto/account.dto'
 
 @Injectable()

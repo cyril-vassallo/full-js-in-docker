@@ -1,44 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { FeatureInterface } from '../Interfaces/feature.interface';
+import { FeatureInterface } from '../Interfaces/interfaces';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class HomeService {
+
+  constructor(
+    private configService: ConfigService,
+  ) {}
+
+
   getFeatures(): FeatureInterface[] {
     return [
       {
-        title: 'Documentation',
-        url: 'https://nextjs.org/docs',
+        title: 'Get one user',
+        url: 'GET: ' + this.configService.get<string>('API_ENDPOINT')+'/user/{:id}',
         description:
-          'Find in-depth information about Next.js features and API.',
+          'Get an user with a specific id provided in url parm except login information',
       },
       {
-        title: 'Learn',
-        url: 'https://nextjs.org/learn',
+        title: 'Get all users',
+        url: 'GET: ' + this.configService.get<string>('API_ENDPOINT')+'/user',
         description:
-          'Learn about Next.js in an interactive course with quizzes!',
+          'Get all users information except login info',
       },
       {
-        title: 'Examples',
-        url: 'https://github.com/vercel/next.js/tree/master/examples',
+        title: 'User login',
+        url: 'POST: ' + this.configService.get<string>('API_ENDPOINT')+'/user/login',
         description:
-          'Discover and deploy boilerplate example Next.js projects.',
+          'Get a specific user with email and password in a POST JSON Body request',
       },
       {
-        title: 'Deploy',
-        url: 'https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app',
+        title: 'Get an user tasks ',
+        url: 'GET: '+this.configService.get<string>('API_ENDPOINT')+'/task/user/{:id}',
         description:
-          'Instantly deploy your Next.js site to a public URL with Vercel.',
-      },
-      {
-        title: 'Tailwindcss',
-        url: 'https://tailwindcss.com/docs/guides/nextjs',
-        description: 'Learn how to install tailwindcss with Next.js.',
-      },
-      {
-        title: 'Tailwindcss Example',
-        url: '/persons',
-        description:
-          'See here a component example directly fetched from Nest.js api',
+          'Get a specific user id tasks',
       },
     ];
   }

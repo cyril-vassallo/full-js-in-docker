@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Body, Post } from '@nestjs/common';
-import { TaskService } from '../Services/task.service';
-import { TasksAndMeta } from '../Types/types';
 import { ConfigService } from '@nestjs/config';
+import { TasksAndMeta } from '../Types/types';
+import { TaskService } from '../Services/task.service';
 
 @Controller('/task')
 export class TaskController {

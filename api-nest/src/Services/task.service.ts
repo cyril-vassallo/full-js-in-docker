@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { TaskInterface} from '../Interfaces/task.interface';
-import { FormateService } from './formate.service';
+import { TaskInterface} from '../Interfaces/interfaces';
+import { FormatService } from './format.service';
 
 
 
@@ -8,7 +8,7 @@ import { FormateService } from './formate.service';
 @Injectable()
 export class TaskService {
 
-  constructor(private format: FormateService){
+  constructor(private format: FormatService){
   }
 
   private tasksFromDb:  TaskInterface[] =  [
