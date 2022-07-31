@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { TaskInterface} from '../Interfaces/interfaces';
 import { FormatService } from './format.service';
+import { TaskDto } from '../dto/task.dto';
+import { BlobOptions } from 'buffer';
 
 
 
@@ -29,7 +31,7 @@ export class TaskService {
       ],
     },
     {
-      id: 2,
+      id: 1,
       userId: 4,
       date: '28/07/2022',
       list: ['task1', "Task2"],
@@ -45,7 +47,7 @@ export class TaskService {
       ]
     },
     {
-      id: 3,
+      id: 2,
       userId: 4,
       date: '29/07/2022',
       list: ['task1', "Task2"],
@@ -61,7 +63,7 @@ export class TaskService {
       ]
     },
     {
-      id: 4,
+      id: 1,
       userId: 2,
       date: '12/07/2022',
       list: ['task1', "Task2"],
@@ -90,6 +92,43 @@ export class TaskService {
 
     return sortedTasksByMostRecentDate;
   }
+
+  getAllTasks(): TaskInterface[] {
+   return this.tasksFromDb;
+  }
+
+  updateTasksFromDb(taskDto: TaskDto): TaskInterface[] {
+    const lastInsertTask: TaskInterface = this.tasksFromDb[this.tasksFromDb.length-1];
+
+    const isSameTask: boolean = lastInsertTask.id === taskDto.id && lastInsertTask.userId === taskDto.userId;
+    const isListSame: boolean  = lastInsertTask.list.length !== taskDto.list.length;
+    const isCommitsSame: boolean = lastInsertTask.commits.length !== taskDto.commits.length;
+
+    if(!isSameTask)  {
+      const task: TaskInterface = {
+        id: null,
+        userId: null,
+        date: '',
+        list: [],
+        commits: []
+      }
+      
+      task.id = taskDto.id;
+      task.userId = taskDto.userId;
+      task.date = taskDto.date;
+      task.list = taskDto.list;
+      task.commits = taskDto.commits;
+  
+      this.tasksFromDb.push(task);
+
+    } else if (isSameTask && (isListSame || isCommitsSame )) {
+      lastInsertTask.list = taskDto.list;
+      lastInsertTask.commits = taskDto.commits;
+    }
+
+    return this.tasksFromDb;
+  }
+
 
 
 }

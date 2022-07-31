@@ -31,10 +31,16 @@ export class HomeService {
           'Get a specific user with email and password in a POST JSON Body request',
       },
       {
-        title: 'Get an user tasks ',
+        title: 'Get an user tasks',
         url: 'GET: '+this.configService.get<string>('API_ENDPOINT')+'/task/user/{:id}',
         description:
           'Get a specific user id tasks',
+      },
+      {
+        title: 'Get all db tasks',
+        url: 'GET: '+this.configService.get<string>('API_ENDPOINT')+'/task',
+        description:
+          'Get a all tasks of all users',
       },
     ];
   }

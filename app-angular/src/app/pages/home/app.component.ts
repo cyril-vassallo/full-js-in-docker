@@ -1,6 +1,7 @@
 import { Component , OnInit } from '@angular/core';
 import { NavigationInterface, UserInterface, TaskInterface } from '../../Interfaces/Interfaces';
 import { TaskService } from '../../services/task.service'
+import { TasksAndMeta } from '../../types/types';
 
 @Component({
   selector: 'app-root',
@@ -117,9 +118,13 @@ export class AppComponent implements OnInit  {
     localStorage.setItem(key, content);
   }
 
-  assignNewTaskState(tasks: TaskInterface[] | null) {
-    console.log('TASKS UPDATED');
+  assignNewTaskState(tasks: TaskInterface[] | null,  task: TaskInterface | null) {
     this.tasksState = tasks;
+    if(task !== null ) {
+      this.taskService.postTask(task).subscribe((tasksAndMeta: TasksAndMeta ) => {
+        //this.tasksState = tasksAndMeta.data;
+      })
+    } 
   }
 
 }

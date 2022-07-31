@@ -14,10 +14,10 @@ export interface TaskInterface {
     userId: number; 
     date: string,
     list: string [],
-    commits: Commit[]
+    commits: CommitInterface[]
 }
 
-export interface Commit {
+export interface CommitInterface {
     url: string;
     hash: string;
 }

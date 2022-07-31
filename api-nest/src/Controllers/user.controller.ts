@@ -12,14 +12,14 @@ export class UserController {
     private configService: ConfigService,
   ) {}
 
-  @Get('/')
+  @Get('/all')
   getUsers(): UsersAndMeta {
     return {
       data: this.usersService.getAllUsers(),
       meta: {
         urn: 'user',
         uri:
-          this.configService.get<string>('API_ENDPOINT') + '/user',
+          this.configService.get<string>('API_ENDPOINT') + '/user/all',
       },
     };
   }

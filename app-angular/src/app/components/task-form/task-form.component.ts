@@ -18,7 +18,7 @@ export class TaskFormComponent implements OnInit {
   commitInput = new FormControl('');
   date: string = new Date().toLocaleString('fr').split(' ')[0];
   @Input() hasTask: boolean = false;
-  @Input() handleTaskState!: (task: TaskInterface[]|null) => void;
+  @Input() handleTaskState!: (tasks: TaskInterface[]|null, task: TaskInterface|null) => void;
   @Input() tasks: TaskInterface[]|null = null;
 
   ngOnInit(): void {
@@ -38,7 +38,7 @@ export class TaskFormComponent implements OnInit {
       this.tasks = this.mergeTasks(this.tasks, this.task);
     }
   
-    this.handleTaskState(this.tasks)
+    this.handleTaskState(this.tasks, this.task)
 
     this.taskInput.setValue("");
 

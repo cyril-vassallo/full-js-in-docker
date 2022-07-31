@@ -21,5 +21,9 @@ export type TasksAndMeta = {
   meta: MetaInterface;
 };
 
+export type TaskAndMeta = {
+  data: TaskInterface;
+  meta: MetaInterface;
+};
 
 
