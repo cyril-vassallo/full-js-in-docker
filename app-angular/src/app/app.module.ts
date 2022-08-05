@@ -7,11 +7,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent } from './components/profile/profile.component';
 import { DailyTaskComponent } from './components/daily-task/daily-task.component';
 import { LoginComponent } from './components/login/login.component';
-import { ButtonComponent } from './components/button/button.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './services/user.service';
 import { TaskService } from './services/task.service';
 import { TaskFormComponent } from './components/task-form/task-form.component';
+import { TeamComponent } from './components/team/team.component';
 
 
 @NgModule({
@@ -21,8 +21,8 @@ import { TaskFormComponent } from './components/task-form/task-form.component';
     ProfileComponent,
     DailyTaskComponent,
     LoginComponent,
-    ButtonComponent,
-    TaskFormComponent
+    TaskFormComponent,
+    TeamComponent
   ],
   imports: [
     BrowserModule,

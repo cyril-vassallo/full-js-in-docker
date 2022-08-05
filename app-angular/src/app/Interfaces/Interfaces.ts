@@ -19,7 +19,7 @@ export interface UserInterface {
 export interface TaskInterface {
     date: string,
     list: string [],
-    commits: Commit[]
+    commits: CommitInterface[]
 }
 
 export interface LoginFormInterface {
@@ -32,9 +32,9 @@ export interface MetaInterface {
   uri: string;
 }
 
-export interface Commit {
-    url: string;
-    hash: string;
+export interface CommitInterface {
+    url: string|null|undefined;
+    hash: string|null|undefined;
 }
 
 export interface TaskInterface {
@@ -42,10 +42,5 @@ export interface TaskInterface {
     userId: number; 
     date: string,
     list: string [],
-    commits: Commit[]
-}
-
-export interface Commit {
-    url: string;
-    hash: string;
+    commits: CommitInterface[]
 }

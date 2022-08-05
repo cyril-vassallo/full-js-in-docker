@@ -1,7 +1,8 @@
 import { Component , OnInit } from '@angular/core';
 import { NavigationInterface, UserInterface, TaskInterface } from '../../Interfaces/Interfaces';
 import { TaskService } from '../../services/task.service'
-import { TasksAndMeta } from '../../types/types';
+import { TasksAndMeta, UsersAndMeta } from '../../types/types';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,9 @@ export class AppComponent implements OnInit  {
 
   userState: UserInterface|null = null;
 
-  tasksState: TaskInterface[] | null = null;
+  usersState: UserInterface[]|null = null;
+
+  tasksState: TaskInterface[]|null = null;
   
   isFormDisplayed: boolean = false;
 
@@ -29,16 +32,16 @@ export class AppComponent implements OnInit  {
       componentId: 'app-my-history'
     },
     {
-      label: "My Team",
-      path: "/my-team",
+      label: "My Settings",
+      path: "/my-settings",
       isActive: false,
-      title: 'Find my team partner history',
-      componentId: 'app-my-team'
+      title: 'Find here your history settings',
+      componentId: 'app-my-setting'
     },
   ];
 
 
-  constructor(private taskService: TaskService) {
+  constructor(private taskService: TaskService, private userService: UserService) {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.updateUserState = this.updateUserState.bind(this);
@@ -52,6 +55,7 @@ export class AppComponent implements OnInit  {
     if (user) {
       this.userState = JSON.parse(user);
       this.loadUser(this.userState);
+      this.loadUsers(this.userState);
     };
   }
 
@@ -63,6 +67,7 @@ export class AppComponent implements OnInit  {
   login(user: UserInterface|null): void {
     if (user != null) {
       this.loadUser(user)
+      this.loadUsers(user)
       this.saveToLocalStorage("user", JSON.stringify(user))
     } else {
       this.initData()
@@ -81,10 +86,18 @@ export class AppComponent implements OnInit  {
     }
   }
 
+  updateUsersState(users: UserInterface[]|null) {
+    if(users !== null){
+      this.usersState = users;
+    } else {
+      this.usersState = null;
+    }
+  }
+
   loadUserTasks() {
     if (this.userState !== null && this.isAuthState) {
       const tasksObservable$ = this.taskService.getTasksByUser(this.userState)
-      tasksObservable$.subscribe((_observer: any) => {
+      tasksObservable$.subscribe((_observer: TasksAndMeta) => {
         if (_observer.data && _observer.data.length > 0) {
           this.tasksState = _observer.data
         } else {
@@ -92,7 +105,6 @@ export class AppComponent implements OnInit  {
         }
       })
     }
-
   }
 
   initData(): void {
@@ -108,6 +120,24 @@ export class AppComponent implements OnInit  {
     this.titleState = 'My dev History'
     this.updateUserState(user);
     this.loadUserTasks();
+  }
+
+  loadUsers(user: UserInterface | null): void {
+
+    const userObservable$ = this.userService.getAllUsers();
+
+    userObservable$.subscribe((_observer: UsersAndMeta) => {
+      console.log(_observer.data)
+      if (_observer.data && _observer.data.length > 0) {
+        const data = _observer.data;
+ 
+        this.usersState = data.filter(loopUser => {
+          return loopUser.firstName !== user?.firstName
+        })
+      } else {
+        this.usersState = null
+      }
+    })
   }
 
   toggleFormState(): void {

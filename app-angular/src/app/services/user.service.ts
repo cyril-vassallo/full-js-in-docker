@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http"
 import { config } from '../../config/config' 
 import { LoginFormInterface } from '../Interfaces/Interfaces';
 import { Observable } from "rxjs";
-import { UserAndMeta } from '../types/types';
+import { UserAndMeta, UsersAndMeta } from '../types/types';
 
 
 
@@ -14,6 +14,11 @@ export class UserService {
     
     public login(loginForm: LoginFormInterface): Observable<UserAndMeta> {
         return this.http.post<UserAndMeta>(config.apiUrl + config.login, loginForm)
+    }
+
+    public getAllUsers() {
+        console.log(config.apiUrl + config.users)
+        return this.http.get<UsersAndMeta>(config.apiUrl + config.users)
     }
 
 }

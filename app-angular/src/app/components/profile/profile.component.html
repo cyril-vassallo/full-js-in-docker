@@ -1,8 +1,10 @@
-<div *ngIf="user !== null" class="card app-profile">
-    <img src="assets/images/{{ user.photo }}.jpg" class="card-img-top" alt="this person do not exist">
-    <div class="card-body">
+<div *ngIf="user !== null" class="d-flex justify-content-center flex-column app-profile m-5">
+    <img src="assets/images/{{ user.photo }}.jpg" class="card-img-top" alt="this person do not exist"/>
+    <div class="m-auto text-center">
         <h5 class="card-title">{{ user.firstName }} {{ user.lastName }}</h5>
-        <p class="card-title text-warning">{{user.job}}</p>
+        <p class="card-title-2 text-warning">{{user.job}}</p>
         <p class="card-text">{{user.description }}</p>
+        <button *ngIf="!isFormDisplayed" (click)="openForm()" [ngClass]="{'btn': true, 'btn-warning': true , 'btn-lg': true}" class="m-auto app-open-form">{{ buttonText }}
+        </button>        
     </div>
 </div>
