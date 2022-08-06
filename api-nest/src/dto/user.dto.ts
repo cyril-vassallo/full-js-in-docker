@@ -24,8 +24,8 @@ export class UserDto  {
     @MaxLength(70)
     job: string;
 
-    @IsInt()
-    password: number;
+    @IsString()
+    password: string;
 
     @IsString()
     @IsOptional()
