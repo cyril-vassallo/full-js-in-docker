@@ -27,13 +27,14 @@ export interface UserInterface {
     lastName: string;
     firstName: string;
     email: string;
-    password: number| null;
+    password: string;
     job: string;
     description: string;
     photo: string;
 }
   
 export interface ReturnedUserInterface {
+    id: number;
     lastName: string;
     firstName: string;
     job: string;

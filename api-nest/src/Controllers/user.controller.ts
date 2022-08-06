@@ -24,17 +24,6 @@ export class UserController {
     };
   }
 
-  @Get('/:id')
-  getUser(@Param('id') id: number): UserAndMeta {
-    return {
-      data: this.usersService.getUserById(id),
-      meta: {
-        urn: 'user/' + id,
-        uri:
-          this.configService.get<string>('API_ENDPOINT') + '/user/' + id,
-      },
-    };
-  }
 
   @Post('/login')
   login(@Body() accountDto: AccountDto): UserAndMeta {
@@ -44,6 +33,19 @@ export class UserController {
         urn: 'user/login',
         uri:
           this.configService.get<string>('API_ENDPOINT') + '/user/login',
+      },
+    };
+  }
+
+
+  @Get('/:id')
+  getUser(@Param('id') id: number): UserAndMeta {
+    return {
+      data: this.usersService.getUserById(id),
+      meta: {
+        urn: 'user/' + id,
+        uri:
+          this.configService.get<string>('API_ENDPOINT') + '/user/' + id,
       },
     };
   }
