@@ -4,11 +4,12 @@
     <div *ngIf="!isAuthState" id="app-login">
         <app-login [handleLogin]="login" [user]="userState"></app-login>
     </div>
-    <div *ngIf="isAuthState" id="app-my-history" class="container-fluid">
-        <app-team [users]="usersState"></app-team>
-        <app-profile [user]="userState" [handleToggleForm]="toggleFormState" [isFormDisplayed]="isFormDisplayed"></app-profile>
-        <app-task-form *ngIf="isFormDisplayed" [tasks]="tasksState" [handleTaskState]="assignNewTaskState"></app-task-form>
-        <app-daily-task [tasks]="tasksState"></app-daily-task>
+    <div *ngIf="isAuthState" id="app-my-history" >
+        <app-profile [user]="userState" [handleLoadUserTasks]="loadUserTasks"></app-profile>
+        <app-team [users]="usersState" [handleTeamPartnerTasks]="loadUserTasks"></app-team>
+        <app-form-button  [handleToggleForm]="toggleFormState" [isFormDisplayed]="formDisplayState" [teamPartner]="teamPartnerState"></app-form-button>
+        <app-task-form *ngIf="isFormShouldDisplayed()" [tasks]="tasksState" [handleTaskState]="assignNewTaskState"></app-task-form>
+        <app-daily-task [tasks]="tasksState" [user]="userState" [teamPartner]="teamPartnerState"></app-daily-task>
     </div>
     <div
         id="app-my-team"><!-- here team element -->

@@ -1,0 +1,4 @@
+<div class="container d-flex justify-content-center mt-5">
+   <button *ngIf="!isFormDisplayed" (click)="openForm()" [ngClass]="{'btn': true, 'btn-warning': true , 'btn-lg': true}" class="m-auto app-open-form" [hidden]="disabledSate">{{ buttonText }}</button>
+</div>
+   

@@ -1,4 +1,4 @@
-import { NgModule,  } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './pages/home/app.component';
@@ -12,7 +12,7 @@ import { UserService } from './services/user.service';
 import { TaskService } from './services/task.service';
 import { TaskFormComponent } from './components/task-form/task-form.component';
 import { TeamComponent } from './components/team/team.component';
-
+import { FormButtonComponent } from './components/buttons/form-button.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,8 @@ import { TeamComponent } from './components/team/team.component';
     DailyTaskComponent,
     LoginComponent,
     TaskFormComponent,
-    TeamComponent
+    TeamComponent,
+    FormButtonComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,6 +33,6 @@ import { TeamComponent } from './components/team/team.component';
     ReactiveFormsModule,
   ],
   providers: [UserService, TaskService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

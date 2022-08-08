@@ -1,11 +1,18 @@
-<div class="d-flex justify-content-md-around">
-    <div *ngFor="let user of users" >
-        <div *ngIf="user !== null" class="d-flex justify-content-center flex-column app-profile m-5">
-            <img src="assets/images/{{ user.photo }}.jpg" class="card-img-top" alt="this person do not exist"/>
-            <div class="m-auto text-center">
-                <h5 class="card-title">{{ user.firstName }} {{ user.lastName }}</h5>
-                <p class="card-title-2 text-warning">{{user.job}}</p>
+<div class="bg-light container-fluid">
+    <h3 class="text-center m-5 fs-2 text-secondary pt-2">
+        My team
+    </h3>
+    <div class="d-flex justify-content-md-around">
+        <div *ngFor="let user of users">
+            <div *ngIf="user !== null" class="d-flex justify-content-center flex-column app-profile m-5">
+                <img src="assets/images/{{ user.photo }}.jpg" class="card-img-top" alt="this person do not exist" (click)="onTeamPartnerClick(user)"/>
+                <div class="m-auto text-center">
+                    <h5 class="card-title">{{ user.firstName }}
+                        {{ user.lastName }}</h5>
+                    <p class="card-title-2 text-warning">{{user.job}}</p>
+                </div>
             </div>
         </div>
     </div>
+
 </div>

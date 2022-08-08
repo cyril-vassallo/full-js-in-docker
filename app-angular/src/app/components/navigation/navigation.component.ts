@@ -1,29 +1,22 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NavigationInterface, UserInterface } from '../../Interfaces/Interfaces';
-
+import { NavigationInterface } from '../../Interfaces/Interfaces';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit {
-
   @Input() navigation!: NavigationInterface[];
   @Input() isAuth!: boolean;
-  @Input() handleNavItemClick!:(event?: MouseEvent) => void;
+  @Input() handleNavItemClick!: (event?: MouseEvent) => void;
   @Input() logout!: () => void;
 
+  constructor() {}
 
-  constructor() { 
+  ngOnInit(): void {}
+
+  onLogoutClick(): void {
+    this.logout();
   }
-
-  ngOnInit(): void {
-  }
-
-  handleLogoutClick(): void {
-    this.logout()
-  }
-
-
 }
