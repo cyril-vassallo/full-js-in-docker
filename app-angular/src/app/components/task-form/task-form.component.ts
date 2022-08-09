@@ -5,7 +5,6 @@ import {
   CommitInterface,
   UserInterface,
 } from 'src/app/Interfaces/Interfaces';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-task-form',
@@ -106,7 +105,8 @@ export class TaskFormComponent implements OnInit {
     if (
       task !== null &&
       taskInputValue !== null &&
-      taskInputValue !== undefined
+      taskInputValue !== undefined &&
+      taskInputValue !== ''
     ) {
       task.list.push(taskInputValue);
     }
