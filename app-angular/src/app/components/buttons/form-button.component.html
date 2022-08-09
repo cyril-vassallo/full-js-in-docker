@@ -1,4 +1,7 @@
-<div class="container d-flex justify-content-center mt-5">
-   <button *ngIf="!isFormDisplayed" (click)="openForm()" [ngClass]="{'btn': true, 'btn-warning': true , 'btn-lg': true}" class="m-auto app-open-form" [hidden]="disabledSate">{{ buttonText }}</button>
+<div class="container d-flex justify-content-center my-5">
+   <button *ngIf="!isFormDisplayed;" (click)="openForm()" [ngClass]="{'btn': true, 'btn-warning': true , 'btn-lg': true}" class="m-auto app-open-form"  [disabled]="disabledSate">
+      <span *ngIf="!disabledSate; else disabledLabel">{{ buttonText }}</span>
+      <ng-template #disabledLabel> <span>Read Only</span></ng-template>
+   </button>
 </div>
    

@@ -1,6 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { TaskInterface, CommitInterface } from 'src/app/Interfaces/Interfaces';
+import {
+  TaskInterface,
+  CommitInterface,
+  UserInterface,
+} from 'src/app/Interfaces/Interfaces';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-task-form',
@@ -9,6 +14,14 @@ import { TaskInterface, CommitInterface } from 'src/app/Interfaces/Interfaces';
 })
 export class TaskFormComponent implements OnInit {
   constructor() {}
+
+  @Input() hasTask: boolean = false;
+  @Input() tasks: TaskInterface[] | null = null;
+  @Input() user: UserInterface | null = null;
+  @Input() handleTaskState!: (
+    tasks: TaskInterface[] | null,
+    task: TaskInterface | null
+  ) => void;
 
   task: TaskInterface | null = null;
   isTodayTaskExist: boolean = false;
@@ -24,13 +37,6 @@ export class TaskFormComponent implements OnInit {
     commitHashInput: new FormControl(''),
     commitUrlInput: new FormControl(''),
   });
-
-  @Input() hasTask: boolean = false;
-  @Input() tasks: TaskInterface[] | null = null;
-  @Input() handleTaskState!: (
-    tasks: TaskInterface[] | null,
-    task: TaskInterface | null
-  ) => void;
 
   ngOnInit(): void {
     this.isTodayTaskExist = this.checkIfTodayTaskExist(this.tasks, this.date);
@@ -49,6 +55,8 @@ export class TaskFormComponent implements OnInit {
     if (this.tasks !== null && this.task !== null && !this.isTodayTaskExist) {
       this.tasks = this.mergeTasks(this.tasks, this.task);
       this.hasTask = true;
+    } else if (!this.tasks && this.task !== null) {
+      this.tasks = [this.task];
     }
 
     this.handleTaskState(this.tasks, this.task);
@@ -123,6 +131,16 @@ export class TaskFormComponent implements OnInit {
       newTask.list = [];
       newTask.date = this.date;
       this.task = newTask;
+    } else {
+      if (this.user) {
+        this.task = {
+          id: 1,
+          userId: this.user.id,
+          date: this.date,
+          commits: [],
+          list: [],
+        };
+      }
     }
   }
 

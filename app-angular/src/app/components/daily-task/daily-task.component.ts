@@ -13,23 +13,34 @@ export class DailyTaskComponent implements OnInit {
 
   usersState: UserInterface[] | null = null;
 
-  constructor() {}
+  private unknownUser: UserInterface;
+
+  constructor() {
+    this.unknownUser = {
+      id: 0,
+      firstName: 'unknown',
+      lastName: 'user',
+      job: 'no job',
+      description: 'this is an unknown user',
+      photo: 'unknown-user',
+    };
+  }
 
   ngOnInit(): void {
     if (this.teamPartner !== null) {
-      console.log('HasTeamParnner');
       this.user = this.teamPartner;
     }
   }
 
-  getAvatar(): string {
-    if (this.teamPartner) {
-      return this.teamPartner.photo;
+  getUser(): UserInterface {
+    if (this.teamPartner && this.teamPartner !== undefined) {
+      return this.teamPartner;
     } else {
-      if (this.user) {
-        return this.user.photo;
+      if (this.user && this.user !== undefined) {
+        return this.user;
+      } else {
+        return this.unknownUser;
       }
-      return 'image/default.jpg';
     }
   }
 }

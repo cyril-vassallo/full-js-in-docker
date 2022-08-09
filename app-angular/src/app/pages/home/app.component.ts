@@ -5,7 +5,7 @@ import {
   TaskInterface,
 } from '../../Interfaces/Interfaces';
 import { TaskService } from '../../services/task.service';
-import { TasksAndMeta, UsersAndMeta } from '../../types/types';
+import { TaskAndMeta, TasksAndMeta, UsersAndMeta } from '../../types/types';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -68,7 +68,6 @@ export class AppComponent implements OnInit {
 
   onClickNavItem(event?: MouseEvent): void {
     console.log('Clicked nav item! ');
-    console.log(event);
   }
 
   login(user: UserInterface | null): void {
@@ -166,11 +165,9 @@ export class AppComponent implements OnInit {
   ) {
     this.tasksState = tasks;
     if (task !== null) {
-      this.taskService
-        .postTask(task)
-        .subscribe((tasksAndMeta: TasksAndMeta) => {
-          this.tasksState = tasksAndMeta.data;
-        });
+      this.taskService.postTask(task).subscribe((taskAndMeta: TaskAndMeta) => {
+        console.log(taskAndMeta.data);
+      });
     }
   }
 

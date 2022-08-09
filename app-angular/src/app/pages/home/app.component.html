@@ -8,7 +8,7 @@
         <app-profile [user]="userState" [handleLoadUserTasks]="loadUserTasks"></app-profile>
         <app-team [users]="usersState" [handleTeamPartnerTasks]="loadUserTasks"></app-team>
         <app-form-button  [handleToggleForm]="toggleFormState" [isFormDisplayed]="formDisplayState" [teamPartner]="teamPartnerState"></app-form-button>
-        <app-task-form *ngIf="isFormShouldDisplayed()" [tasks]="tasksState" [handleTaskState]="assignNewTaskState"></app-task-form>
+        <app-task-form *ngIf="isFormShouldDisplayed()" [user]="userState" [tasks]="tasksState" [handleTaskState]="assignNewTaskState" ></app-task-form>
         <app-daily-task [tasks]="tasksState" [user]="userState" [teamPartner]="teamPartnerState"></app-daily-task>
     </div>
     <div

@@ -1,8 +1,9 @@
 import { Controller, Get, Param, Body, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { TasksAndMeta } from '../Types/types';
+import { TasksAndMeta, StateAndMeta, TaskAndMeta } from '../Types/types';
 import { TaskService } from '../Services/task.service';
 import { TaskDto } from '../dto/task.dto';
+import { TaskInterface } from 'src/Interfaces/interfaces';
 
 @Controller('/task')
 export class TaskController {
@@ -10,7 +11,6 @@ export class TaskController {
     private readonly taskService: TaskService,
     private configService: ConfigService,
   ) {}
-
 
   @Get('/user/:id')
   getTasks(@Param('id') id: number): TasksAndMeta {
@@ -30,14 +30,13 @@ export class TaskController {
       data: this.taskService.getAllTasks(),
       meta: {
         urn: '/task/all',
-        uri:
-          this.configService.get<string>('API_ENDPOINT') + '/task/all',
+        uri: this.configService.get<string>('API_ENDPOINT') + '/task/all',
       },
     };
   }
 
   @Post('')
-  postTask(@Body() taskDto: TaskDto): TasksAndMeta  {
+  postTask(@Body() taskDto: TaskDto): TaskAndMeta {
     return {
       data: this.taskService.updateTasksFromDb(taskDto),
       meta: {
@@ -46,6 +45,4 @@ export class TaskController {
       },
     };
   }
-
-
 }

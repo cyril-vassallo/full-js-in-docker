@@ -97,7 +97,7 @@ export class TaskService {
     return this.tasksFromDb;
   }
 
-  updateTasksFromDb(taskDto: TaskDto): TaskInterface[] {
+  updateTasksFromDb(taskDto: TaskDto): TaskInterface {
     const lastInsertTask: TaskInterface =
       this.tasksFromDb[this.tasksFromDb.length - 1];
 
@@ -117,13 +117,13 @@ export class TaskService {
         list: taskDto.list,
         commits: taskDto.commits,
       };
-
       this.tasksFromDb.push(task);
+      return task;
     } else if (isSameTask && (isListSame || isCommitsSame)) {
       lastInsertTask.list = taskDto.list;
       lastInsertTask.commits = taskDto.commits;
+      return lastInsertTask;
     }
-
-    return this.tasksFromDb;
+    return lastInsertTask;
   }
 }
