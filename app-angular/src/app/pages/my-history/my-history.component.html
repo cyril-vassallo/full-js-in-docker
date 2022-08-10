@@ -1,4 +1,4 @@
-<main class="spa">
+<main class="main-my-history">
     <app-navigation [navigation]="navigationState" [isAuth]="isAuthState" [handleNavItemClick]="onClickNavItem" [logout]="logout"></app-navigation>
     <h1 class="text-center m-5 fs-2 fw-semibold text-secondary">{{ titleState }}</h1>
     <div *ngIf="!isAuthState" id="app-login">
@@ -10,8 +10,5 @@
         <app-form-button  [handleToggleForm]="toggleFormState" [isFormDisplayed]="formDisplayState" [teamPartner]="teamPartnerState"></app-form-button>
         <app-task-form *ngIf="isFormShouldDisplayed()" [user]="userState" [tasks]="tasksState" [handleTaskState]="assignNewTaskState" ></app-task-form>
         <app-daily-task [tasks]="tasksState" [user]="userState" [teamPartner]="teamPartnerState"></app-daily-task>
-    </div>
-    <div
-        id="app-my-team"><!-- here team element -->
     </div>
 </main>

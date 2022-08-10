@@ -1,0 +1,85 @@
+<main class="main-my-seetings">
+    <h1 class="text-center m-5 fs-2 fw-semibold text-secondary">My-Settings</h1>
+    <p class="text-center m-5 fw-semibold text-secondary"><a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Go back to the app</a></p>
+    <div class="card ">
+        <div class="card-header text-center">
+            <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="true" href="#">Me</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Wire GitHub</a>
+            </li>
+            </ul>
+        </div>
+        <div class="container card-body">
+            <div class="row text-center mb-5">
+                <h5 class="card-title">Find here your personal params</h5>
+            </div>
+            <div class="row">
+                <div class="col mb-3">
+                    <h2 class="fs-4 fw-semibold text-secondary">Your personal information</h2>
+                    <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Change your email">
+
+                    <label for="exampleFormControlInput2" class="form-label"> First name</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="Change your first name">
+
+                    <label for="exampleFormControlInput3" class="form-label"> Last name</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput3" placeholder="Change your last name">
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-50  my-5">Update</button>
+                    </div>
+              
+                </div>
+                <div class="col mb-3 container">
+                    <h2 class="fs-4 fw-semibold text-secondary">App settings</h2>    
+                    <div class="row mt-2">
+                        <label class="col form-label">Clear today task:</label>
+                        <button type="button" href="#" class="col btn btn-sm btn-warning mx-5">Clear</button>
+                    </div>
+                    <div class="row mt-2">
+                        <label class="col form-label">Clear all the history:</label>
+                        <button type="button" href="#" class="col btn btn-sm btn-danger mx-5">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container card-body">
+            <div class="row text-center mb-5">
+                <h5 class="card-title">Find here params to auto-wire github</h5>
+            </div>
+            <div class="row">
+                <div class="col mb-3 container">
+                    <div class="row">
+                        <h2 class="fs-4 fw-semibold text-secondary">Wire github</h2>   
+                    </div>
+                    <div class="col-md form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label mx-2" for="flexSwitchCheckDefault">Disable</label>
+                    </div>
+                    <div class="row mt-2 align-items-center">
+                        <div class="col-md">
+                            <label for="exampleFormControlInput4" class="form-label">Onwer</label>
+                            <input type="text"  class="form-control" id="exampleFormControlInput4" placeholder="Enter repository owner"/>
+                        </div>
+                        <div class="col-md">
+                            <label for="exampleFormControlInput5" class="form-label">Repository</label>
+                            <input type="text"  class="form-control" id="exampleFormControlInput5" placeholder="Enter repository name"/>
+                        </div>
+                        <div class="col-md">
+                            <label for="exampleFormControlInput6" class="form-label">Branch</label>
+                            <input type="text"  class="form-control" id="exampleFormControlInput6" placeholder="Enter repository branch name"/>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary w-25  my-5">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

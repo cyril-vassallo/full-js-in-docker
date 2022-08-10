@@ -9,11 +9,11 @@ import { TaskAndMeta, TasksAndMeta, UsersAndMeta } from '../../types/types';
 import { UserService } from '../../services/user.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  selector: 'app-my-history',
+  templateUrl: './my-history.component.html',
+  styleUrls: ['./my-history.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class MyHistoryComponent implements OnInit {
   titleState: string = 'Login';
 
   isAuthState: boolean = false;
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
   navigationState: NavigationInterface[] = [
     {
       label: 'My History',
-      path: '/my-history',
+      path: '/',
       isActive: true,
       title: 'Fill your information',
       componentId: 'app-my-history',
