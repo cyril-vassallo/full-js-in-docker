@@ -7,6 +7,8 @@ import { HomeService } from './Services/home.service';
 import { UserService } from './Services/user.service';
 import { TaskService } from './Services/task.service';
 import { FormatService } from './Services/format.service';
+import { GithubService } from './Services/github.service';
+import { GithubController } from './Controllers/github.controller';
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { FormatService } from './Services/format.service';
       isGlobal: true,
     }),
   ],
-  controllers: [HomeController, UserController, TaskController],
-  providers: [HomeService, UserService, TaskService, FormatService],
+  controllers: [HomeController, UserController, TaskController, GithubController],
+  providers: [HomeService, UserService, TaskService, FormatService, GithubService],
 })
 export class AppModule {}

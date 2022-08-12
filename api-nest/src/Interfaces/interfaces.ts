@@ -41,3 +41,13 @@ export interface ReturnedUserInterface {
     description: string;
     photo: string;
 }
+
+
+export interface GithubInterface {
+    id: number;
+    userId: number;
+    owner: string;
+    repository: string;
+    branch: string;
+    enabled : boolean;
+}

@@ -13,6 +13,12 @@ export class HomeService {
   getFeatures(): FeatureInterface[] {
     return [
       {
+        title: 'User login',
+        url: 'POST: ' + this.configService.get<string>('API_ENDPOINT')+'/user/login',
+        description:
+          'Get a specific user with email and password in a POST JSON Body request',
+      },
+      {
         title: 'Get one user',
         url: 'GET: ' + this.configService.get<string>('API_ENDPOINT')+'/user/{:id}',
         description:
@@ -20,25 +26,19 @@ export class HomeService {
       },
       {
         title: 'Get all users',
-        url: 'GET: ' + this.configService.get<string>('API_ENDPOINT')+'/user',
+        url: 'GET: ' + this.configService.get<string>('API_ENDPOINT')+'/user/all',
         description:
           'Get all users information except login info',
       },
       {
-        title: 'User login',
-        url: 'POST: ' + this.configService.get<string>('API_ENDPOINT')+'/user/login',
-        description:
-          'Get a specific user with email and password in a POST JSON Body request',
-      },
-      {
-        title: 'Get an user tasks',
+        title: 'Get all tasks for one user',
         url: 'GET: '+this.configService.get<string>('API_ENDPOINT')+'/task/user/{:id}',
         description:
-          'Get a specific user id tasks',
+          'Get all task for one specific user id tasks',
       },
       {
         title: 'Get all db tasks',
-        url: 'GET: '+this.configService.get<string>('API_ENDPOINT')+'/task',
+        url: 'GET: '+this.configService.get<string>('API_ENDPOINT')+'/task/all',
         description:
           'Get a all tasks of all users',
       },

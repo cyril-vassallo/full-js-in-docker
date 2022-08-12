@@ -44,3 +44,12 @@ export interface TaskInterface {
     list: string [],
     commits: CommitInterface[]
 }
+
+export interface GithubInterface {
+    id: number;
+    userId: number;
+    owner: string;
+    repository: string;
+    branch: string;
+    enabled : boolean;
+}

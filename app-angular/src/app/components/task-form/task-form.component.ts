@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import format from 'date-fns/format'
 import {
   TaskInterface,
   CommitInterface,
@@ -25,7 +26,7 @@ export class TaskFormComponent implements OnInit {
   task: TaskInterface | null = null;
   isTodayTaskExist: boolean = false;
   isValidCommit: boolean = true;
-  date: string = new Date().toLocaleString('fr').split(',')[0];
+  date: string = format(new Date(), 'dd/MM/yyyy');
   userAgent: string = navigator.userAgent;
 
   taskForm = new FormGroup({
@@ -38,6 +39,7 @@ export class TaskFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    console.log(this.date)
     this.isTodayTaskExist = this.checkIfTodayTaskExist(this.tasks, this.date);
     this.isTodayTaskExist ? (this.hasTask = true) : (this.hasTask = false);
   }
