@@ -6,5 +6,6 @@ export const config = {
     login: '/user/login',
     getUserTasks: '/task/user/',
     postTask : '/task/',
-    getUserGithub : '/github/'
+    getUserGithub : '/github/',
+    postUserGithub: '/github/user'
 }

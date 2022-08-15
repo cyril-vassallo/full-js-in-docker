@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { GithubAndMeta } from '../types/types';
 
 
+
 @Injectable()
 export class GithubService {
   constructor(private http: HttpClient) {}
@@ -20,6 +21,10 @@ export class GithubService {
     return this.http.get<any>(
         config.apiGithub + 'repos/'+ github.owner + '/' + github.repository + '/branches/' + github.branch
     );
+  }
+
+  public postGithub(github: GithubInterface): Observable<GithubAndMeta> {
+    return this.http.post<GithubAndMeta>( config.apiUrl + config.postUserGithub, github)
   }
 
 }

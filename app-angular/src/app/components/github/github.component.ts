@@ -3,8 +3,9 @@ import { UserInterface, GithubInterface } from '../../Interfaces/Interfaces';
 import { GithubService } from '../../services/github.service';
 import { GithubAndMeta } from '../../types/types';
 import { FormGroup, FormControl } from '@angular/forms';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError, map} from 'rxjs/operators';
+import { of, Subscription, Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-github',
@@ -16,7 +17,7 @@ export class GithubComponent implements OnInit {
   @Input() user!: UserInterface|null;
   githubState: GithubInterface|null = null;
   enabled: boolean = false;
-  hasError: boolean = false;
+  hasError: boolean = true;
   githubForm = new FormGroup({
     owner: new FormControl(''),
     repository: new FormControl(''),
@@ -24,28 +25,41 @@ export class GithubComponent implements OnInit {
     enabled: new FormControl(false),
   });
 
-  constructor(private githubService: GithubService) { }
+  githubObservable$: Observable<GithubAndMeta>|null = null
+  githubCheckingObservable$: Observable<GithubAndMeta>|null = null
+  githubUpdateObservable$: Observable<GithubAndMeta>|null = null
+  gitUpdateSubscription$: Subscription| null = null;
+  gitCheckingSubscription$: Subscription| null = null;
+  gitGetByUserSubscription$: Subscription| null = null;
 
-  async ngOnInit(): Promise<void> {
+  constructor(private githubService: GithubService) {}
+
+  ngOnInit(): void {
     this.initGithubState();
-    this.checkRepository();
   }
 
-
+  ngOnDestroy() {
+    // Unsubscribe when the component is destroyed
+    if(this.gitUpdateSubscription$) this.gitUpdateSubscription$.unsubscribe();
+    if(this.gitCheckingSubscription$) this.gitCheckingSubscription$.unsubscribe();
+    if(this.gitGetByUserSubscription$) this.gitGetByUserSubscription$.unsubscribe();
+  }
+  
   onGithubFormSubmit(): void {
     this.checkRepository();
     if(!this.hasError){
-      this.updateRepository()
+      this.updateRepository() 
     }
   }
 
-
   initGithubState(): void{
     if(this.user){
-      const githubObservable$ = this.githubService.getGithubByUser(this.user);
-      githubObservable$.subscribe( (_observer: GithubAndMeta) => {
-        this.githubState = {..._observer.data}
-        this.updateFormValues()
+      this.githubObservable$ = this.githubService.getGithubByUser(this.user);
+      this.gitGetByUserSubscription$ = this.githubObservable$.subscribe( (_event: GithubAndMeta) => {
+        console.log('GET GIT')
+        this.githubState = {..._event.data}
+        this.updateFormValues();
+        this.checkRepository();
       })
     }
   }
@@ -72,7 +86,6 @@ export class GithubComponent implements OnInit {
 
   } 
 
-
   isGithubActive() {
     return this.githubForm.get('enabled')?.getRawValue()
   }
@@ -86,6 +99,11 @@ export class GithubComponent implements OnInit {
     )
     {
       this.checkRepository();
+    }else {
+      if(this.githubForm.controls.enabled.value) {
+        this.hasError = true
+      }
+     
     }
   }
 
@@ -102,24 +120,45 @@ export class GithubComponent implements OnInit {
     }
   }
 
-  checkRepository(): void {
+  checkRepository(): any {
     if(this.githubState){
+
       this.githubState.owner = this.githubForm.controls.owner.value!;
       this.githubState.repository = this.githubForm.controls.repository.value!;
       this.githubState.branch = this.githubForm.controls.branch.value!;
-      const githubCheckingObservable$ = this.githubService.checkGithubRepository(this.githubState)
-      githubCheckingObservable$
-        .pipe(catchError(err => of({status : err.status})))
-        .subscribe( (resp: any) => {
-          console.log(resp)
-          resp.status === 404 || resp.status === 403  ? this.hasError = true : this.hasError = false
-      } )
+      
+      this.githubCheckingObservable$ = this.githubService.checkGithubRepository(this.githubState)
+      this.gitCheckingSubscription$ = this.githubCheckingObservable$
+        .pipe(
+          catchError(err => of({status : err.status}))
+        )
+        .subscribe( (_event: any) => {
+          console.log('CHECK GIT');
+          _event.status === 404 || _event.status === 403  ? this.hasError = true : this.hasError = false
+      })
     }
   }
 
   updateRepository(): void {
-    //to do backend
+    if(this.githubState && this.user && !this.hasError){
+
+      this.githubState.userId =  this.user?.id;
+      this.githubState.enabled = true;
+      this.githubState.owner = this.githubForm.controls.owner.value!;
+      this.githubState.repository = this.githubForm.controls.repository.value!;
+      this.githubState.branch = this.githubForm.controls.branch.value!;
+
+      this.githubUpdateObservable$ = this.githubService.postGithub(this.githubState)
+      this.gitUpdateSubscription$ = this.githubUpdateObservable$
+        .pipe(catchError(err => of({status : err.status})))
+        .subscribe( (_event: any) => {
+          console.log('UPDATE GIT')
+          console.log(_event)
+          _event.status === 404 || _event.status === 403  ? this.hasError = true : this.hasError = false
+      } )
+    }
   }
-  
+
+
 
 }

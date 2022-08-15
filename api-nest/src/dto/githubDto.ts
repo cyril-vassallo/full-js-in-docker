@@ -1,7 +1,9 @@
 
-import { IsString,  IsInt, IsBoolean } from 'class-validator';
+import { IsString,  IsInt, IsBoolean, IsOptional } from 'class-validator';
 
 export class GithubDto  {
+
+
     @IsInt()
     id: number;
 
@@ -18,7 +20,7 @@ export class GithubDto  {
     branch: string;
 
     @IsBoolean()
-    enabled: string; 
+    enabled: boolean; 
 
 
 
