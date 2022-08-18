@@ -12,8 +12,6 @@ export class ProfileComponent implements OnInit {
 
   constructor() {}
 
-  buttonText: string = 'Archive today tasks!';
-
   ngOnInit(): void {}
 
   onUserProfileClick() {

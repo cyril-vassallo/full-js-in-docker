@@ -9,6 +9,8 @@ import { TaskService } from './Services/task.service';
 import { FormatService } from './Services/format.service';
 import { GithubService } from './Services/github.service';
 import { GithubController } from './Controllers/github.controller';
+import { NavigationService } from './Services/navigation.service';
+import { NavigationController } from './Controllers/navigation.controller';
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ import { GithubController } from './Controllers/github.controller';
       isGlobal: true,
     }),
   ],
-  controllers: [HomeController, UserController, TaskController, GithubController],
-  providers: [HomeService, UserService, TaskService, FormatService, GithubService],
+  controllers: [HomeController, UserController, TaskController, GithubController, NavigationController],
+  providers: [HomeService, UserService, TaskService, FormatService, GithubService, NavigationService],
 })
 export class AppModule {}

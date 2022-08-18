@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-export interface NavigationInterface {
+
+export interface NavigationItemInterface {
+    id: number;
     label: string;
-    path: string;
-    isActive : boolean;
     title: string;
+    path: string;
+    isActive: boolean;
     componentId: string;
 }
 
@@ -54,3 +55,4 @@ export interface GithubInterface {
     enabled : boolean;
     token: string;
 }
+

@@ -20,6 +20,7 @@ import { TaskService } from './services/task.service';
 import { GithubService } from './services/github.service';
 import { GithubComponent } from './components/github/github.component';
 import { ParamsComponent } from './components/params/params.component';
+import { NavigationService } from './services/navigation.service';
 
 
 
@@ -45,7 +46,7 @@ import { ParamsComponent } from './components/params/params.component';
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [UserService, TaskService, GithubService],
+  providers: [UserService, TaskService, GithubService, NavigationService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

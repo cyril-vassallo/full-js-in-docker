@@ -52,3 +52,13 @@ export interface GithubInterface {
     enabled : boolean;
     token: string;
 }
+
+
+export interface NavigationItemInterface {
+    id: number;
+    label: string;
+    title: string;
+    path: string;
+    isActive: boolean;
+    componentId: string;
+}

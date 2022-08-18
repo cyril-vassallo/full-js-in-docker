@@ -3,7 +3,8 @@ import {
   TaskInterface,
   MetaInterface,
   FeatureInterface,
-  GithubInterface
+  GithubInterface,
+  NavigationItemInterface
 } from '../Interfaces/interfaces';
 
 export type FeaturesAndMeta = {
@@ -38,6 +39,12 @@ export type StateAndMeta = {
 
 export type GithubAndMeta = {
   data: GithubInterface;
+  meta: MetaInterface;
+};
+
+
+export type NavigationAndMeta = {
+  data: NavigationItemInterface[];
   meta: MetaInterface;
 };
 

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  NavigationInterface,
+  NavigationItemInterface,
   UserInterface,
   TaskInterface,
   GithubInterface
@@ -34,25 +34,7 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
 
   githubState: GithubInterface | null = null;
 
-
   formDisplayState: boolean = false;
-
-  navigationState: NavigationInterface[] = [
-    {
-      label: 'My History',
-      path: '/',
-      isActive: true,
-      title: 'Fill your information',
-      componentId: 'app-my-history',
-    },
-    {
-      label: 'My Settings',
-      path: '/my-settings',
-      isActive: false,
-      title: 'Find here your history settings',
-      componentId: 'app-my-setting',
-    },
-  ];
 
   gitSubscription$: Subscription|null = null;
   tasksSubscription$: Subscription|null = null;
@@ -115,6 +97,8 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
       }) 
     }
   }
+
+
 
   loadUser(user: UserInterface | null): void {
     this.isAuthState = true;
