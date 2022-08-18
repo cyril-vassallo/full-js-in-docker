@@ -1,20 +1,18 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { TaskService } from 'src/app/services/task.service';
 import {
   LoginFormInterface,
   UserInterface,
   TaskInterface,
 } from '../../Interfaces/Interfaces';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   email: string = '';
   password: string = '';
   errorMessage: string = 'E-Mail address or password is incorrect !';
@@ -26,9 +24,10 @@ export class LoginComponent implements OnInit {
   @Input() handleTasksList!: (tasks: TaskInterface[] | null) => void;
   @Input() user!: UserInterface | null;
 
+  loginUserSubscription$ : Subscription| null = null;
+
   constructor(
     private userService: UserService,
-    private taskService: TaskService
   ) {
     this.userService = userService;
   }
@@ -36,20 +35,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmitLogin(loginForm: LoginFormInterface) {
-    const UserAndMeta$ = this.userService.login(loginForm).pipe(
-      catchError((error) => {
-        if (error.error instanceof ErrorEvent) {
-          this.errorMsg = `Error: ${error.error.message}`;
-          console.log(this.errorMsg);
-        } else {
-          this.errorMsg = `Error: ${error.message}`;
-          console.log(this.errorMsg);
-        }
-        return of([]);
-      })
-    );
-
-    UserAndMeta$.subscribe((_observer: any) => {
+    this.loginUserSubscription$ = this.userService.login(loginForm).subscribe((_observer: any) => {
       if (_observer.data) {
         this.isLoginFailed = false;
         this.user = _observer.data;
@@ -58,5 +44,9 @@ export class LoginComponent implements OnInit {
         this.isLoginFailed = true;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.loginUserSubscription$?.unsubscribe();
   }
 }

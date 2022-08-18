@@ -60,8 +60,7 @@ export class GithubComponent implements OnInit {
 
   initGithubState(): void {
     if(this.user){
-      this.githubObservable$ = this.githubService.getGithubByUser(this.user);
-      this.gitGetByUserSubscription$ = this.githubObservable$.subscribe( (_event: GithubAndMeta) => {
+      this.gitGetByUserSubscription$ = this.githubService.getGithubByUser(this.user).subscribe( (_event: GithubAndMeta) => {
         console.log('GET GIT')
         this.githubState = {..._event.data};
         this.updateFormValues();
@@ -131,8 +130,7 @@ export class GithubComponent implements OnInit {
       this.githubState.branch = this.githubForm.controls.branch.value!;
       this.githubState.token = this.githubForm.controls.token.value!;
       
-      this.githubCheckingObservable$ = this.githubService.checkGithubRepository(this.githubState)
-      this.gitCheckingSubscription$ = this.githubCheckingObservable$
+      this.gitCheckingSubscription$ = this.githubService.checkGithubRepository(this.githubState)
         .pipe(
           catchError(err => of({status : err.status}))
         )
@@ -156,8 +154,7 @@ export class GithubComponent implements OnInit {
       this.githubState.branch = this.githubForm.controls.branch.value!;
       this.githubState.token = this.githubForm.controls.token.value!;
 
-      this.githubUpdateObservable$ = this.githubService.postGithub(this.githubState)
-      this.gitUpdateSubscription$ = this.githubUpdateObservable$
+      this.gitUpdateSubscription$ = this.githubService.postGithub(this.githubState)
         .pipe(catchError(err => of({status : err.status})))
         .subscribe( (_event: any) => {
           console.log('UPDATE GIT')

@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  NavigationItemInterface,
   UserInterface,
   TaskInterface,
   GithubInterface
@@ -8,9 +7,8 @@ import {
 import { TaskService } from '../../services/task.service';
 import { UserService } from '../../services/user.service';
 import { GithubService } from '../../services/github.service';
-import { TaskAndMeta, TasksAndMeta, UsersAndMeta } from '../../types/types';
+import { TaskAndMeta, TasksAndMeta, UsersAndMeta, GithubAndMeta } from '../../types/types';
 import { Subscription } from 'rxjs';
-
 
 
 
@@ -38,6 +36,7 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
 
   gitSubscription$: Subscription|null = null;
   tasksSubscription$: Subscription|null = null;
+  userSubscription$: Subscription|null = null;
 
   constructor(
     private taskService: TaskService,
@@ -66,6 +65,7 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void  {
     this.gitSubscription$?.unsubscribe();
     this.tasksSubscription$?.unsubscribe();
+    this.userSubscription$?.unsubscribe();
   }
 
   loadUserTasks(user: UserInterface | null) {
@@ -77,8 +77,7 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
         this.teamPartnerState = null;
       }
 
-      const tasksObservable$ = this.taskService.getTasksByUser(user);
-      this.tasksSubscription$  = tasksObservable$.subscribe((_observer: TasksAndMeta) => {
+      this.tasksSubscription$  = this.taskService.getTasksByUser(user).subscribe((_observer: TasksAndMeta) => {
         if (_observer.data && _observer.data.length > 0) {
           this.tasksState = _observer.data;
         } else {
@@ -91,9 +90,8 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
   loadUserGithub(user: UserInterface | null): void  {
     console.log('user github loaded !');
     if(user !== null) {
-      const gitObservables$ = this.githubService.getGithubByUser(user);
-      this.gitSubscription$ = gitObservables$.subscribe((result) => {
-        this.githubState = result.data;
+      this.gitSubscription$ = this.githubService.getGithubByUser(user).subscribe((_observer: GithubAndMeta) => {
+        this.githubState = _observer.data;
       }) 
     }
   }
@@ -108,13 +106,11 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
   }
 
   loadUsers(user: UserInterface | null): void {
-    const userObservable$ = this.userService.getAllUsers();
-
-    userObservable$.subscribe((_observer: UsersAndMeta) => {
-      if (_observer.data && _observer.data.length > 0) {
+    this.userSubscription$ = this.userService.getAllUsers().subscribe((_observer: UsersAndMeta) => {
+      if (_observer?.hasOwnProperty('data')) {
         const data = _observer.data;
 
-        this.usersState = data.filter((loopUser) => {
+        this.usersState = data.filter((loopUser: UserInterface) => {
           return loopUser.firstName !== user?.firstName;
         });
       } else {
