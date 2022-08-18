@@ -50,4 +50,5 @@ export interface GithubInterface {
     repository: string;
     branch: string;
     enabled : boolean;
+    token: string;
 }

@@ -11,6 +11,7 @@ export class GithubService {
             owner: 'cyril-vassallo',
             repository: "full-js-in-docker",
             branch: "ANGULAR-14_NEST-JS",
+            token: "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",
             enabled: true
         },
         {
@@ -19,6 +20,7 @@ export class GithubService {
             owner: 'cyril-vassallo',
             repository: "full-js-in-docker",
             branch: "ANGULAR-14_NEST-JS",
+            token: "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",
             enabled: false
         }
     ]
@@ -33,13 +35,13 @@ export class GithubService {
 
     updateGithubRepository(githubDto: GithubDto): GithubInterface {
         let github: GithubInterface | undefined = this.getGithubByUserId(githubDto.userId);
-        console.log(github)
         if(github !== undefined) {
             //update
             github.owner = githubDto.owner;
             github.repository = githubDto.repository;
             github.branch = githubDto.branch;
             github.enabled = githubDto.enabled;
+            github.token = githubDto.token;
         }else {
             //create
             const lastGithub: GithubInterface = this.githubFromDb.reduce( (previewGit: GithubInterface, currentGit: GithubInterface) => {

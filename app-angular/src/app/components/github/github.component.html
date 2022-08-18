@@ -28,12 +28,18 @@
                     <input formControlName="branch" type="text"  class="form-control" id="branch" placeholder="Enter repository branch name"/>
                 </div>
             </div>
-            <div class="row justify-content-center">
+            <div class="row mt-2 justify-content-center">
+                <div class="col-md">
+                    <label for="token" class="form-label">Access Token</label>
+                    <input formControlName="token" type="text"  class="form-control" id="token" placeholder="Enter your repository access token"/>
+                </div>
+            </div>
+            <div class="row mt-2 align-items-center">
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary w-25  my-5" [disabled]="!isGithubActive()">Update</button>
                 </div>
             </div>
-            <div *ngIf="isGithubActive()" class="row justify-content-center">
+            <div *ngIf="isMessageDisplayed" class="row justify-content-center">
                 <p *ngIf="hasError; else valid" class="alert alert-warning text-center w-50  mb-5"><b>Repository not found !</b> <br/>Check if information: owner name, repository name and branch name are well matching !</p>
                 <ng-template #valid>
                     <p class="alert alert-success w-50 text-center mb-5"> <b>Available repository !</b> <br/> You can now import daily tasks directly from commits</p>

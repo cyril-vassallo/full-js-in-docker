@@ -22,6 +22,10 @@ export class GithubDto  {
     @IsBoolean()
     enabled: boolean; 
 
+    @IsString()
+    token: string;
+
+
 
 
 }
