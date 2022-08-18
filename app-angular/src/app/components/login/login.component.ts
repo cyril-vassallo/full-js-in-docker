@@ -6,6 +6,7 @@ import {
   TaskInterface,
 } from '../../Interfaces/Interfaces';
 import { Subscription } from 'rxjs';
+import { UserAndMeta } from '../../types/types';
 
 @Component({
   selector: 'app-login',
@@ -34,8 +35,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {}
 
+  ngOnDestroy(): void {
+    this.loginUserSubscription$?.unsubscribe();
+  }
+
   onSubmitLogin(loginForm: LoginFormInterface) {
-    this.loginUserSubscription$ = this.userService.login(loginForm).subscribe((_observer: any) => {
+    this.loginUserSubscription$ = this.userService.login(loginForm).subscribe((_observer: UserAndMeta) => {
       if (_observer.data) {
         this.isLoginFailed = false;
         this.user = _observer.data;
@@ -46,7 +51,5 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.loginUserSubscription$?.unsubscribe();
-  }
+
 }

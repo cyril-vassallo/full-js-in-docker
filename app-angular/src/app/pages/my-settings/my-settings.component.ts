@@ -8,6 +8,7 @@ import { UserInterface } from 'src/app/Interfaces/Interfaces';
 })
 export class MySettingsComponent implements OnInit {
   userState: UserInterface | null = null;
+  currentActiveFeature: string = 'me';
 
   constructor() {}
 
@@ -16,5 +17,13 @@ export class MySettingsComponent implements OnInit {
     if (user) {
       this.userState = JSON.parse(user);
     }
+  }
+
+  onClickSubNavItem(featureName: string){
+    this.currentActiveFeature = featureName;
+  }
+
+  checkFeatureIsActive(featureName: string){
+    return this.currentActiveFeature === featureName ? true : false
   }
 }

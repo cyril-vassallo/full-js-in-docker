@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { NavigationItemInterface } from '../../Interfaces/Interfaces';
 import { NavigationService } from '../../services/navigation.service';
 import { Subscription } from 'rxjs';
+import { NavigationAndMeta } from '../../types/types';
 
 @Component({
   selector: 'app-navigation',
@@ -21,8 +22,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
   constructor(private navigationService: NavigationService) {}
 
   ngOnInit(): void {
-    this.navigationSubscription$ = this.navigationService.getNavigation().subscribe((_event) => {
-      this.navigation = _event.data;
+    this.navigationSubscription$ = this.navigationService.getNavigation().subscribe((_observer: NavigationAndMeta) => {
+      this.navigation =  _observer.data;
     });
 
   }

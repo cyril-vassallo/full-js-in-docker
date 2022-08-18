@@ -5,14 +5,14 @@
         <div class="card-header text-center">
             <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="true" href="#">Me</a>
+                <a (click)="onClickSubNavItem('me')" [ngClass]="{'nav-link': true, 'active': checkFeatureIsActive('me')}" aria-current="true" href="/my-settings#me">Me</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Wire GitHub</a>
+                <a (click)="onClickSubNavItem('github')" [ngClass]="{'nav-link': true, 'active': checkFeatureIsActive('github') }" aria-current="true" href="/my-settings#github">Wire GitHub</a>
             </li>
             </ul>
         </div>
-        <app-params [user]="userState"></app-params>
-        <app-github [user]="userState"></app-github>
+        <app-params [user]="userState" [isFeatureActive]="checkFeatureIsActive('me')"></app-params>
+        <app-github [user]="userState" [isFeatureActive]="checkFeatureIsActive('github')"></app-github>
     </div>
 </main>

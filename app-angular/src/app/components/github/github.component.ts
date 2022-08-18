@@ -15,6 +15,7 @@ import { of, Subscription, Observable } from 'rxjs';
 export class GithubComponent implements OnInit {
 
   @Input() user!: UserInterface|null;
+  @Input() isFeatureActive: boolean = false;
   githubState: GithubInterface|null = null;
   enabled: boolean = false;
   hasError: boolean = true;

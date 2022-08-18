@@ -12,6 +12,7 @@ export class ParamsComponent implements OnInit {
 
 
   @Input() user!: UserInterface|null;
+  @Input() isFeatureActive: boolean = false;
 
   ngOnInit(): void {
   }
