@@ -7,9 +7,11 @@ import { UserInterface } from '../../Interfaces/Interfaces';
   styleUrls: ['./form-button.component.scss'],
 })
 export class FormButtonComponent implements OnChanges {
-  @Input() buttonText: string = 'Archive today tasks!';
+  @Input() buttonTextOpenForm: string = 'Archive today tasks!';
+  @Input() buttonTextSyncGithub: string = 'Sync today task with git!';
   @Input() isFormDisplayed: boolean = false;
   @Input() handleToggleForm!: () => void;
+  @Input() handleSyncGithub!: () => void;
   @Input() teamPartner!: UserInterface | null;
   disabledSate: boolean = true;
 
@@ -21,7 +23,12 @@ export class FormButtonComponent implements OnChanges {
       : (this.disabledSate = false);
   }
 
-  openForm(): void {
+  onOpenFormClick(): void {
     this.handleToggleForm();
   }
+
+  onSyncGithubClick(): void {
+    this.handleSyncGithub();
+  }
+
 }

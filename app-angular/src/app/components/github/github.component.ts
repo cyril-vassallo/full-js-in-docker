@@ -42,9 +42,9 @@ export class GithubComponent implements OnInit {
 
   ngOnDestroy() {
     // Unsubscribe when the component is destroyed
-    if(this.gitUpdateSubscription$) this.gitUpdateSubscription$.unsubscribe();
-    if(this.gitCheckingSubscription$) this.gitCheckingSubscription$.unsubscribe();
-    if(this.gitGetByUserSubscription$) this.gitGetByUserSubscription$.unsubscribe();
+    this.gitUpdateSubscription$?.unsubscribe();
+    this.gitCheckingSubscription$?.unsubscribe();
+    this.gitGetByUserSubscription$?.unsubscribe();
   }
   
   onGithubFormSubmit(): void {

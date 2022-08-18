@@ -1,19 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   NavigationInterface,
   UserInterface,
   TaskInterface,
+  GithubInterface
 } from '../../Interfaces/Interfaces';
 import { TaskService } from '../../services/task.service';
-import { TaskAndMeta, TasksAndMeta, UsersAndMeta } from '../../types/types';
 import { UserService } from '../../services/user.service';
+import { GithubService } from '../../services/github.service';
+import { TaskAndMeta, TasksAndMeta, UsersAndMeta } from '../../types/types';
+import { Subscription } from 'rxjs';
+
+
+
 
 @Component({
   selector: 'app-my-history',
   templateUrl: './my-history.component.html',
   styleUrls: ['./my-history.component.scss'],
 })
-export class MyHistoryComponent implements OnInit {
+export class MyHistoryComponent implements OnInit, OnDestroy {
   titleState: string = 'Login';
 
   isAuthState: boolean = false;
@@ -25,6 +31,9 @@ export class MyHistoryComponent implements OnInit {
   usersState: UserInterface[] | null = null;
 
   tasksState: TaskInterface[] | null = null;
+
+  githubState: GithubInterface | null = null;
+
 
   formDisplayState: boolean = false;
 
@@ -45,9 +54,13 @@ export class MyHistoryComponent implements OnInit {
     },
   ];
 
+  gitSubscription$: Subscription|null = null;
+  tasksSubscription$: Subscription|null = null;
+
   constructor(
     private taskService: TaskService,
-    private userService: UserService
+    private userService: UserService,
+    private githubService: GithubService,
   ) {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
@@ -55,6 +68,7 @@ export class MyHistoryComponent implements OnInit {
     this.toggleFormState = this.toggleFormState.bind(this);
     this.assignNewTaskState = this.assignNewTaskState.bind(this);
     this.loadUserTasks = this.loadUserTasks.bind(this);
+    this.syncGitTasks = this.syncGitTasks.bind(this)
   }
 
   ngOnInit() {
@@ -63,8 +77,68 @@ export class MyHistoryComponent implements OnInit {
       this.userState = JSON.parse(user);
       this.loadUser(this.userState);
       this.loadUsers(this.userState);
+      this.loadUserGithub(this.userState);
     }
   }
+
+  ngOnDestroy(): void  {
+    this.gitSubscription$?.unsubscribe();
+    this.tasksSubscription$?.unsubscribe();
+  }
+
+  loadUserTasks(user: UserInterface | null) {
+    if (user !== null && this.isAuthState) {
+      if (user != this.userState) {
+        this.formDisplayState = false;
+        this.teamPartnerState = { ...user };
+      } else {
+        this.teamPartnerState = null;
+      }
+
+      const tasksObservable$ = this.taskService.getTasksByUser(user);
+      this.tasksSubscription$  = tasksObservable$.subscribe((_observer: TasksAndMeta) => {
+        if (_observer.data && _observer.data.length > 0) {
+          this.tasksState = _observer.data;
+        } else {
+          this.tasksState = null;
+        }
+      });
+    }
+  }
+
+  loadUserGithub(user: UserInterface | null): void  {
+    console.log('user github loaded !');
+    if(user !== null) {
+      const gitObservables$ = this.githubService.getGithubByUser(user);
+      this.gitSubscription$ = gitObservables$.subscribe((result) => {
+        this.githubState = result.data;
+      }) 
+    }
+  }
+
+  loadUser(user: UserInterface | null): void {
+    this.isAuthState = true;
+    this.titleState = 'My History';
+    this.updateUserState(user);
+    this.loadUserTasks(user);
+  }
+
+  loadUsers(user: UserInterface | null): void {
+    const userObservable$ = this.userService.getAllUsers();
+
+    userObservable$.subscribe((_observer: UsersAndMeta) => {
+      if (_observer.data && _observer.data.length > 0) {
+        const data = _observer.data;
+
+        this.usersState = data.filter((loopUser) => {
+          return loopUser.firstName !== user?.firstName;
+        });
+      } else {
+        this.usersState = null;
+      }
+    });
+  }
+
 
   onClickNavItem(event?: MouseEvent): void {
     console.log('Clicked nav item! ');
@@ -100,26 +174,6 @@ export class MyHistoryComponent implements OnInit {
     }
   }
 
-  loadUserTasks(user: UserInterface | null) {
-    if (user !== null && this.isAuthState) {
-      if (user != this.userState) {
-        this.formDisplayState = false;
-        this.teamPartnerState = { ...user };
-      } else {
-        this.teamPartnerState = null;
-      }
-
-      const tasksObservable$ = this.taskService.getTasksByUser(user);
-      tasksObservable$.subscribe((_observer: TasksAndMeta) => {
-        if (_observer.data && _observer.data.length > 0) {
-          this.tasksState = _observer.data;
-        } else {
-          this.tasksState = null;
-        }
-      });
-    }
-  }
-
   initData(): void {
     this.titleState = 'Login';
     this.isAuthState = false;
@@ -128,28 +182,6 @@ export class MyHistoryComponent implements OnInit {
     localStorage.removeItem('user');
   }
 
-  loadUser(user: UserInterface | null): void {
-    this.isAuthState = true;
-    this.titleState = 'My History';
-    this.updateUserState(user);
-    this.loadUserTasks(user);
-  }
-
-  loadUsers(user: UserInterface | null): void {
-    const userObservable$ = this.userService.getAllUsers();
-
-    userObservable$.subscribe((_observer: UsersAndMeta) => {
-      if (_observer.data && _observer.data.length > 0) {
-        const data = _observer.data;
-
-        this.usersState = data.filter((loopUser) => {
-          return loopUser.firstName !== user?.firstName;
-        });
-      } else {
-        this.usersState = null;
-      }
-    });
-  }
 
   toggleFormState(): void {
     this.formDisplayState = !this.formDisplayState;
@@ -174,4 +206,12 @@ export class MyHistoryComponent implements OnInit {
   isFormShouldDisplayed(): boolean {
     return this.formDisplayState;
   }
+
+  syncGitTasks(): void  {
+    console.log('sync...');
+    console.log(this.githubState);
+  }
+
+
+
 }
