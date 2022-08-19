@@ -128,7 +128,7 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
     if (user != null) {
       this.loadUser(user);
       this.loadUsers(user);
-      this.saveToLocalStorage('user', JSON.stringify(user));
+      this.userService.saveUserToLocalStorage(JSON.stringify(user));
     } else {
       this.initData();
     }

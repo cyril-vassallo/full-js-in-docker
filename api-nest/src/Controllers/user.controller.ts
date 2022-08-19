@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Body, Post } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post, Put } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersAndMeta } from '../Types/types';
 import { UserAndMeta } from '../Types/types';
 import { AccountDto } from '../dto/account.dto';
+import { UserDto } from '../dto/user.dto';
 import { UserService } from '../Services/user.service';
 
 @Controller('/user')
@@ -17,7 +18,7 @@ export class UserController {
     return {
       data: this.usersService.getAllUsers(),
       meta: {
-        urn: 'user',
+        urn: '/user',
         uri:
           this.configService.get<string>('API_ENDPOINT') + '/user/all',
       },
@@ -30,7 +31,7 @@ export class UserController {
     return {
       data: this.usersService.getUserByAccount(accountDto),
       meta: {
-        urn: 'user/login',
+        urn: '/user/login',
         uri:
           this.configService.get<string>('API_ENDPOINT') + '/user/login',
       },
@@ -49,4 +50,19 @@ export class UserController {
       },
     };
   }
+
+
+
+  @Put('')
+  updateUser(@Body() userDto: UserDto): UserAndMeta {
+    return {
+      data: this.usersService.updateUserInfo(userDto),
+      meta: {
+        urn: '/user',
+        uri:
+          this.configService.get<string>('API_ENDPOINT') + '/user',
+      },
+    };
+  }
 }
+

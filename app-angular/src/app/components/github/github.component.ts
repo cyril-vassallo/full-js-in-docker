@@ -61,9 +61,9 @@ export class GithubComponent implements OnInit {
 
   initGithubState(): void {
     if(this.user){
-      this.gitGetByUserSubscription$ = this.githubService.getGithubByUser(this.user).subscribe( (_event: GithubAndMeta) => {
+      this.gitGetByUserSubscription$ = this.githubService.getGithubByUser(this.user).subscribe( (_observer: GithubAndMeta) => {
         console.log('GET GIT')
-        this.githubState = {..._event.data};
+        this.githubState = {..._observer.data};
         this.updateFormValues();
       })
     }

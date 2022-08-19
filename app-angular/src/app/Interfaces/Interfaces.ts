@@ -12,9 +12,12 @@ export interface UserInterface {
     id: number;
     firstName: string;
     lastName: string;
+    email?:string;
+    password?:string;
     job: string;
     photo: string;
-    description: string
+    description: string;
+
 }
 
 export interface TaskInterface {

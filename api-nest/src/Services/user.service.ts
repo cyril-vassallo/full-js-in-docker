@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { ReturnedUserInterface, UserInterface,  } from '../Interfaces/interfaces';
-import { AccountDto } from '../dto/account.dto'
+import { AccountDto } from '../dto/account.dto';
+import { UserDto } from '../dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -82,7 +83,7 @@ export class UserService {
   }
 
   getUserByAccount(accountDto: AccountDto): ReturnedUserInterface {
-    const accounts = this.usersFromDB.filter(user => {
+    const accounts: UserInterface [] = this.usersFromDB.filter(user => {
       return user.email == accountDto.email && user.password == accountDto.password && accountDto.email != '' &&  accountDto.password != null 
     });
 
@@ -100,5 +101,17 @@ export class UserService {
     } else {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
+  }
+
+  updateUserInfo(userDto: UserDto): ReturnedUserInterface {
+    let user : UserInterface = this.usersFromDB.filter(user => user.id === userDto.id)[0]
+    
+    user.firstName = userDto.firstName;
+    user.lastName = userDto.lastName;
+    user.job = userDto.job;
+    user.description = userDto.description;
+
+    return this.getUserById(userDto.id)
+
   }
 }

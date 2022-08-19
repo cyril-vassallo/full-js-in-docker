@@ -1,23 +1,43 @@
-<div *ngIf="isFeatureActive" id="me" class="container card-body">
+<div *ngIf="isFeatureActive" id="params" class="container card-body">
     <div class="row text-center mb-5">
         <h5 class="card-title">Find here your personal params</h5>
     </div>
     <div class="row">
-        <div class="col mb-3">
+        <form [formGroup]="userForm" (ngSubmit)="onUserFormSubmit()" class="col mb-3">
             <h2 class="fs-4 fw-semibold text-secondary">Your personal information</h2>
-            <label for="exampleFormControlInput1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Change your email">
 
-            <label for="exampleFormControlInput2" class="form-label"> First name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput2" placeholder="Change your first name">
-
-            <label for="exampleFormControlInput3" class="form-label"> Last name</label>
-            <input type="text" class="form-control" id="exampleFormControlInput3" placeholder="Change your last name">
-            
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary w-50  my-5">Update</button>
+            <div class = "form-group mt-2">
+                <label for="firstName" class="form-label"> First name</label>
+                <input formControlName="firstName" type="text" class="form-control" id="firstName" placeholder="Change your first name"/>
             </div>
-        </div>
+
+            <div class = "form-group mt-2">
+                <label for="lastName" class="form-label"> Last name</label>
+                <input formControlName="lastName" type="text" class="form-control" id="lastName" placeholder="Change your last name"/>
+            </div>
+
+            <div class = "form-group mt-2">
+                <label for="job" class="form-label">Job</label>
+                <input formControlName="job" type="text" class="form-control" id="job" placeholder="Change your job"/>
+            </div>
+
+        
+            <div class = "form-group mt-2">
+                <label for="description" class="form-label">Description</label>
+                <textarea formControlName="description" type="text" class="form-control" id="description" placeholder="Change your description"></textarea>
+            </div>
+
+        
+            <div class = "form-group mt-2">
+                <label for="photo" class="form-label">Photo</label>
+                <input formControlName="photo"  class="form-control" type="file" id="photo" placeholder="Change your photo"/>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary w-50  my-5">Update<span  *ngIf="isUserUpdated">d</span></button>
+            </div>
+
+        </form>
         <div class="col mb-3 container">
             <h2 class="fs-4 fw-semibold text-secondary">App settings</h2>    
             <div class="row mt-2">

@@ -8,7 +8,7 @@ import { UserInterface } from 'src/app/Interfaces/Interfaces';
 })
 export class MySettingsComponent implements OnInit {
   userState: UserInterface | null = null;
-  currentActiveFeature: string = 'me';
+  currentActiveFeature: string = 'params';
 
   constructor() {}
 
