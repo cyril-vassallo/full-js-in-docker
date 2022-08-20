@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { ReturnedUserInterface, UserInterface,  } from '../Interfaces/interfaces';
+import { UserInterface } from '../Interfaces/interfaces';
 import { AccountDto } from '../dto/account.dto';
 import { UserDto } from '../dto/user.dto';
 
@@ -54,7 +54,7 @@ export class UserService {
   ];
 
 
-  getAllUsers(): ReturnedUserInterface[] {
+  getAllUsers(): UserInterface[] {
     return this.usersFromDB.map((user)=> {
       return    { 
         id: user.id,
@@ -67,7 +67,7 @@ export class UserService {
     })
   }
 
-  getUserById(id: number): ReturnedUserInterface {
+  getUserById(id: number): UserInterface {
     const user: UserInterface = this.usersFromDB.filter((user) => { 
       return id == user.id;
      })[0]; 
@@ -76,13 +76,14 @@ export class UserService {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
+      email: user.email,
       job: user.job,
       description: user.description,
       photo: user.photo
     } 
   }
 
-  getUserByAccount(accountDto: AccountDto): ReturnedUserInterface {
+  getUserByAccount(accountDto: AccountDto): UserInterface {
     const accounts: UserInterface [] = this.usersFromDB.filter(user => {
       return user.email == accountDto.email && user.password == accountDto.password && accountDto.email != '' &&  accountDto.password != null 
     });
@@ -94,6 +95,7 @@ export class UserService {
         id: userAccount.id,
         firstName: userAccount.firstName,
         lastName: userAccount.lastName,
+        email: userAccount.email,
         job: userAccount.job,
         description: userAccount.description,
         photo: userAccount.photo
@@ -103,11 +105,12 @@ export class UserService {
     }
   }
 
-  updateUserInfo(userDto: UserDto): ReturnedUserInterface {
+  updateUserInfo(userDto: UserDto): UserInterface {
     let user : UserInterface = this.usersFromDB.filter(user => user.id === userDto.id)[0]
     
     user.firstName = userDto.firstName;
     user.lastName = userDto.lastName;
+    user.email = userDto.email;
     user.job = userDto.job;
     user.description = userDto.description;
 

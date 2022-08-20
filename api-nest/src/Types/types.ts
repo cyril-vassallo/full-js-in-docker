@@ -1,5 +1,5 @@
 import {
-  ReturnedUserInterface,
+  UserInterface,
   TaskInterface,
   MetaInterface,
   FeatureInterface,
@@ -13,12 +13,12 @@ export type FeaturesAndMeta = {
 };
 
 export type UsersAndMeta = {
-  data: ReturnedUserInterface[];
+  data: UserInterface[];
   meta: MetaInterface;
 };
 
 export type UserAndMeta = {
-  data: ReturnedUserInterface;
+  data: UserInterface;
   meta: MetaInterface;
 };
 

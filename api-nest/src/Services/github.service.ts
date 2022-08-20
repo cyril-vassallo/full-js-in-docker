@@ -51,7 +51,6 @@ export class GithubService {
             this.githubFromDb.push(githubDto);
             github = this.githubFromDb[this.githubFromDb.length - 1];
         }
-        console.log(this.githubFromDb);
         return github;
 
     }

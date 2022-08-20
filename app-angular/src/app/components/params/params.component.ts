@@ -20,6 +20,7 @@ export class ParamsComponent implements OnInit, OnDestroy {
   userForm = new FormGroup({
     firstName: new FormControl(''),
     lastName: new FormControl(''),
+    email: new FormControl(''),
     job: new FormControl(''),
     description: new FormControl(''),
     photo: new FormControl('')
@@ -39,9 +40,10 @@ export class ParamsComponent implements OnInit, OnDestroy {
 
 
   bindCurrentUserWithForm(): void {
-    if(this.user) {
+    if(this.user?.email) {
       this.userForm.controls.firstName.setValue(this.user?.firstName);
       this.userForm.controls.lastName.setValue(this.user?.lastName)
+      this.userForm.controls.email.setValue(this.user?.email);
       this.userForm.controls.job.setValue(this.user?.job);
       this.userForm.controls.description.setValue(this.user?.description);
     }
@@ -53,6 +55,7 @@ export class ParamsComponent implements OnInit, OnDestroy {
         id:  this.user?.id!,
         firstName: this.userForm.controls.firstName.value!,
         lastName:  this.userForm.controls.lastName.value!,
+        email: this.userForm.controls.email.value!,
         job: this.userForm.controls.job.value!,
         description: this.userForm.controls.description.value!,
         photo: this.user?.photo!

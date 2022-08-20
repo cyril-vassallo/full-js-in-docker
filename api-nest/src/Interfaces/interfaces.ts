@@ -26,23 +26,13 @@ export interface UserInterface {
     id: number;
     lastName: string;
     firstName: string;
-    email: string;
-    password: string;
+    email?: string;
+    password?: string;
     job: string;
     description: string;
     photo: string;
 }
   
-export interface ReturnedUserInterface {
-    id: number;
-    lastName: string;
-    firstName: string;
-    job: string;
-    description: string;
-    photo: string;
-}
-
-
 export interface GithubInterface {
     id: number;
     userId: number;
@@ -52,7 +42,6 @@ export interface GithubInterface {
     enabled : boolean;
     token: string;
 }
-
 
 export interface NavigationItemInterface {
     id: number;

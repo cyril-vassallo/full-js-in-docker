@@ -21,6 +21,7 @@ import { GithubService } from './services/github.service';
 import { GithubComponent } from './components/github/github.component';
 import { ParamsComponent } from './components/params/params.component';
 import { NavigationService } from './services/navigation.service';
+import { LoaderComponent } from './components/loader/loader.component';
 
 
 
@@ -38,6 +39,7 @@ import { NavigationService } from './services/navigation.service';
     FormButtonComponent,
     GithubComponent,
     ParamsComponent,
+    LoaderComponent,
   ],
   imports: [
     BrowserModule,
