@@ -1,6 +1,6 @@
-import { Controller, Get, Param, Body, Post } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post, Delete } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { TasksAndMeta, TaskAndMeta } from '../Types/types';
+import { TasksAndMeta, TaskAndMeta, IdAndMeta } from '../Types/types';
 import { TaskService } from '../Services/task.service';
 import { TaskDto } from '../dto/task.dto';
 
@@ -35,6 +35,17 @@ export class TaskController {
     };
   }
 
+  @Get('/last')
+  getLastTaskId(): IdAndMeta {
+    return {
+      data: this.taskService.getLastTaskId(),
+      meta: {
+        urn: '/task/last',
+        uri: this.configService.get<string>('API_ENDPOINT') + '/task/last',
+      },
+    };
+  }
+
   @Post('')
   postTask(@Body() taskDto: TaskDto): TaskAndMeta {
     return {
@@ -42,6 +53,20 @@ export class TaskController {
       meta: {
         urn: '/task',
         uri: this.configService.get<string>('API_ENDPOINT') + '/task',
+      },
+    };
+  }
+
+
+
+
+  @Delete(':id')
+  deleteTask(@Param() id: number): TaskAndMeta {
+    return {
+      data: this.taskService.deleteTasksFromDb(id),
+      meta: {
+        urn: '/task/{:id}',
+        uri: this.configService.get<string>('API_ENDPOINT') + '/task/{:id}',
       },
     };
   }

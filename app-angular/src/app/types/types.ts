@@ -36,4 +36,9 @@ export type NavigationAndMeta = {
   meta: MetaInterface;
 };
 
+export type IdAndMeta = {
+  data: number
+  meta: MetaInterface;
+};
+
 

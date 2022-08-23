@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import format from 'date-fns/format'
 import {
@@ -6,14 +6,16 @@ import {
   CommitInterface,
   UserInterface,
 } from 'src/app/Interfaces/Interfaces';
+import { Subscription } from 'rxjs';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-task-form',
   templateUrl: './task-form.component.html',
   styleUrls: ['./task-form.component.scss'],
 })
-export class TaskFormComponent implements OnInit {
-  constructor() {}
+export class TaskFormComponent implements OnInit, OnDestroy {
+  constructor(private taskService: TaskService) {}
 
   @Input() hasTask: boolean = false;
   @Input() tasks: TaskInterface[] | null = null;
@@ -28,6 +30,7 @@ export class TaskFormComponent implements OnInit {
   isValidCommit: boolean = true;
   date: string = format(new Date(), 'dd/MM/yyyy');
   userAgent: string = navigator.userAgent;
+  lastCreatedTaskId: number| null = null;
 
   taskForm = new FormGroup({
     taskInput: new FormControl(''),
@@ -38,10 +41,16 @@ export class TaskFormComponent implements OnInit {
     commitUrlInput: new FormControl(''),
   });
 
+  lastTaskIdSubscription$: Subscription|null = null;
+
   ngOnInit(): void {
     console.log(this.date)
     this.isTodayTaskExist = this.checkIfTodayTaskExist(this.tasks, this.date);
     this.isTodayTaskExist ? (this.hasTask = true) : (this.hasTask = false);
+  }
+
+  ngOnDestroy(): void {
+    this.lastTaskIdSubscription$?.unsubscribe();
   }
 
   onTaskFormSubmit(): void {
@@ -116,6 +125,7 @@ export class TaskFormComponent implements OnInit {
   }
 
   createTask(): void {
+    this.getLastTaskIdFromDb()
     if (this.tasks && this.taskForm.value.taskInput !== null) {
       const task: TaskInterface = this.tasks.reduce(function (
         accumulator: TaskInterface,
@@ -128,11 +138,12 @@ export class TaskFormComponent implements OnInit {
       const newTask: TaskInterface = { ...task };
 
       //transforme the last task into a today new task
-      newTask.id = newTask.id + 1;
+      newTask.id = this.lastCreatedTaskId?? 0;
       newTask.commits = [];
       newTask.list = [];
       newTask.date = this.date;
       this.task = newTask;
+      console.log(newTask)
     } else {
       if (this.user) {
         this.task = {
@@ -161,4 +172,14 @@ export class TaskFormComponent implements OnInit {
       this.commitForm.value.commitUrlInput !== ''
     );
   }
+
+
+  getLastTaskIdFromDb(): void {
+    //Mouve to createtask
+    this.lastTaskIdSubscription$ = this.taskService.getLastCreatedTaskId().subscribe(( _observer => {
+       this.lastCreatedTaskId  = _observer.data;
+       console.log(this.lastCreatedTaskId)
+    }))
+  }
+
 }

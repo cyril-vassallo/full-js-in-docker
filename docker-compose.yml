@@ -31,5 +31,18 @@ services:
     depends_on:
       - api-nest
 
+  mongo-db:
+    image: "mongo:latest"
+    container_name: mongo-db
+    working_dir: /
+    env_file:
+      - ./mongo-db/.env
+    ports:
+      - 2717:${EXPOSE_PORT_MONGO:-27017}
+    volumes:
+      - "./mongo-db:/data/db"
+    networks:
+      - app-fullstack
+
 networks:
   app-fullstack:

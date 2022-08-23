@@ -34,9 +34,11 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
 
   formDisplayState: boolean = false;
 
+
   gitSubscription$: Subscription|null = null;
   tasksSubscription$: Subscription|null = null;
   userSubscription$: Subscription|null = null;
+
 
   constructor(
     private taskService: TaskService,
@@ -191,6 +193,8 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
     console.log('sync...');
     console.log(this.githubState);
   }
+
+
 
 
 

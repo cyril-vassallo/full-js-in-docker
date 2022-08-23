@@ -25,7 +25,7 @@ export class TaskService {
       ],
     },
     {
-      id: 1,
+      id: 2,
       userId: 4,
       date: '28/07/2022',
       list: ['task1', 'Task2'],
@@ -41,7 +41,7 @@ export class TaskService {
       ],
     },
     {
-      id: 2,
+      id: 3,
       userId: 4,
       date: '29/07/2022',
       list: ['task1', 'Task2'],
@@ -57,7 +57,7 @@ export class TaskService {
       ],
     },
     {
-      id: 1,
+      id: 4,
       userId: 2,
       date: '12/07/2022',
       list: ['task1', 'Task2'],
@@ -125,5 +125,20 @@ export class TaskService {
       return lastInsertTask;
     }
     return lastInsertTask;
+  }
+
+
+  deleteTasksFromDb(id: number): TaskInterface {
+    const task: TaskInterface = this.tasksFromDb.filter(task => task.id === id)[0]
+    //first resolve get last taskID
+    return task;
+  }
+
+  getLastTaskId(): number {
+    const lastCreatedTask: TaskInterface = this.tasksFromDb.reduce((previewTask: TaskInterface , currentTask: TaskInterface) => {
+      return previewTask.id < currentTask.id ? currentTask : previewTask;
+    })
+    console.log(lastCreatedTask)
+    return lastCreatedTask.id;
   }
 }

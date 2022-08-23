@@ -71,7 +71,15 @@ export class ParamsComponent implements OnInit, OnDestroy {
           }, 2000)
         }
       })
-  
+  }
+
+  onClearHistoryClick(): void {
+    console.log("Clearing history....");
+  }
+
+  onClearTodayTasksClick(): void {
+    console.log("Clearing today Tasks....");
+    
   }
 
 
