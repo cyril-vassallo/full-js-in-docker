@@ -32,13 +32,13 @@ services:
       - api-nest
 
   mongo-db:
-    image: "mongo:latest"
+    image: "mongo:5.0.11"
     container_name: mongo-db
     working_dir: /
     env_file:
       - ./mongo-db/.env
     ports:
-      - 2717:${EXPOSE_PORT_MONGO:-27017}
+      - ${EXPOSE_PORT_MONGO:-27017}:${EXPOSE_PORT_MONGO:-27017}
     volumes:
       - "./mongo-db:/data/db"
     networks:
