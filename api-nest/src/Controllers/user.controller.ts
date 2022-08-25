@@ -27,9 +27,9 @@ export class UserController {
 
 
   @Post('/login')
-  login(@Body() accountDto: AccountDto): UserAndMeta {
+  async login(@Body() accountDto: AccountDto): Promise<UserAndMeta> {
     return {
-      data: this.usersService.findOneByAccount(accountDto),
+      data: await this.usersService.findOneByAccount(accountDto),
       meta: {
         urn: '/user/login',
         uri:
@@ -40,13 +40,13 @@ export class UserController {
 
 
   @Get('/:id')
-  getUser(@Param('id') id: number): UserAndMeta {
+  async getUser(@Param('id') userId: string): Promise<UserAndMeta> {
     return {
-      data: this.usersService.findOneById(id),
+      data: await this.usersService.findOneById(userId),
       meta: {
-        urn: 'user/' + id,
+        urn: 'user/' + userId,
         uri:
-          this.configService.get<string>('API_ENDPOINT') + '/user/' + id,
+          this.configService.get<string>('API_ENDPOINT') + '/user/' + userId,
       },
     };
   }
@@ -54,9 +54,9 @@ export class UserController {
 
 
   @Put('')
-  updateUser(@Body() userDto: UserDto): UserAndMeta {
+  async updateUser(@Body() userDto: UserDto): Promise<UserAndMeta> {
     return {
-      data: this.usersService.updateOne(userDto),
+      data: await this.usersService.updateOne(userDto),
       meta: {
         urn: '/user',
         uri:
