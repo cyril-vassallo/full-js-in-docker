@@ -1,6 +1,21 @@
 version: "3.9"
 
 services:
+
+  mongo-db:
+    image: "mongo:5.0.11"
+    container_name: mongo-db
+    working_dir: /usr/www/mongo-db
+    env_file:
+      - .env
+    ports:
+      - ${EXPOSE_PORT_MONGO:-27017}:${EXPOSE_PORT_MONGO:-27017}
+    volumes:
+      - "~/mongodb:/data/db"
+      - "./mongo-db:/usr/www/mongo-db"
+    networks:
+      - app-fullstack
+
   api-nest:
     image: "node:14.15.5"
     container_name: api-nest
@@ -14,6 +29,9 @@ services:
     command: "/bin/sh install.sh"
     networks:
       - app-fullstack
+    depends_on:
+      - mongo-db
+
 
   app-angular:
     image: "node:14.15.5"
@@ -31,19 +49,6 @@ services:
     depends_on:
       - api-nest
 
-  mongo-db:
-    image: "mongo:5.0.11"
-    container_name: mongo-db
-    working_dir: /usr/www/mongo-db
-    env_file:
-      - .env
-    ports:
-      - ${EXPOSE_PORT_MONGO:-27017}:${EXPOSE_PORT_MONGO:-27017}
-    volumes:
-      - "~/mongodb:/data/db"
-      - "./mongo-db:/usr/www/mongo-db"
-    networks:
-      - app-fullstack
 
 networks:
   app-fullstack:
