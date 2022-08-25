@@ -6,7 +6,7 @@ services:
     container_name: api-nest
     working_dir: /usr/www/api
     env_file:
-      - ./api-nest/.env
+      - .env
     ports:
       - ${EXPOSE_PORT_NEST:-8080}:${EXPOSE_PORT_NEST:-8080}
     volumes:
@@ -20,7 +20,7 @@ services:
     container_name: app-angular
     working_dir: /usr/www/app
     env_file:
-      - ./app-angular/.env
+      - .env
     ports:
       - ${EXPOSE_PORT_ANGULAR:-4200}:${EXPOSE_PORT_ANGULAR:-4200}
     volumes:
@@ -34,13 +34,14 @@ services:
   mongo-db:
     image: "mongo:5.0.11"
     container_name: mongo-db
-    working_dir: /
+    working_dir: /usr/www/mongo-db
     env_file:
-      - ./mongo-db/.env
+      - .env
     ports:
       - ${EXPOSE_PORT_MONGO:-27017}:${EXPOSE_PORT_MONGO:-27017}
     volumes:
-      - "./mongo-db:/data/db"
+      - "~/mongodb:/data/db"
+      - "./mongo-db:/usr/www/mongo-db"
     networks:
       - app-fullstack
 

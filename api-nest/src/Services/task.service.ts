@@ -13,16 +13,7 @@ export class TaskService {
       userId: 1,
       date: '11/07/2022',
       list: ['task1', 'Task2'],
-      commits: [
-        {
-          url: '/task1',
-          hash: 'GUFUSSkGIHOIHYFTFYT1',
-        },
-        {
-          url: '/task2',
-          hash: 'GUFUGIHOILKSJJFTFY2',
-        },
-      ],
+      commits: [ ],
     },
     {
       id: 2,

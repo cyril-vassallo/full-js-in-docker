@@ -14,9 +14,9 @@ export class UserController {
   ) {}
 
   @Get('/all')
-  getUsers(): UsersAndMeta {
+  async getUsers(): Promise<UsersAndMeta> {
     return {
-      data: this.usersService.getAllUsers(),
+      data: await this.usersService.findAll(),
       meta: {
         urn: '/user',
         uri:
@@ -29,7 +29,7 @@ export class UserController {
   @Post('/login')
   login(@Body() accountDto: AccountDto): UserAndMeta {
     return {
-      data: this.usersService.getUserByAccount(accountDto),
+      data: this.usersService.findOneByAccount(accountDto),
       meta: {
         urn: '/user/login',
         uri:
@@ -42,7 +42,7 @@ export class UserController {
   @Get('/:id')
   getUser(@Param('id') id: number): UserAndMeta {
     return {
-      data: this.usersService.getUserById(id),
+      data: this.usersService.findOneById(id),
       meta: {
         urn: 'user/' + id,
         uri:
@@ -56,7 +56,7 @@ export class UserController {
   @Put('')
   updateUser(@Body() userDto: UserDto): UserAndMeta {
     return {
-      data: this.usersService.updateUserInfo(userDto),
+      data: this.usersService.updateOne(userDto),
       meta: {
         urn: '/user',
         uri:

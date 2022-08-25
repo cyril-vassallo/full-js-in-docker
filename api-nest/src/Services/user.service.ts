@@ -2,6 +2,9 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { UserInterface } from '../Interfaces/interfaces';
 import { AccountDto } from '../dto/account.dto';
 import { UserDto } from '../dto/user.dto';
+import { User, UserDocument } from '../Schemas/user.schema';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class UserService {
@@ -53,21 +56,26 @@ export class UserService {
     },
   ];
 
+  constructor(@InjectModel('User') private readonly userModel: Model<UserDocument>){}
 
-  getAllUsers(): UserInterface[] {
-    return this.usersFromDB.map((user)=> {
-      return    { 
-        id: user.id,
-        firstName: user.firstName,
+
+  async findAll(): Promise<UserInterface[]> {
+    const users =  await this.userModel.find().exec();
+    return users.map(user => {
+      return {
+        id : user.id, 
+        firstName: user.firstName, 
         lastName: user.lastName,
+        email: user.email,
+        password: user.password,
         job: user.job,
         description: user.description,
         photo: user.photo
-      } 
+      }
     })
   }
 
-  getUserById(id: number): UserInterface {
+  findOneById(id: number): UserInterface {
     const user: UserInterface = this.usersFromDB.filter((user) => { 
       return id == user.id;
      })[0]; 
@@ -83,7 +91,7 @@ export class UserService {
     } 
   }
 
-  getUserByAccount(accountDto: AccountDto): UserInterface {
+  findOneByAccount(accountDto: AccountDto): UserInterface {
     const accounts: UserInterface [] = this.usersFromDB.filter(user => {
       return user.email == accountDto.email && user.password == accountDto.password && accountDto.email != '' &&  accountDto.password != null 
     });
@@ -105,7 +113,7 @@ export class UserService {
     }
   }
 
-  updateUserInfo(userDto: UserDto): UserInterface {
+  updateOne(userDto: UserDto): UserInterface {
     let user : UserInterface = this.usersFromDB.filter(user => user.id === userDto.id)[0]
     
     user.firstName = userDto.firstName;
@@ -114,7 +122,7 @@ export class UserService {
     user.job = userDto.job;
     user.description = userDto.description;
 
-    return this.getUserById(userDto.id)
+    return this.findOneById(userDto.id)
 
   }
 }
