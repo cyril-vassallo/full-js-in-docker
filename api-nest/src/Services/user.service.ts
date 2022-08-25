@@ -2,17 +2,18 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { UserInterface } from '../Interfaces/interfaces';
 import { AccountDto } from '../dto/account.dto';
 import { UserDto } from '../dto/user.dto';
-import { UserDocument } from '../Schemas/user.schema';
+import { User, UserDocument } from '../Schemas/user.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class UserService {
 
-  constructor(@InjectModel('User') private readonly userModel: Model<UserDocument>){}
+  constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>){}
 
   async findAll(): Promise<UserInterface[]> {
     const users: UserDocument[] =  await this.userModel.find().exec();
+
     return users.map(user => {
       return {
         id : user.id, 
@@ -28,7 +29,7 @@ export class UserService {
   }
 
   async findOneById(userId: string): Promise<UserInterface> {
-    const user: UserDocument = await this.userModel.findOne({_id: userId})
+    const user: UserDocument = await this.userModel.findOne({_id: userId}).exec()
 
     return { 
       id: user.id,
