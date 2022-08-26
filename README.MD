@@ -12,12 +12,15 @@
         You can install GNU make with chocolatey, a well-maintained package manager, which will add make to the global path and runs on all CLIs (powershell, git bash, cmd, etc…) saving you a ton of time in both maintenance and initial setup to get make running.
         Install the chocolatey package manager for Windows
         compatible to Windows 7+ / Windows Server 2003+
-        - Run choco install make
+        - choco install make
+        - https://community.chocolatey.org/packages/make
     - On Linux 
         It is commonly provide in most of Linux distribution:
         - sudo apt install make
+        - https://linuxhint.com/install-make-ubuntu/
     - On Mac
         - brew install make
+        - https://formulae.brew.sh/formula/make
 
 
 ## Command's
