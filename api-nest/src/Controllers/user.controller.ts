@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Body, Post, Put } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post, Patch } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersAndMeta } from '../Types/types';
 import { UserAndMeta } from '../Types/types';
@@ -13,24 +13,12 @@ export class UserController {
     private configService: ConfigService,
   ) {}
 
-  @Get('/all')
-  async getUsers(): Promise<UsersAndMeta> {
-    return {
-      data: await this.usersService.findAll(),
-      meta: {
-        urn: '/user',
-        uri:
-          this.configService.get<string>('API_ENDPOINT') + '/user/all',
-      },
-    };
-  }
-
-
   @Post('/login')
   async login(@Body() accountDto: AccountDto): Promise<UserAndMeta> {
     return {
       data: await this.usersService.findOneByAccount(accountDto),
       meta: {
+        method: 'POST',
         urn: '/user/login',
         uri:
           this.configService.get<string>('API_ENDPOINT') + '/user/login',
@@ -38,12 +26,25 @@ export class UserController {
     };
   }
 
+  @Get('/all')
+  async getUsers(): Promise<UsersAndMeta> {
+    return {
+      data: await this.usersService.findAll(),
+      meta: {
+        method: 'GET',
+        urn: '/user',
+        uri:
+          this.configService.get<string>('API_ENDPOINT') + '/user/all',
+      },
+    };
+  }
 
   @Get('/:id')
   async getUser(@Param('id') userId: string): Promise<UserAndMeta> {
     return {
       data: await this.usersService.findOneById(userId),
       meta: {
+        method: 'GET',
         urn: 'user/' + userId,
         uri:
           this.configService.get<string>('API_ENDPOINT') + '/user/' + userId,
@@ -51,13 +52,12 @@ export class UserController {
     };
   }
 
-
-
-  @Put('')
+  @Patch('')
   async updateUser(@Body() userDto: UserDto): Promise<UserAndMeta> {
     return {
       data: await this.usersService.updateOne(userDto),
       meta: {
+        method: 'PATCH',
         urn: '/user',
         uri:
           this.configService.get<string>('API_ENDPOINT') + '/user',
@@ -65,4 +65,3 @@ export class UserController {
     };
   }
 }
-

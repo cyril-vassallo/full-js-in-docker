@@ -23,7 +23,7 @@ export class UserService {
         password: user.password,
         job: user.job,
         description: user.description,
-        photo: user.photo
+        photo: user.photo,
       }
     })
   }

@@ -1,14 +1,16 @@
+
 import {
   UserInterface,
   TaskInterface,
   MetaInterface,
-  FeatureInterface,
+  FeaturesInterface,
   GithubInterface,
-  NavigationItemInterface
+  NavigationItemInterface,
+  IdInterface
 } from '../Interfaces/interfaces';
 
 export type FeaturesAndMeta = {
-  data: FeatureInterface[];
+  data: FeaturesInterface;
   meta: MetaInterface;
 };
 
@@ -49,7 +51,12 @@ export type NavigationAndMeta = {
 };
 
 export type IdAndMeta = {
-  data: number
+  data: IdInterface;
+  meta: MetaInterface;
+};
+
+export type IdsAndMeta = {
+  data: IdInterface[];
   meta: MetaInterface;
 };
 

@@ -18,9 +18,12 @@
         It is commonly provide in most of Linux distribution:
         - sudo apt install make
         - https://linuxhint.com/install-make-ubuntu/
+        - make --version
     - On Mac
+        You will probably need to install the package
         - brew install make
         - https://formulae.brew.sh/formula/make
+        - make --version
 
 
 ## Command's

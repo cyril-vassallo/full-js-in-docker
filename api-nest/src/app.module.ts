@@ -13,6 +13,9 @@ import { GithubController } from './Controllers/github.controller';
 import { NavigationService } from './Services/navigation.service';
 import { NavigationController } from './Controllers/navigation.controller';
 import { User, UserSchema } from './Schemas/user.schema';
+import { Task, TaskSchema } from './Schemas/task.schema';
+import { Github, GithubSchema } from './Schemas/github.schema';
+
 
 @Module({
   imports: [
@@ -21,7 +24,11 @@ import { User, UserSchema } from './Schemas/user.schema';
       
     }),
     MongooseModule.forRoot('mongodb://mongo-db:27017/taskiteam'),
-    MongooseModule.forFeature([{name: User.name, schema: UserSchema}]) 
+    MongooseModule.forFeature([
+      {name: User.name, schema: UserSchema},
+      {name: Task.name, schema: TaskSchema},
+      {name: Github.name, schema: GithubSchema}
+    ]) 
   ],
   controllers: [HomeController, UserController, TaskController, GithubController, NavigationController],
   providers: [HomeService, UserService, TaskService, FormatService, GithubService, NavigationService],

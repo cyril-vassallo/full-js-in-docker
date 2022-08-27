@@ -1,8 +1,9 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Schema, Prop, SchemaFactory, raw } from '@nestjs/mongoose';
 import { Document } from "mongoose";
 import * as mongoose from 'mongoose';
 import { User } from './user.schema';
-import { Commit } from './commit.schema';
+import { CommitInterface } from '../Interfaces/interfaces';
+
 
 
 export type TaskDocument = Task & Document
@@ -10,23 +11,21 @@ export type TaskDocument = Task & Document
 @Schema()
 export class Task {
     
-    @Prop({ required: true })
-    id: number;
 
-    @Prop({ required: true })
-    userId: number;
-
-    @Prop({ required: true })
+    @Prop({type: String,  required: true })
     date: string;
 
-    @Prop([String])
-    list: string;
+    @Prop({type: [String]})
+    list: string[];
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User'  })
+    @Prop(raw([{
+        hash: {type: String},
+        url: {type: String}
+    }]))
+    commits: CommitInterface[];
+
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     user: User;
-
-    @Prop({raw: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Commit' }]})
-    commit: Commit[];
 
 }
 

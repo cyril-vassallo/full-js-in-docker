@@ -15,6 +15,7 @@ export class HomeController {
     return {
       data: this.homeService.getFeatures(),
       meta: {
+        method: 'GET',
         urn: 'home',
         uri: this.configService.get<string>('API_ENDPOINT'),
       },

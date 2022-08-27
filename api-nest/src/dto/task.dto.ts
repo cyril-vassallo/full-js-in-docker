@@ -1,13 +1,13 @@
 
-import { IsString, MaxLength, IsInt, IsOptional } from 'class-validator';
-import { TaskInterface, CommitInterface } from '../Interfaces/interfaces';
+import { IsString, MaxLength } from 'class-validator';
+import { CommitInterface } from '../Interfaces/interfaces';
 
 export class TaskDto  {
-    @IsInt()
-    id: number;
+    @IsString()
+    id: string;
 
-    @IsInt()
-    userId: number;
+    @IsString()
+    user: string;
     
     @IsString()
     @MaxLength(8)

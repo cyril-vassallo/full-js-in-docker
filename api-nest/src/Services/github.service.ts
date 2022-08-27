@@ -1,59 +1,90 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { GithubInterface } from "src/Interfaces/interfaces";
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Github, GithubDocument } from "src/Schemas/github.schema";
 import { GithubDto } from '../dto/githubDto';
 
+@Injectable()
 export class GithubService {
-    constructor() {}
+    constructor(@InjectModel(Github.name) private githubModel: Model<GithubDocument>) {}
 
-    private githubFromDb: GithubInterface[] = [
-        {
-            id: 1,
-            userId: 4,
-            owner: 'cyril-vassallo',
-            repository: "full-js-in-docker",
-            branch: "ANGULAR-14_NEST-JS",
-            token: "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",
-            enabled: true
-        },
-        {
-            id: 2,
-            userId: 2,
-            owner: 'cyril-vassallo',
-            repository: "full-js-in-docker",
-            branch: "ANGULAR-14_NEST-JS",
-            token: "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",
-            enabled: false
-        }
-    ]
-
-    getGithubByUserId(userId: number): GithubInterface {
-        return this.githubFromDb
-        .filter((github) => { 
-            return userId == github.userId;
-           })[0]; 
-    
+    async createOne(githubDto: GithubDto): Promise<GithubInterface> {
+        const newGitHub = { 
+            user: githubDto.user,
+            owner: githubDto.owner,
+            repository: githubDto.repository,
+            branch: githubDto.branch,
+            enabled: githubDto.enabled,
+            token: githubDto.token
+          }
+          const createdGithub = new this.githubModel(newGitHub);
+      
+          createdGithub.save();
+      
+          return  { 
+            id: createdGithub.id,
+            user: createdGithub.user,
+            owner: createdGithub.owner,
+            repository: createdGithub.repository,
+            branch: createdGithub.branch,
+            enabled: createdGithub.enabled,
+            token: createdGithub.token
+          }
     }
 
-    updateGithubRepository(githubDto: GithubDto): GithubInterface {
-        let github: GithubInterface | undefined = this.getGithubByUserId(githubDto.userId);
-        if(github !== undefined) {
-            //update
-            github.owner = githubDto.owner;
-            github.repository = githubDto.repository;
-            github.branch = githubDto.branch;
-            github.enabled = githubDto.enabled;
-            github.token = githubDto.token;
+    async findOneByUserId(userId: string): Promise<GithubInterface> {
+        const github =  await this.githubModel.findOne({ user: userId }).exec();
+        if(github) {
+            return {
+                id : github.id,
+                user: github.user,
+                owner: github.owner,
+                repository: github.repository,
+                branch:  github.branch,
+                enabled: github.enabled,
+                token: github.token
+              }
         }else {
-            //create
-            const lastGithub: GithubInterface = this.githubFromDb.reduce( (previewGit: GithubInterface, currentGit: GithubInterface) => {
-                return previewGit.id < currentGit.id ? currentGit : previewGit;
-            }) 
-            githubDto.id = lastGithub.id + 1 
-            this.githubFromDb.push(githubDto);
-            github = this.githubFromDb[this.githubFromDb.length - 1];
+            throw new NotFoundException('Github could not be found!')
         }
-        return github;
-
+       
     }
 
+    async updateOne(githubDto: GithubDto): Promise<GithubInterface> {
+        let githubToUpdate = await this.githubModel.findOne({_id: githubDto.id}).exec();
+
+        if(githubDto.owner) {
+          githubToUpdate.owner = githubDto.owner;
+        }
     
+        if(githubDto.repository) {
+            githubToUpdate.repository = githubDto.repository;
+        }
+
+        if(githubDto.branch) {
+            githubToUpdate.branch = githubDto.branch;
+        }
+    
+        if(githubDto.token) {
+            githubToUpdate.token = githubDto.token;
+        }
+    
+        if(githubDto.enabled) {
+            githubToUpdate.enabled = githubDto.enabled;
+        }
+    
+        githubToUpdate.save();
+    
+        return { 
+          id: githubToUpdate.id, 
+          user: githubToUpdate.user,
+          owner: githubToUpdate.owner,
+          repository: githubToUpdate.repository,
+          branch: githubToUpdate.branch,
+          token: githubToUpdate.token,
+          enabled: githubToUpdate.enabled,
+        }
+    }
+
 }

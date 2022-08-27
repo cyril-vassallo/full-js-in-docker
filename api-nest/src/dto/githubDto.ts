@@ -1,14 +1,13 @@
 
-import { IsString,  IsInt, IsBoolean, IsOptional } from 'class-validator';
+import { IsString, IsBoolean } from 'class-validator';
 
 export class GithubDto  {
 
+    @IsString()
+    id: string;
 
-    @IsInt()
-    id: number;
-
-    @IsInt()
-    userId: number;
+    @IsString()
+    user: string;
     
     @IsString()
     owner: string;
@@ -24,8 +23,5 @@ export class GithubDto  {
 
     @IsString()
     token: string;
-
-
-
 
 }

@@ -1,7 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from "mongoose";
-import * as mongoose from 'mongoose';
-import { Task } from './task.schema';
 
 
 export type UserDocument = User & Document
@@ -29,9 +27,6 @@ export class User {
 
     @Prop()
     photo: string;
-
-    // @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }] })
-    // task: Task[];
 
 }
 

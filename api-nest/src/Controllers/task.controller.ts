@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Body, Post, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post, Delete, Patch } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TasksAndMeta, TaskAndMeta, IdAndMeta } from '../Types/types';
 import { TaskService } from '../Services/task.service';
@@ -12,62 +12,81 @@ export class TaskController {
     private configService: ConfigService,
   ) {}
 
-  @Get('/user/:id')
-  getTasks(@Param('id') id: number): TasksAndMeta {
-    return {
-      data: this.taskService.getTasksByUserId(id),
-      meta: {
-        urn: '/task/user/' + id,
-        uri:
-          this.configService.get<string>('API_ENDPOINT') + '/task/user/' + id,
-      },
-    };
-  }
-
-  @Get('/all')
-  getAllTasks(): TasksAndMeta {
-    return {
-      data: this.taskService.getAllTasks(),
-      meta: {
-        urn: '/task/all',
-        uri: this.configService.get<string>('API_ENDPOINT') + '/task/all',
-      },
-    };
-  }
-
-  @Get('/last')
-  getLastTaskId(): IdAndMeta {
-    return {
-      data: this.taskService.getLastTaskId(),
-      meta: {
-        urn: '/task/last',
-        uri: this.configService.get<string>('API_ENDPOINT') + '/task/last',
-      },
-    };
-  }
-
   @Post('')
-  postTask(@Body() taskDto: TaskDto): TaskAndMeta {
+  async postTask(@Body() taskDto: TaskDto): Promise<TaskAndMeta> {
     return {
-      data: this.taskService.updateTasksFromDb(taskDto),
+      data: await this.taskService.createOne(taskDto),
       meta: {
+        method: 'POST',
         urn: '/task',
         uri: this.configService.get<string>('API_ENDPOINT') + '/task',
       },
     };
   }
 
+  @Get('/user/:id')
+  async getTasks(@Param('id') userId: string): Promise<TasksAndMeta> {
+    return {
+      data: await this.taskService.findByUserId(userId),
+      meta: {
+        method: 'GET',
+        urn: '/task/user/' + userId,
+        uri:
+          this.configService.get<string>('API_ENDPOINT') + '/task/user/' + userId,
+      },
+    };
+  }
+
+  @Get('/all')
+  async getAllTasks(): Promise<TasksAndMeta> {
+    return {
+      data: await this.taskService.findAll(),
+      meta: {
+        method: 'GET',
+        urn: '/task/all',
+        uri: this.configService.get<string>('API_ENDPOINT') + '/task/all',
+      },
+    };
+  }
 
 
+  @Get('/last')
+  async getLastTaskId(): Promise<IdAndMeta> {
+    return {
+      data: await this.taskService.findLastCreatedId(),
+      meta: {
+        method: 'GET',
+        urn: '/task/last',
+        uri: this.configService.get<string>('API_ENDPOINT') + '/task/last',
+      },
+    };
+  }
+
+  @Patch('')
+  async updateTask(@Body() taskDto: TaskDto): Promise<TaskAndMeta> {
+    return {
+      data: await this.taskService.updateOne(taskDto),
+      meta: {
+        method: 'PATCH',
+        urn: '/task',
+        uri: this.configService.get<string>('API_ENDPOINT') + '/task',
+      },
+    };
+  }
 
   @Delete(':id')
-  deleteTask(@Param() id: number): TaskAndMeta {
+  async deleteTask(@Param() TaskId: string): Promise<TaskAndMeta> {
     return {
-      data: this.taskService.deleteTasksFromDb(id),
+      data: await this.taskService.deleteOne(TaskId),
       meta: {
+        method: 'DELETE',
         urn: '/task/{:id}',
         uri: this.configService.get<string>('API_ENDPOINT') + '/task/{:id}',
       },
     };
   }
+
+
+
+
 }

@@ -1,4 +1,7 @@
+import { User } from '../Schemas/user.schema'
+
 export interface MetaInterface {
+    method: string;
     urn: string;
     uri: string;
 }
@@ -6,14 +9,21 @@ export interface MetaInterface {
 export interface FeatureInterface {
     title: string;
     url: string;
+    method: string;
     description: string;
 }
 
+export interface FeaturesInterface {
+    user: FeatureInterface[];
+    task: FeatureInterface[];
+    github: FeatureInterface[];
+}
+
 export interface TaskInterface {
-    id: number;
-    userId: number; 
+    id: string;
+    user: User; 
     date: string,
-    list: string [],
+    list: string[],
     commits: CommitInterface[]
 }
 
@@ -35,7 +45,7 @@ export interface UserInterface {
   
 export interface GithubInterface {
     id: number;
-    userId: number;
+    user: User;
     owner: string;
     repository: string;
     branch: string;
@@ -50,4 +60,8 @@ export interface NavigationItemInterface {
     path: string;
     isActive: boolean;
     componentId: string;
+}
+
+export interface IdInterface {
+    id: string;
 }

@@ -15,6 +15,7 @@ export class NavigationController {
       return {
         data: this.navigationService.getNavigation(),
         meta: {
+          method: 'GET',
           urn: '/navigation',
           uri: this.configService.get<string>('API_ENDPOINT') + "/navigation",
         },
