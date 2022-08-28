@@ -8,6 +8,7 @@ import { NavigationAndMeta } from '../types/types';
 export class NavigationService {
   constructor(private http: HttpClient) {}
 
+  // path: /navigation
   public getNavigation(): Observable<NavigationAndMeta> {
     return this.http.get<NavigationAndMeta>(constant.API_URL + constant.NAVIGATION);
   }
