@@ -3,6 +3,8 @@ import { UserInterface } from '../../Interfaces/Interfaces';
 import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
 import { FormGroup, FormControl } from '@angular/forms';
+import { TaskService } from '../../services/task.service';
+import { TaskAndMeta } from '../../types/types';
 
 @Component({
   selector: 'app-params',
@@ -11,7 +13,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class ParamsComponent implements OnInit, OnDestroy {
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private taskService: TaskService) { }
 
 
   @Input() user!: UserInterface|null;
@@ -27,7 +29,11 @@ export class ParamsComponent implements OnInit, OnDestroy {
   })
 
   isUserUpdated: boolean = false;
+  isHistoryClearing: boolean = false;
+  isClearingToday: boolean = false;
   userUpdateSubscription$: Subscription | null = null;
+  historyClearingSubscription$: Subscription | null = null;
+  todayTaskClearingSubscription$: Subscription | null = null;
 
   ngOnInit(): void {
     this.bindCurrentUserWithForm();
@@ -36,6 +42,8 @@ export class ParamsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.userUpdateSubscription$?.unsubscribe();
+    this.historyClearingSubscription$?.unsubscribe();
+    this.todayTaskClearingSubscription$?.unsubscribe();
   }
 
 
@@ -75,11 +83,33 @@ export class ParamsComponent implements OnInit, OnDestroy {
 
   onClearHistoryClick(): void {
     console.log("Clearing history....");
-    
+    if(this.user){
+      this.historyClearingSubscription$ = this.taskService.deleteTasksByUser(this.user).subscribe((_observer: TaskAndMeta) => {
+        if(_observer?.hasOwnProperty('data')){
+          console.log(_observer.data);
+          this.isHistoryClearing = true;
+          setTimeout(() => {
+            this.isHistoryClearing = false;
+          }, 2000)
+        }
+      })
+    }
+
   }
 
   onClearTodayTasksClick(): void {
     console.log("Clearing today Tasks....");
+    if(this.user){
+      this.historyClearingSubscription$ = this.taskService.deleteTodayTask(this.user).subscribe((_observer: TaskAndMeta) => {
+        if(_observer?.hasOwnProperty('data')){
+          console.log(_observer.data);
+          this.isHistoryClearing = true;
+          setTimeout(() => {
+            this.isHistoryClearing = false;
+          }, 2000)
+        }
+      })
+    }
     
   }
 

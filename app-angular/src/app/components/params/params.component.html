@@ -41,8 +41,8 @@
 
             <div class="text-center">
                 <button type="submit" class="btn btn-primary w-50  my-5">
-                    <span  *ngIf="!isUserUpdated; else updateTemplate" >Update</span></button>
-                    <ng-template #updateTemplate><span>
+                    <span  *ngIf="!isUserUpdated; else updateUserTemplate" >Update</span></button>
+                    <ng-template #updateUserTemplate><span>
                         Updating...
                         <app-loader></app-loader>
                     </span>
@@ -54,11 +54,26 @@
             <h2 class="fs-4 fw-semibold text-secondary">App settings</h2>    
             <div class="row mt-2">
                 <label class="col form-label">Clear today task:</label>
-                <button (click) ="onClearTodayTasksClick()" type="button" href="#" class="col btn btn-sm btn-warning mx-5">Clear</button>
+                <button (click) ="onClearTodayTasksClick()" type="button" href="#" class="col btn btn-sm btn-warning mx-5">
+                    <span  *ngIf="!isClearingToday; else clearTodayTemplate" >Clear</span>
+                </button>
+                <ng-template #clearTodayTemplate><span>
+                    Clearing...
+                    <app-loader></app-loader>
+                    </span>
+                </ng-template>
+
             </div>
             <div class="row mt-2">
                 <label class="col form-label">Clear all the history:</label>
-                <button (click) ="onClearHistoryClick()" type="button" href="#" class="col btn btn-sm btn-danger mx-5">Clear</button>
+                <button (click) ="onClearHistoryClick()" type="button" href="#" class="col btn btn-sm btn-danger mx-5">
+                    <span  *ngIf="!isHistoryClearing; else clearHistoryTemplate" >Clear</span>
+                </button>
+                <ng-template #clearHistoryTemplate><span>
+                    Clearing...
+                    <app-loader></app-loader>
+                    </span>
+                </ng-template>
             </div>
         </div>
     </div>

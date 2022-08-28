@@ -86,6 +86,18 @@ export class TaskController {
     };
   }
 
+  @Delete('/user/:userId/today')
+  async deleteTodayTask(@Param('userId') userId: string): Promise<TaskAndMeta> {
+    return {
+      data: await this.taskService.deleteOneByUserIdAndToday(userId),
+      meta: {
+        method: 'DELETE',
+        urn: '/task/user/{:id}/today',
+        uri: this.configService.get<string>('API_ENDPOINT') + '/task/user/{:id}/today',
+      },
+    };
+  }
+
   @Delete('/user/:userId')
   async deleteTasksByUserId(@Param('userId') userId: string): Promise<TaskAndMeta> {
     return {
@@ -98,17 +110,7 @@ export class TaskController {
     };
   }
 
-  @Delete('/user/:userId/today')
-  async deleteTodayTask(@Param('userId') userId: string): Promise<TaskAndMeta> {
-    return {
-      data: await this.taskService.deleteOneByUserIdAndToday(userId),
-      meta: {
-        method: 'DELETE',
-        urn: '/task/user/{:id}/today',
-        uri: this.configService.get<string>('API_ENDPOINT') + '/task/user/{:id}/today',
-      },
-    };
-  }
+
 
 
 

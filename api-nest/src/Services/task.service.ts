@@ -7,7 +7,6 @@ import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose';
 
 
-
 @Injectable()
 export class TaskService {
 
@@ -127,7 +126,10 @@ export class TaskService {
   }
 
   async deleteOneByUserIdAndToday(userId: string):  Promise<null> {
+
+    //TODO:  see why date is not god at midnight offset ? location ?
     const todayDate: string = this.format.getTodayDate('fr');
+
 
     const result = await this.taskModel.findOneAndRemove(
       {user: userId, date: todayDate},
@@ -137,6 +139,7 @@ export class TaskService {
         }
     }).clone().exec();
 
+  console.log(result);
 
     if(result === null) {
       throw new NotFoundException('Task could not be found!');
