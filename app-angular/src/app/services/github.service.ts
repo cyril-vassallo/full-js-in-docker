@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { config } from '../../config/config';
+import { constant } from '../../config/config';
 import { UserInterface, GithubInterface } from '../Interfaces/Interfaces';
 import { Observable } from 'rxjs';
 import { GithubAndMeta } from '../types/types';
@@ -13,18 +13,18 @@ export class GithubService {
 
   public getGithubByUser(user: UserInterface): Observable<GithubAndMeta> {
     return this.http.get<GithubAndMeta>(
-      config.apiUrl + config.getUserGithub + user.id
+      constant.API_URL + constant.GITHUB + '/'+ user.id
     );
   }
 
   public checkGithubRepository(github: GithubInterface):  Observable<any> {
     return this.http.get<any>(
-        config.apiGithub + 'repos/'+ github.owner + '/' + github.repository + '/branches/' + github.branch
+        constant.API_GITHUB + 'repos/'+ github.owner + '/' + github.repository + '/branches/' + github.branch
     );
   }
 
   public postGithub(github: GithubInterface): Observable<GithubAndMeta> {
-    return this.http.post<GithubAndMeta>( config.apiUrl + config.postUserGithub, github)
+    return this.http.post<GithubAndMeta>( constant.API_URL + constant.USER, github)
   }
 
 }

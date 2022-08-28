@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { config } from '../../config/config';
+import { constant } from '../../config/config';
 import { UserInterface } from '../Interfaces/Interfaces';
 import { Observable } from 'rxjs';
 import { TaskAndMeta, TasksAndMeta, IdAndMeta } from '../types/types';
@@ -12,19 +12,27 @@ export class TaskService {
 
   public getTasksByUser(user: UserInterface): Observable<TasksAndMeta> {
     return this.http.get<TasksAndMeta>(
-      config.apiUrl + config.getUserTasks + user.id
+      constant.API_URL + constant.TASK + constant.USER + '/'+ user.id
     );
   }
 
   public postTask(task: TaskInterface): Observable<TaskAndMeta> {
-    return this.http.post<TaskAndMeta>(config.apiUrl + config.postTask, task);
+    return this.http.post<TaskAndMeta>(constant.API_URL + constant.TASK, task);
   }
 
   public updateTask(task: TaskInterface): Observable<TaskAndMeta> {
-    return this.http.patch<TaskAndMeta>(config.apiUrl + config.updateTask, task);
+    return this.http.patch<TaskAndMeta>(constant.API_URL + constant.TASK, task);
+  }
+
+  public deleteTasksByUser(user: UserInterface): Observable<TaskAndMeta> {
+    return this.http.delete<TaskAndMeta>(constant.API_URL + constant.TASK + constant.USER + '/'+ user.id );
+  }
+
+  public deleteTodayTask(user: UserInterface): Observable<TaskAndMeta> {
+    return this.http.delete<TaskAndMeta>(constant.API_URL + constant.TASK + constant.USER + '/' + user.id + constant.TODAY);
   }
 
   public getLastCreatedTaskId(): Observable<IdAndMeta> {
-    return this.http.get<IdAndMeta>(config.apiUrl + config.getLastCreatedTasksId);
+    return this.http.get<IdAndMeta>(constant.API_URL + constant.TASK + constant.LAST);
   }
 }
