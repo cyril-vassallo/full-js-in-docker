@@ -15,11 +15,11 @@ export class UserService {
   }
 
   public getAllUsers(): Observable<UsersAndMeta>{
-    return this.http.get<UsersAndMeta>(config.apiUrl + config.users);
+    return this.http.get<UsersAndMeta>(config.apiUrl + config.getUsers);
   }
 
   public updateUser(user: UserInterface): Observable<UsersAndMeta>{
-    return this.http.put<UsersAndMeta>(config.apiUrl + config.user, user);
+    return this.http.put<UsersAndMeta>(config.apiUrl + config.getUser, user);
   }
 
   public saveUserToLocalStorage(content: string) {

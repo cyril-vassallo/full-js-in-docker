@@ -6,8 +6,13 @@ import { Task, TaskDocument } from '../Schemas/task.schema'
 import { Model } from 'mongoose'
 import { InjectModel } from '@nestjs/mongoose';
 
+
+
 @Injectable()
 export class TaskService {
+
+
+
   constructor(private format: FormatService, @InjectModel(Task.name) private taskModel: Model<TaskDocument>) {}
 
   async createOne(taskDto: TaskDto): Promise<TaskInterface> {
@@ -107,16 +112,38 @@ export class TaskService {
 
   async deleteOne(taskId: string):  Promise<null> {
       const result = await this.taskModel.deleteOne({id: taskId}).exec()
-      if(result.acknowledged) {
+      if(result.deletedCount === 0) {
         throw new NotFoundException('Task could not be found!')
       }
       return null
   }
 
-  async deleteAll(userId: number): Promise<null> {
+  async deleteAllByUserId(userId: string): Promise<null> {
+    const result =  await this.taskModel.deleteMany({user: userId}).exec()
+    if(result.deletedCount === 0) {
+      throw new NotFoundException('Tasks could not be found!')
+    }
     return null
   }
 
+  async deleteOneByUserIdAndToday(userId: string):  Promise<null> {
+    const todayDate: string = this.format.getTodayDate('fr');
+
+    const result = await this.taskModel.findOneAndRemove(
+      {user: userId, date: todayDate},
+      function (err) {
+        if (err){
+          throw new NotFoundException('Task could not be found!');
+        }
+    }).clone().exec();
+
+
+    if(result === null) {
+      throw new NotFoundException('Task could not be found!');
+    }
+
+    return null
+}
 
 
 }

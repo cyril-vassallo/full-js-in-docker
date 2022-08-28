@@ -9,6 +9,7 @@ import { UserService } from '../../services/user.service';
 import { GithubService } from '../../services/github.service';
 import { TaskAndMeta, TasksAndMeta, UsersAndMeta, GithubAndMeta } from '../../types/types';
 import { Subscription } from 'rxjs';
+import { isToday } from 'date-fns';
 
 
 
@@ -48,8 +49,8 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.updateUserState = this.updateUserState.bind(this);
+    this.updateTasksState = this.updateTasksState.bind(this);
     this.toggleFormState = this.toggleFormState.bind(this);
-    this.assignNewTaskState = this.assignNewTaskState.bind(this);
     this.loadUserTasks = this.loadUserTasks.bind(this);
     this.syncGitTasks = this.syncGitTasks.bind(this)
   }
@@ -173,16 +174,32 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
     localStorage.setItem(key, content);
   }
 
-  assignNewTaskState(
+  updateTasksState(
     tasks: TaskInterface[] | null,
-    task: TaskInterface | null
+    task: TaskInterface | null,
+    isTodayTaskExist: boolean
   ) {
-    this.tasksState = tasks;
-    if (task !== null) {
-      this.taskService.postTask(task).subscribe((taskAndMeta: TaskAndMeta) => {
-        console.log(taskAndMeta.data);
-      });
+    switch (isTodayTaskExist) {
+      case true:
+        if (task !== null) {
+          this.taskService.updateTask(task).subscribe((_observer: TaskAndMeta) => {
+            task.id = _observer.data.id;
+            this.tasksState = tasks;
+          });
+        } 
+        break
+      case false:
+        if (task !== null) {
+          this.taskService.postTask(task).subscribe((_observer: TaskAndMeta) => {
+            task.id = _observer.data.id;
+            console.log(task)
+            this.tasksState = tasks;
+            console.log(this.tasksState);
+          });
+        }
+        break
     }
+   
   }
 
   isFormShouldDisplayed(): boolean {

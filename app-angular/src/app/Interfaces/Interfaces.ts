@@ -9,7 +9,7 @@ export interface NavigationItemInterface {
 }
 
 export interface UserInterface {
-    id: number;
+    id?: string;
     firstName: string;
     lastName: string;
     email?:string;
@@ -20,11 +20,6 @@ export interface UserInterface {
 
 }
 
-export interface TaskInterface {
-    date: string,
-    list: string [],
-    commits: CommitInterface[]
-}
 
 export interface LoginFormInterface {
     email: string;
@@ -42,16 +37,16 @@ export interface CommitInterface {
 }
 
 export interface TaskInterface {
-    id: number;
-    userId: number; 
-    date: string,
-    list: string [],
-    commits: CommitInterface[]
+    id?: string;
+    user: string; 
+    date: string;
+    list?: string[];
+    commits?: CommitInterface[];
 }
 
 export interface GithubInterface {
-    id: number;
-    userId: number;
+    id: string;
+    user: string;
     owner: string;
     repository: string;
     branch: string;

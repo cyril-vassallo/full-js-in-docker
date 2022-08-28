@@ -17,7 +17,6 @@ export class DailyTaskComponent implements OnInit {
 
   constructor() {
     this.unknownUser = {
-      id: 0,
       firstName: 'unknown',
       lastName: 'user',
       job: 'no job',

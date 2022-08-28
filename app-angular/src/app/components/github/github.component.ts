@@ -146,9 +146,9 @@ export class GithubComponent implements OnInit {
   }
 
   updateRepository(): void {
-    if (this.githubState && this.user) {
-
-      this.githubState.userId =  this.user?.id;
+    if (this.githubState && this.user?.id) {
+      
+      this.githubState.user =  this.user?.id;
       this.githubState.enabled = this.githubForm.controls.enabled.value!;
       this.githubState.owner = this.githubForm.controls.owner.value!;
       this.githubState.repository = this.githubForm.controls.repository.value!;

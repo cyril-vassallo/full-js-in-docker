@@ -8,6 +8,7 @@ import {
 } from 'src/app/Interfaces/Interfaces';
 import { Subscription } from 'rxjs';
 import { TaskService } from '../../services/task.service';
+import { fi } from 'date-fns/locale';
 
 @Component({
   selector: 'app-task-form',
@@ -20,9 +21,10 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   @Input() hasTask: boolean = false;
   @Input() tasks: TaskInterface[] | null = null;
   @Input() user: UserInterface | null = null;
-  @Input() handleTaskState!: (
+  @Input() handleTasksState!: (
     tasks: TaskInterface[] | null,
-    task: TaskInterface | null
+    task: TaskInterface | null,
+    isTodayTaskExist: boolean
   ) => void;
 
   task: TaskInterface | null = null;
@@ -45,7 +47,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     console.log(this.date)
-    this.isTodayTaskExist = this.checkIfTodayTaskExist(this.tasks, this.date);
+    this.checkIfTodayTaskExist();
     this.isTodayTaskExist ? (this.hasTask = true) : (this.hasTask = false);
   }
 
@@ -54,22 +56,22 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   }
 
   onTaskFormSubmit(): void {
-    this.isTodayTaskExist = this.checkIfTodayTaskExist(this.tasks, this.date);
+    this.checkIfTodayTaskExist();
 
     if (!this.isTodayTaskExist) {
-      this.createTask();
-    }
+      this.initializeNewTask();
+    } 
 
-    this.task = this.updateTaskList(this.task, this.taskForm.value.taskInput);
+    this.updateTaskList();
 
     if (this.tasks !== null && this.task !== null && !this.isTodayTaskExist) {
-      this.tasks = this.mergeTasks(this.tasks, this.task);
+      this.tasks.unshift(this.task);
       this.hasTask = true;
     } else if (!this.tasks && this.task !== null) {
       this.tasks = [this.task];
     }
 
-    this.handleTaskState(this.tasks, this.task);
+    this.handleTasksState(this.tasks, this.task, this.isTodayTaskExist);
 
     this.resetInputsState();
   }
@@ -82,78 +84,50 @@ export class TaskFormComponent implements OnInit, OnDestroy {
         hash: this.commitForm.value.commitHashInput,
       };
       this.task?.commits?.push(commit);
-      this.handleTaskState(this.tasks, this.task);
+      this.handleTasksState(this.tasks, this.task, this.isTodayTaskExist);
     } else {
       this.isValidCommit = false;
     }
     this.resetInputsState();
   }
 
-  mergeTasks(tasks: TaskInterface[], task: TaskInterface): TaskInterface[] {
-    tasks.unshift(task);
-    return tasks;
-  }
 
-  checkIfTodayTaskExist(tasks: TaskInterface[] | null, date: string): boolean {
-    if (tasks) {
-      const todayTasks: TaskInterface[] = tasks.filter((task) => {
-        return task.date == date;
+
+  checkIfTodayTaskExist(): void {
+    if (this.tasks) {
+      const todayTasks: TaskInterface[] = this.tasks.filter((task) => {
+        return task.date == this.date;
       });
 
       if (todayTasks.length > 0) {
         console.log('TASK EXIST');
         this.task = todayTasks[0];
-        return true;
+        this.isTodayTaskExist = true;
+      }else {
+        console.log('TASK DO NOT EXIST');
+        this.isTodayTaskExist = false;
       }
     }
-    return false;
+  
   }
 
-  updateTaskList(
-    task: TaskInterface | null,
-    taskInputValue: string | null | undefined
-  ): TaskInterface | null {
+  updateTaskList(): void {
     if (
-      task !== null &&
-      taskInputValue !== null &&
-      taskInputValue !== undefined &&
-      taskInputValue !== ''
+      this.task?.list &&
+      this.taskForm.value.taskInput
     ) {
-      task.list.push(taskInputValue);
+      this.task.list.push(this.taskForm.value.taskInput);
     }
-    return task;
   }
 
-  createTask(): void {
-    this.getLastTaskIdFromDb()
-    if (this.tasks && this.taskForm.value.taskInput !== null) {
-      const task: TaskInterface = this.tasks.reduce(function (
-        accumulator: TaskInterface,
-        currentTask: TaskInterface
-      ) {
-        return currentTask.id > accumulator.id ? currentTask : accumulator;
-      },
-      this.tasks[0]);
-
-      const newTask: TaskInterface = { ...task };
-
-      //transforme the last task into a today new task
-      newTask.id = this.lastCreatedTaskId?? 0;
-      newTask.commits = [];
-      newTask.list = [];
-      newTask.date = this.date;
-      this.task = newTask;
-      console.log(newTask)
-    } else {
-      if (this.user) {
-        this.task = {
-          id: 1,
-          userId: this.user.id,
-          date: this.date,
-          commits: [],
-          list: [],
-        };
-      }
+  initializeNewTask(): void {
+    if (this.user?.id && this.taskForm.value.taskInput !== null) {
+      this.task = { 
+        user: this.user.id,
+        date: this.date,
+        list: [],
+        commits: []
+      };
     }
   }
 
@@ -175,7 +149,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 
 
   getLastTaskIdFromDb(): void {
-    //Mouve to createtask
+    //Mouve to initializeNewTask
     this.lastTaskIdSubscription$ = this.taskService.getLastCreatedTaskId().subscribe(( _observer => {
        this.lastCreatedTaskId  = _observer.data;
        console.log(this.lastCreatedTaskId)

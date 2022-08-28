@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { MyHistoryComponent } from './pages/my-history/my-history.component';
@@ -25,6 +25,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +42,7 @@ import { LoaderComponent } from './components/loader/loader.component';
     ParamsComponent,
     LoaderComponent,
   ],
-  imports: [
+  imports: [  
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
