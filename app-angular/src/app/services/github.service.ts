@@ -20,7 +20,7 @@ export class GithubService {
   // path: /github/user/{:userId}
   public getGithubByUser(user: UserInterface): Observable<GithubAndMeta> {
     return this.http.get<GithubAndMeta>(
-      constant.API_URL + constant.GITHUB + constant.USER + '/'+ user.id
+      constant.API_URL + constant.GITHUB + constant.USER + '/' + user.id
     );
   }
 

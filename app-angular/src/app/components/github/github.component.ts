@@ -61,10 +61,24 @@ export class GithubComponent implements OnInit {
 
   initGithubState(): void {
     if(this.user){
-      this.gitGetByUserSubscription$ = this.githubService.getGithubByUser(this.user).subscribe( (_observer: GithubAndMeta) => {
+      this.gitGetByUserSubscription$ = this.githubService.getGithubByUser(this.user)
+      .pipe(catchError(err => of({status : err.status}))).subscribe( (_observer: any) => {
         console.log('GET GIT')
-        this.githubState = {..._observer.data};
-        this.updateFormValues();
+        if(_observer.status === 404 &&  this.user?.id){
+          this.githubState = {    
+            id: "",
+            user: this.user.id,
+            owner: "",
+            repository: "",
+            branch: "",
+            enabled : false,
+            token: "",
+        }
+        }else {
+          this.githubState = {..._observer.data};
+          this.updateFormValues();
+        }
+
       })
     }
   }

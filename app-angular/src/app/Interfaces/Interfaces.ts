@@ -54,3 +54,7 @@ export interface GithubInterface {
     token: string;
 }
 
+export interface ErrorInterface {
+    status: number;
+    message?: string;
+}

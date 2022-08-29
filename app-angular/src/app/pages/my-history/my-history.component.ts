@@ -8,8 +8,8 @@ import { TaskService } from '../../services/task.service';
 import { UserService } from '../../services/user.service';
 import { GithubService } from '../../services/github.service';
 import { TaskAndMeta, TasksAndMeta, UsersAndMeta, GithubAndMeta } from '../../types/types';
-import { Subscription } from 'rxjs';
-import { isToday } from 'date-fns';
+import { Subscription, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 
 
@@ -93,8 +93,21 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
   loadUserGithub(user: UserInterface | null): void  {
     console.log('user github loaded !');
     if(user !== null) {
-      this.gitSubscription$ = this.githubService.getGithubByUser(user).subscribe((_observer: GithubAndMeta) => {
-        this.githubState = _observer.data;
+      this.gitSubscription$ = this.githubService.getGithubByUser(user).pipe(catchError(err => of({status: err.status}))).subscribe((_observer: any) => {
+        if(_observer.status === 404 && this.userState?.id) {
+          this.githubState = {    
+            id: "",
+            user: this.userState.id,
+            owner: "",
+            repository: "",
+            branch: "",
+            enabled : false,
+            token: "",
+          }
+        } else {
+          this.githubState = _observer.data;
+        }
+      
       }) 
     }
   }
