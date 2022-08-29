@@ -13,7 +13,12 @@ export class UserService {
 
   // path: /user/login
   public login(loginForm: LoginFormInterface): Observable<UserAndMeta> {
-    return this.http.post<UserAndMeta>(constant.API_URL + constant.LOGIN, loginForm);
+    return this.http.post<UserAndMeta>(constant.API_URL + constant.USER + constant.LOGIN, loginForm);
+  }
+
+  // path: /user
+  public createUser(user: UserInterface): Observable<UserAndMeta> {
+    return this.http.post<UserAndMeta>(constant.API_URL + constant.USER, user);
   }
 
   // path: /user/all

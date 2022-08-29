@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Body, Post, Patch } from '@nestjs/common';
+import { Controller, Get, Param, Body, Post, Patch, Delete } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersAndMeta } from '../Types/types';
 import { UserAndMeta } from '../Types/types';
@@ -25,6 +25,20 @@ export class UserController {
       },
     };
   }
+
+  @Post()
+  async createUser(@Body() userDto: UserDto): Promise<UserAndMeta> {
+    return {
+      data: await this.usersService.createOne(userDto),
+      meta: {
+        method: 'POST',
+        urn: '/user',
+        uri:
+          this.configService.get<string>('API_ENDPOINT') + '/user',
+      },
+    };
+  }
+
 
   @Get('/all')
   async getUsers(): Promise<UsersAndMeta> {
@@ -64,4 +78,18 @@ export class UserController {
       },
     };
   }
+
+  @Delete('/:userId')
+  async deleteTasksByUserId(@Param('userId') userId: string): Promise<UserAndMeta> {
+    return {
+      data: await this.usersService.deleteOne(userId),
+      meta: {
+        method: 'DELETE',
+        urn: '/user/{:id}',
+        uri: this.configService.get<string>('API_ENDPOINT') + '/user/{:id}',
+      },
+    };
+  }
+
+
 }

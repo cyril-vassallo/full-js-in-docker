@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { UserInterface } from '../Interfaces/interfaces';
 import { AccountDto } from '../dto/account.dto';
 import { UserDto } from '../dto/user.dto';
@@ -11,6 +11,33 @@ export class UserService {
 
   constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>){}
 
+
+  async createOne(userDto: UserDto ): Promise<UserInterface> {
+    const newUser: UserInterface = {
+      firstName: userDto.firstName,
+      lastName: userDto.lastName,
+      email: userDto.email,
+      password : userDto.password,
+      job: 'no job set',
+      description: 'You can enter a description for your profile',
+      photo: 'default'
+    }
+
+    const createdUser = new this.userModel(newUser);
+
+    createdUser.save();
+
+    return {
+      id : createdUser.id, 
+      firstName: createdUser.firstName, 
+      lastName: createdUser.lastName,
+      email: createdUser.email,
+      job: createdUser.job,
+      description: createdUser.description,
+      photo: createdUser.photo,
+    }
+  }
+  
   async findAll(): Promise<UserInterface[]> {
     const users: UserDocument[] =  await this.userModel.find().exec();
 
@@ -95,6 +122,15 @@ export class UserService {
       email: user.email,
       photo: user.photo,
     };
+
+  }
+
+  async deleteOne(userId: string): Promise<UserInterface> {
+    const result = await this.userModel.deleteOne({_id: userId}).exec()
+    if(result.deletedCount === 0) {
+      throw new NotFoundException('User could not be found!')
+    }
+    return null
 
   }
 }

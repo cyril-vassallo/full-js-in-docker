@@ -43,4 +43,9 @@ export class TaskService {
     return this.http.delete<TaskAndMeta>(constant.API_URL + constant.TASK + constant.USER + '/' + user.id + constant.TODAY);
   }
 
+  // path: /task
+  public deleteAllAppTask(): Observable<TaskAndMeta> {
+    return this.http.delete<TaskAndMeta>(constant.API_URL + constant.TASK);
+  }
+
 }

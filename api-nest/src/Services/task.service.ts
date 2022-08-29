@@ -118,11 +118,11 @@ export class TaskService {
   }
 
   async deleteAllByUserId(userId: string): Promise<null> {
-    const result =  await this.taskModel.deleteMany({user: userId}).exec()
-    if(result.deletedCount === 0) {
-      throw new NotFoundException('Tasks could not be found!')
-    }
-    return null
+  const result =  await this.taskModel.deleteMany({user: userId}).exec()
+  if(result.deletedCount === 0) {
+    throw new NotFoundException('Tasks could not be found!')
+  }
+  return null
   }
 
   async deleteOneByUserIdAndToday(userId: string):  Promise<null> {
@@ -146,7 +146,16 @@ export class TaskService {
     }
 
     return null
-}
+  }
+  
+  async deleteAll(): Promise<null> {
+    const result =  await this.taskModel.deleteMany({}).exec()
+    if(result.deletedCount === 0) {
+      throw new NotFoundException('Tasks could not be found!')
+    }
+    return null
+  }
+
 
 
 }

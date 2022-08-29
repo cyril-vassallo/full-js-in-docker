@@ -110,6 +110,18 @@ export class TaskController {
     };
   }
 
+  @Delete()
+  async deleteAllTasks(): Promise<TaskAndMeta> {
+    return {
+      data: await this.taskService.deleteAll(),
+      meta: {
+        method: 'DELETE',
+        urn: '/task',
+        uri: this.configService.get<string>('API_ENDPOINT') + '/task',
+      },
+    };
+  }
+
 
 
 

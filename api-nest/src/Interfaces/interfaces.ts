@@ -33,14 +33,14 @@ export interface CommitInterface {
 }
 
 export interface UserInterface {
-    id: string;
+    id?: string;
     lastName: string;
     firstName: string;
     email?: string;
     password?: string;
-    job: string;
-    description: string;
-    photo: string;
+    job?: string;
+    description?: string;
+    photo?: string;
 }
   
 export interface GithubInterface {

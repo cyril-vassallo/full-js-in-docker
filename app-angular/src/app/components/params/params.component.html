@@ -53,9 +53,9 @@
         <div class="col mb-3 container">
             <h2 class="fs-4 fw-semibold text-secondary">App settings</h2>    
             <div class="row mt-2">
-                <label class="col form-label">Clear today task:</label>
-                <button (click) ="onClearTodayTasksClick()" type="button" href="#" class="col btn btn-sm btn-warning mx-5">
-                    <span  *ngIf="!isClearingToday; else clearTodayTemplate" >Clear</span>
+                <label class="col form-label">Clear today history:</label>
+                <button (click) ="onClearTodayTasksClick()" type="button" href="#" class="col btn btn-sm btn-info mx-5">
+                    <span  *ngIf="!isTodayTaskClearing; else clearTodayTemplate" >Clear</span>
                 </button>
                 <ng-template #clearTodayTemplate><span>
                     Clearing...
@@ -65,11 +65,22 @@
 
             </div>
             <div class="row mt-2">
-                <label class="col form-label">Clear all the history:</label>
-                <button (click) ="onClearHistoryClick()" type="button" href="#" class="col btn btn-sm btn-danger mx-5">
+                <label class="col form-label">Clear user history:</label>
+                <button (click) ="onClearHistoryClick()" type="button" href="#" class="col btn btn-sm btn-warning mx-5">
                     <span  *ngIf="!isHistoryClearing; else clearHistoryTemplate" >Clear</span>
                 </button>
                 <ng-template #clearHistoryTemplate><span>
+                    Clearing...
+                    <app-loader></app-loader>
+                    </span>
+                </ng-template>
+            </div>
+            <div class="row mt-2">
+                <label class="col form-label">Clear app history (Admin):</label>
+                <button (click) ="onClearAllAppTasksClick()" type="button" href="#" class="col btn btn-sm btn-danger mx-5">
+                    <span  *ngIf="!isAllAppTasksClearing; else clearAllAppTasksTemplate" >Clear</span>
+                </button>
+                <ng-template #clearAllAppTasksTemplate><span>
                     Clearing...
                     <app-loader></app-loader>
                     </span>

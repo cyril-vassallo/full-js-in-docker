@@ -30,10 +30,12 @@ export class ParamsComponent implements OnInit, OnDestroy {
 
   isUserUpdated: boolean = false;
   isHistoryClearing: boolean = false;
-  isClearingToday: boolean = false;
+  isTodayTaskClearing: boolean = false;
+  isAllAppTasksClearing: boolean = false;
   userUpdateSubscription$: Subscription | null = null;
   historyClearingSubscription$: Subscription | null = null;
   todayTaskClearingSubscription$: Subscription | null = null;
+  allAppTasksClearingSubscription$: Subscription | null = null;
 
   ngOnInit(): void {
     this.bindCurrentUserWithForm();
@@ -44,6 +46,7 @@ export class ParamsComponent implements OnInit, OnDestroy {
     this.userUpdateSubscription$?.unsubscribe();
     this.historyClearingSubscription$?.unsubscribe();
     this.todayTaskClearingSubscription$?.unsubscribe();
+    this.allAppTasksClearingSubscription$?.unsubscribe();
   }
 
 
@@ -81,6 +84,23 @@ export class ParamsComponent implements OnInit, OnDestroy {
       })
   }
 
+
+  onClearTodayTasksClick(): void {
+    console.log("Clearing today Tasks....");
+    if(this.user){
+      this.historyClearingSubscription$ = this.taskService.deleteTodayTask(this.user).subscribe((_observer: TaskAndMeta) => {
+        if(_observer?.hasOwnProperty('data')){
+          console.log(_observer.data);
+          this.isTodayTaskClearing = true;
+          setTimeout(() => {
+            this.isTodayTaskClearing = false;
+          }, 2000)
+        }
+      })
+    }
+  }
+
+
   onClearHistoryClick(): void {
     console.log("Clearing history....");
     if(this.user){
@@ -97,21 +117,21 @@ export class ParamsComponent implements OnInit, OnDestroy {
 
   }
 
-  onClearTodayTasksClick(): void {
-    console.log("Clearing today Tasks....");
-    if(this.user){
-      this.historyClearingSubscription$ = this.taskService.deleteTodayTask(this.user).subscribe((_observer: TaskAndMeta) => {
-        if(_observer?.hasOwnProperty('data')){
-          console.log(_observer.data);
-          this.isHistoryClearing = true;
-          setTimeout(() => {
-            this.isHistoryClearing = false;
-          }, 2000)
-        }
-      })
-    }
-    
+
+  onClearAllAppTasksClick(): void {
+    console.log("Clearing all app Tasks....");
+    this.allAppTasksClearingSubscription$ = this.taskService.deleteAllAppTask().subscribe((_observer: TaskAndMeta) => {
+      if(_observer?.hasOwnProperty('data')){
+        console.log(_observer.data);
+        this.isAllAppTasksClearing = true;
+        setTimeout(() => {
+          this.isAllAppTasksClearing = false;
+        }, 2000)
+      }
+    })
+  
   }
+
 
 
   
