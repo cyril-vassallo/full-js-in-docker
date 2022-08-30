@@ -8,7 +8,7 @@ import {
 } from 'src/app/Interfaces/Interfaces';
 import { Subscription } from 'rxjs';
 import { TaskService } from '../../services/task.service';
-import { fi } from 'date-fns/locale';
+
 
 @Component({
   selector: 'app-task-form',
@@ -16,6 +16,7 @@ import { fi } from 'date-fns/locale';
   styleUrls: ['./task-form.component.scss'],
 })
 export class TaskFormComponent implements OnInit, OnDestroy {
+
   constructor(private taskService: TaskService) {}
 
   @Input() hasTask: boolean = false;
@@ -43,7 +44,9 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     commitUrlInput: new FormControl(''),
   });
 
-  lastTaskIdSubscription$: Subscription|null = null;
+  subscriptions: Subscription = new Subscription();
+
+  // ----- Component lifecycle methods ----- //
 
   ngOnInit(): void {
     console.log(this.date)
@@ -52,8 +55,10 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.lastTaskIdSubscription$?.unsubscribe();
+    this.subscriptions?.unsubscribe();
   }
+
+// ----- Component methods ----- //
 
   onTaskFormSubmit(): void {
     this.checkIfTodayTaskExist();
@@ -90,8 +95,6 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     }
     this.resetInputsState();
   }
-
-
 
   checkIfTodayTaskExist(): void {
     if (this.tasks) {
@@ -147,13 +150,12 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     );
   }
 
-
   getLastTaskIdFromDb(): void {
     //Mouve to initializeNewTask
-    this.lastTaskIdSubscription$ = this.taskService.getLastCreatedTaskId().subscribe(( _observer => {
+    this.subscriptions.add(this.taskService.getLastCreatedTaskId().subscribe(( _observer => {
        this.lastCreatedTaskId  = _observer.data;
        console.log(this.lastCreatedTaskId)
-    }))
+    })));
   }
 
 }

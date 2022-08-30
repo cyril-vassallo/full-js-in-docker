@@ -15,13 +15,15 @@ export class FormButtonComponent implements OnChanges {
   @Input() teamPartner!: UserInterface | null;
   disabledSate: boolean = true;
 
-  constructor() {}
+  // ----- Component lifecycle methods ----- //
 
   ngOnChanges(): void {
     this.teamPartner !== null
       ? (this.disabledSate = true)
       : (this.disabledSate = false);
   }
+
+  // ----- Component methods----- //
 
   onOpenFormClick(): void {
     this.handleToggleForm();

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { UserInterface } from '../../Interfaces/Interfaces';
 
 @Component({
@@ -6,13 +6,12 @@ import { UserInterface } from '../../Interfaces/Interfaces';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
   @Input() user!: UserInterface | null;
   @Input() handleLoadUserTasks!: (user: UserInterface | null) => void;
 
-  constructor() {}
 
-  ngOnInit(): void {}
+  // ----- Component methods----- //
 
   onUserProfileClick() {
     if (this.user !== null) {

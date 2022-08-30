@@ -32,23 +32,21 @@ export class ParamsComponent implements OnInit, OnDestroy {
   isHistoryClearing: boolean = false;
   isTodayTaskClearing: boolean = false;
   isAllAppTasksClearing: boolean = false;
-  userUpdateSubscription$: Subscription | null = null;
-  historyClearingSubscription$: Subscription | null = null;
-  todayTaskClearingSubscription$: Subscription | null = null;
-  allAppTasksClearingSubscription$: Subscription | null = null;
+  subscriptions: Subscription = new Subscription()
+
+  // ----- Component lifecycle methods ----- //
+
 
   ngOnInit(): void {
     this.bindCurrentUserWithForm();
   }
 
-
   ngOnDestroy(): void {
-    this.userUpdateSubscription$?.unsubscribe();
-    this.historyClearingSubscription$?.unsubscribe();
-    this.todayTaskClearingSubscription$?.unsubscribe();
-    this.allAppTasksClearingSubscription$?.unsubscribe();
+    this.subscriptions?.unsubscribe();
   }
 
+
+  // ----- Component methods----- //
 
   bindCurrentUserWithForm(): void {
     if(this.user?.email) {
@@ -72,7 +70,7 @@ export class ParamsComponent implements OnInit, OnDestroy {
         photo: this.user?.photo!
       }
 
-      this.userUpdateSubscription$ = this.userService.updateUser(userInfoFromInput).subscribe((_observer: any) => {
+      this.subscriptions = this.userService.updateUser(userInfoFromInput).subscribe((_observer: any) => {
         if(_observer?.hasOwnProperty('data')){
           this.user = _observer.data;
           this.userService.saveUserToLocalStorage(JSON.stringify(_observer.data));
@@ -84,11 +82,10 @@ export class ParamsComponent implements OnInit, OnDestroy {
       })
   }
 
-
   onClearTodayTasksClick(): void {
     console.log("Clearing today Tasks....");
     if(this.user){
-      this.historyClearingSubscription$ = this.taskService.deleteTodayTask(this.user).subscribe((_observer: TaskAndMeta) => {
+      this.subscriptions.add(this.taskService.deleteTodayTask(this.user).subscribe((_observer: TaskAndMeta) => {
         if(_observer?.hasOwnProperty('data')){
           console.log(_observer.data);
           this.isTodayTaskClearing = true;
@@ -96,15 +93,14 @@ export class ParamsComponent implements OnInit, OnDestroy {
             this.isTodayTaskClearing = false;
           }, 2000)
         }
-      })
+      }));
     }
   }
-
 
   onClearHistoryClick(): void {
     console.log("Clearing history....");
     if(this.user){
-      this.historyClearingSubscription$ = this.taskService.deleteTasksByUser(this.user).subscribe((_observer: TaskAndMeta) => {
+      this.subscriptions.add(this.taskService.deleteTasksByUser(this.user).subscribe((_observer: TaskAndMeta) => {
         if(_observer?.hasOwnProperty('data')){
           console.log(_observer.data);
           this.isHistoryClearing = true;
@@ -112,15 +108,13 @@ export class ParamsComponent implements OnInit, OnDestroy {
             this.isHistoryClearing = false;
           }, 2000)
         }
-      })
+      }));
     }
-
   }
-
 
   onClearAllAppTasksClick(): void {
     console.log("Clearing all app Tasks....");
-    this.allAppTasksClearingSubscription$ = this.taskService.deleteAllAppTask().subscribe((_observer: TaskAndMeta) => {
+    this.subscriptions.add(this.taskService.deleteAllAppTask().subscribe((_observer: TaskAndMeta) => {
       if(_observer?.hasOwnProperty('data')){
         console.log(_observer.data);
         this.isAllAppTasksClearing = true;
@@ -128,12 +122,7 @@ export class ParamsComponent implements OnInit, OnDestroy {
           this.isAllAppTasksClearing = false;
         }, 2000)
       }
-    })
-  
+    }));
   }
-
-
-
-  
 
 }

@@ -1,10 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserInterface, GithubInterface } from '../../Interfaces/Interfaces';
 import { GithubService } from '../../services/github.service';
-import { GithubAndMeta } from '../../types/types';
 import { FormGroup, FormControl } from '@angular/forms';
 import { catchError} from 'rxjs/operators';
-import { of, Subscription, Observable } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 
 
 @Component({
@@ -28,26 +27,23 @@ export class GithubComponent implements OnInit {
     enabled: new FormControl(false),
   });
 
-  githubObservable$: Observable<GithubAndMeta>|null = null
-  githubCheckingObservable$: Observable<GithubAndMeta>|null = null
-  githubUpdateObservable$: Observable<GithubAndMeta>|null = null
-  gitUpdateSubscription$: Subscription| null = null;
-  gitCheckingSubscription$: Subscription| null = null;
-  gitGetByUserSubscription$: Subscription| null = null;
+  subscriptions: Subscription = new Subscription()
 
   constructor(private githubService: GithubService) {}
 
+  // ----- Component lifecycle methods ----- //
+
+
   ngOnInit(): void {
-    this.initGithubState();
+    this.loadUserGithub();
   }
 
   ngOnDestroy() {
-    // Unsubscribe when the component is destroyed
-    this.gitUpdateSubscription$?.unsubscribe();
-    this.gitCheckingSubscription$?.unsubscribe();
-    this.gitGetByUserSubscription$?.unsubscribe();
+    this.subscriptions?.unsubscribe();
   }
-  
+
+  // ----- Component methods----- //
+
   onGithubFormSubmit(): void {
     this.checkRepository();
     this.toggleMessageDisplay(true)
@@ -58,28 +54,11 @@ export class GithubComponent implements OnInit {
 
   }
 
-
-  initGithubState(): void {
-    if(this.user){
-      this.gitGetByUserSubscription$ = this.githubService.getGithubByUser(this.user)
-      .pipe(catchError(err => of({status : err.status}))).subscribe( (_observer: any) => {
-        console.log('GET GIT')
-        if(_observer.status === 404 &&  this.user?.id){
-          this.githubState = {    
-            id: "",
-            user: this.user.id,
-            owner: "",
-            repository: "",
-            branch: "",
-            enabled : false,
-            token: "",
-        }
-        }else {
-          this.githubState = {..._observer.data};
-          this.updateFormValues();
-        }
-
-      })
+  loadUserGithub(): void {
+    if(this.user !== null ){
+      this.subscriptions.add(this.githubService.getGithubByUser(this.user).subscribe((_observer: GithubInterface) => {
+        this.githubState = _observer;
+      }));
     }
   }
 
@@ -111,7 +90,6 @@ export class GithubComponent implements OnInit {
   isGithubActive() {
     return this.githubForm.get('enabled')?.getRawValue()
   }
-
 
   toggleGithubEnabling(): void {  
     const enabled: boolean = !this.githubForm.controls.enabled.value;
@@ -145,7 +123,7 @@ export class GithubComponent implements OnInit {
       this.githubState.branch = this.githubForm.controls.branch.value!;
       this.githubState.token = this.githubForm.controls.token.value!;
       
-      this.gitCheckingSubscription$ = this.githubService.checkGithubRepository(this.githubState)
+      this.subscriptions.add(this.githubService.checkGithubRepository(this.githubState)
         .pipe(
           catchError(err => of({status : err.status}))
         )
@@ -155,7 +133,7 @@ export class GithubComponent implements OnInit {
           if(!this.hasError){
             this.updateRepository();
           }
-      })
+      }));
     }
   }
 
@@ -169,13 +147,13 @@ export class GithubComponent implements OnInit {
       this.githubState.branch = this.githubForm.controls.branch.value!;
       this.githubState.token = this.githubForm.controls.token.value!;
 
-      this.gitUpdateSubscription$ = this.githubService.postGithub(this.githubState)
+      this.subscriptions.add(this.githubService.postGithub(this.githubState)
         .pipe(catchError(err => of({status : err.status})))
         .subscribe( (_event: any) => {
           console.log('UPDATE GIT')
           console.log(_event)
           _event.status === 404 || _event.status === 403  ? this.hasError = true : this.hasError = false
-      })
+      }));
     }
   }
 

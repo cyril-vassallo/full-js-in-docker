@@ -25,11 +25,17 @@ export class DailyTaskComponent implements OnInit {
     };
   }
 
+
+  // ----- Component lifecycle methods ----- //
+
   ngOnInit(): void {
     if (this.teamPartner !== null) {
       this.user = this.teamPartner;
     }
   }
+
+
+  // ----- Component methods----- //
 
   getUser(): UserInterface {
     if (this.teamPartner && this.teamPartner !== undefined) {

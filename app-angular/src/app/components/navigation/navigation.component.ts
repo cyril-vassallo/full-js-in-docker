@@ -16,21 +16,25 @@ export class NavigationComponent implements OnInit, OnDestroy {
   @Input() logout!: () => void;
 
   navigationState: NavigationItemInterface[] = [];
-  navigationSubscription$: Subscription| null = null;
+  subscriptions: Subscription = new Subscription();
   navigation: NavigationItemInterface[]| null = null;
 
   constructor(private navigationService: NavigationService) {}
 
-  ngOnInit(): void {
-    this.navigationSubscription$ = this.navigationService.getNavigation().subscribe((_observer: NavigationAndMeta) => {
-      this.navigation =  _observer.data;
-    });
+  // ----- Component lifecycle methods ----- //
 
+  ngOnInit(): void {
+    this.subscriptions.add(this.navigationService.getNavigation().subscribe((_observer: NavigationAndMeta) => {
+      this.navigation =  _observer.data;
+    }));
   }
 
   ngOnDestroy(): void {
-    this.navigationSubscription$?.unsubscribe();
+    this.subscriptions?.unsubscribe();
   }
+  
+
+  // ----- Component methods----- //
 
   onLogoutClick(): void {
     this.logout();

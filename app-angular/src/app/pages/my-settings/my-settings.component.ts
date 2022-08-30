@@ -10,7 +10,7 @@ export class MySettingsComponent implements OnInit {
   userState: UserInterface | null = null;
   currentActiveFeature: string = 'params';
 
-  constructor() {}
+  // ----- Component lifecycle methods ----- //
 
   ngOnInit(): void {
     const user: string | null = localStorage.getItem('user');
@@ -18,6 +18,8 @@ export class MySettingsComponent implements OnInit {
       this.userState = JSON.parse(user);
     }
   }
+
+// ----- Component methods ----- //
 
   onClickSubNavItem(featureName: string){
     this.currentActiveFeature = featureName;

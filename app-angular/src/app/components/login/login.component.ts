@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import {
   LoginFormInterface,
@@ -13,7 +13,7 @@ import { UserAndMeta } from '../../types/types';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnDestroy {
   email: string = '';
   password: string = '';
   errorMessage: string = 'E-Mail address or password is incorrect !';
@@ -25,22 +25,23 @@ export class LoginComponent implements OnInit, OnDestroy {
   @Input() handleTasksList!: (tasks: TaskInterface[] | null) => void;
   @Input() user!: UserInterface | null;
 
-  loginUserSubscription$ : Subscription| null = null;
+  subscriptions: Subscription = new Subscription();
 
-  constructor(
-    private userService: UserService,
-  ) {
+  constructor(private userService: UserService) {
     this.userService = userService;
   }
 
-  ngOnInit(): void {}
 
+  // ----- Component lifecycle methods ----- //
+ 
   ngOnDestroy(): void {
-    this.loginUserSubscription$?.unsubscribe();
+    this.subscriptions?.unsubscribe();
   }
 
+  // ----- Component methods----- //
+
   onSubmitLogin(loginForm: LoginFormInterface) {
-    this.loginUserSubscription$ = this.userService.login(loginForm).subscribe((_observer: UserAndMeta) => {
+    this.subscriptions.add(this.userService.login(loginForm).subscribe((_observer: UserAndMeta) => {
       if (_observer.data) {
         this.isLoginFailed = false;
         this.user = _observer.data;
@@ -48,7 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       } else {
         this.isLoginFailed = true;
       }
-    });
+    }));
   }
 
 
