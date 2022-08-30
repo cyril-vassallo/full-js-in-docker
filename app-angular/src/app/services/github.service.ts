@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { constant } from '../../config/config';
 import { UserInterface, GithubInterface } from '../Interfaces/Interfaces';
 import { map, Observable } from 'rxjs';
-import { GithubAndMeta } from '../types/types';
-import { catchError, of } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 
 
 @Injectable()
@@ -13,36 +12,35 @@ export class GithubService {
 
 
   // path: /github
-  public postGithub(github: GithubInterface): Observable<GithubAndMeta> {
-    return this.http.post<GithubAndMeta>( constant.API_URL + constant.GITHUB, github)
+  public postGithub(github: GithubInterface): Observable<GithubInterface> {
+    return this.http.post<GithubInterface>( constant.API_URL + constant.GITHUB, github)
+    .pipe(
+      map( (_observable: any) => {
+        return _observable.data as GithubInterface 
+      })
+    )
   }
 
   // path: /github/user/{:userId}
-  public getGithubByUser(user: UserInterface): Observable<GithubInterface> {
-    return this.http.get<GithubInterface>(constant.API_URL + constant.GITHUB + constant.USER + '/' + user.id).pipe(
+  public getGithubByUser(user: UserInterface): Observable<GithubInterface|null> {
+    return this.http.get<GithubInterface|null>(constant.API_URL + constant.GITHUB + constant.USER + '/' + user.id).pipe(
+
       map((_observable: any) => {
         return _observable.data as GithubInterface;
       }),
+      tap(item => console.log(item)),
       catchError((err: any) => {
-        const emptyGithub:  GithubInterface = { 
-          id: "",
-          user: "",
-          owner: "",
-          repository: "",
-          branch: "",
-          enabled : false,
-          token: "",
-        }
-        return of(emptyGithub);
+        return of(null);
       })
     );
   }
 
   // path: /repos/{:owner}/{:repository}/branches/{:branch}
   public checkGithubRepository(github: GithubInterface):  Observable<any> {
-    return this.http.get<any>(
-        constant.API_GITHUB + constant.REPOS  + '/' + github.owner + '/' + github.repository + constant.BRANCHES + '/' + github.branch
-    );
+    return this.http.get<any>(constant.API_GITHUB + constant.REPOS  + '/' + github.owner + '/' + github.repository + constant.BRANCHES + '/' + github.branch)
+      .pipe(
+        catchError(err => of({status : err.status}))
+      )
   }
 
 }

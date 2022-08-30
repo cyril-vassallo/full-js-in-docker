@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { constant } from '../../config/config';
 import { LoginFormInterface, UserInterface } from '../Interfaces/Interfaces';
 import { Observable } from 'rxjs';
-import { UserAndMeta, UsersAndMeta } from '../types/types';
+import { UsersAndMeta } from '../types/types';
+import { map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -12,24 +13,41 @@ export class UserService {
 
 
   // path: /user/login
-  public login(loginForm: LoginFormInterface): Observable<UserAndMeta> {
-    return this.http.post<UserAndMeta>(constant.API_URL + constant.USER + constant.LOGIN, loginForm);
+  public login(loginForm: LoginFormInterface): Observable<UserInterface> {
+    return this.http.post<UserInterface>(constant.API_URL + constant.USER + constant.LOGIN, loginForm)
+    .pipe(
+      map((_observable: any) => {
+        return _observable.data as UserInterface;
+      }));
   }
 
   // path: /user
-  public createUser(user: UserInterface): Observable<UserAndMeta> {
-    return this.http.post<UserAndMeta>(constant.API_URL + constant.USER, user);
+  public createUser(user: UserInterface): Observable<UserInterface> {
+    return this.http.post<UserInterface>(constant.API_URL + constant.USER, user)
+    .pipe(
+      map((_observable: any) => {
+        return _observable.data as UserInterface;
+      }));
   }
 
   // path: /user/all
-  public getAllUsers(): Observable<UsersAndMeta>{
-    return this.http.get<UsersAndMeta>(constant.API_URL + constant.USER + constant.ALL);
+  public getAllUsers(): Observable<UserInterface[]>{
+    return this.http.get<UserInterface[]>(constant.API_URL + constant.USER + constant.ALL)    
+    .pipe(
+      map((_observable: any) => {
+        return _observable.data as UserInterface[];
+      }));
   }
 
   // path: /user
-  public updateUser(user: UserInterface): Observable<UsersAndMeta>{
-    return this.http.patch<UsersAndMeta>(constant.API_URL + constant.USER, user);
+  public updateUser(user: UserInterface): Observable<UserInterface>{
+    return this.http.patch<UserInterface>(constant.API_URL + constant.USER, user)
+    .pipe(
+      map((_observable: any) => {
+        return _observable.data as UserInterface;
+      }));
   }
+  
 
   // BROWSER LOCAL STORAGE
   public saveUserToLocalStorage(content: string) {

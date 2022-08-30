@@ -7,7 +7,7 @@ import {
 import { TaskService } from '../../services/task.service';
 import { UserService } from '../../services/user.service';
 import { GithubService } from '../../services/github.service';
-import { TaskAndMeta, TasksAndMeta, UsersAndMeta } from '../../types/types';
+import { TaskAndMeta, TasksAndMeta } from '../../types/types';
 import { Subscription, of } from 'rxjs';
 
 
@@ -79,22 +79,18 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
   }
 
   loadUsers(): void {
-    this.subscriptions.add(this.userService.getAllUsers().subscribe((_observer: UsersAndMeta) => {
-      if (_observer?.hasOwnProperty('data')) {
-        const data = _observer.data;
-        this.usersState = data.filter((loopUser: UserInterface) => {
-          return loopUser.firstName !== this.userState?.firstName;
-        });
-      } else {
-        this.usersState = null;
-      }
+    this.subscriptions.add(this.userService.getAllUsers().subscribe((_observer: UserInterface[]) => {
+      const data = _observer;
+      this.usersState = data.filter((loopUser: UserInterface) => {
+        return loopUser.firstName !== this.userState?.firstName;
+      });
     }));
   }
 
   loadUserGithub(): void  {
     console.log('user github loaded !');
     if(this.userState !== null) {
-      this.subscriptions.add(this.githubService.getGithubByUser(this.userState).subscribe((_observer: GithubInterface) => {
+      this.subscriptions.add(this.githubService.getGithubByUser(this.userState).subscribe((_observer: GithubInterface|null) => {
         this.githubState = _observer;
       }));
     }

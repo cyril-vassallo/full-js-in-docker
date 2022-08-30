@@ -2,8 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { UserInterface, GithubInterface } from '../../Interfaces/Interfaces';
 import { GithubService } from '../../services/github.service';
 import { FormGroup, FormControl } from '@angular/forms';
-import { catchError} from 'rxjs/operators';
-import { of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -56,8 +55,9 @@ export class GithubComponent implements OnInit {
 
   loadUserGithub(): void {
     if(this.user !== null ){
-      this.subscriptions.add(this.githubService.getGithubByUser(this.user).subscribe((_observer: GithubInterface) => {
+      this.subscriptions.add(this.githubService.getGithubByUser(this.user).subscribe((_observer: GithubInterface|null) => {
         this.githubState = _observer;
+        this.updateFormValues();
       }));
     }
   }
@@ -116,7 +116,7 @@ export class GithubComponent implements OnInit {
     }
   }
 
-  checkRepository(): any {
+  checkRepository(): void {
     if(this.githubState){
       this.githubState.owner = this.githubForm.controls.owner.value!;
       this.githubState.repository = this.githubForm.controls.repository.value!;
@@ -124,12 +124,9 @@ export class GithubComponent implements OnInit {
       this.githubState.token = this.githubForm.controls.token.value!;
       
       this.subscriptions.add(this.githubService.checkGithubRepository(this.githubState)
-        .pipe(
-          catchError(err => of({status : err.status}))
-        )
-        .subscribe( (_event: any) => {
+        .subscribe( (_observer: any) => {
           console.log('CHECK GIT');
-          _event.status === 404 || _event.status === 403  ? this.hasError = true : this.hasError = false
+          _observer.status === 404 || _observer.status === 403  ? this.hasError = true : this.hasError = false
           if(!this.hasError){
             this.updateRepository();
           }
@@ -147,12 +144,9 @@ export class GithubComponent implements OnInit {
       this.githubState.branch = this.githubForm.controls.branch.value!;
       this.githubState.token = this.githubForm.controls.token.value!;
 
-      this.subscriptions.add(this.githubService.postGithub(this.githubState)
-        .pipe(catchError(err => of({status : err.status})))
-        .subscribe( (_event: any) => {
+      this.subscriptions.add(this.githubService.postGithub(this.githubState).subscribe( (_observer: GithubInterface) => {
           console.log('UPDATE GIT')
-          console.log(_event)
-          _event.status === 404 || _event.status === 403  ? this.hasError = true : this.hasError = false
+          console.log(_observer)
       }));
     }
   }

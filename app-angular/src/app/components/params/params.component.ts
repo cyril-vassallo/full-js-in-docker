@@ -70,15 +70,13 @@ export class ParamsComponent implements OnInit, OnDestroy {
         photo: this.user?.photo!
       }
 
-      this.subscriptions = this.userService.updateUser(userInfoFromInput).subscribe((_observer: any) => {
-        if(_observer?.hasOwnProperty('data')){
-          this.user = _observer.data;
-          this.userService.saveUserToLocalStorage(JSON.stringify(_observer.data));
-          this.isUserUpdated = true;
-          setTimeout(() => {
-            this.isUserUpdated = false;
-          }, 2000)
-        }
+      this.subscriptions = this.userService.updateUser(userInfoFromInput).subscribe((_observer: UserInterface) => {
+        this.user = _observer;
+        this.userService.saveUserToLocalStorage(JSON.stringify(_observer));
+        this.isUserUpdated = true;
+        setTimeout(() => {
+          this.isUserUpdated = false;
+        }, 2000)
       })
   }
 

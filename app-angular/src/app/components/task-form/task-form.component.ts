@@ -49,7 +49,6 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   // ----- Component lifecycle methods ----- //
 
   ngOnInit(): void {
-    console.log(this.date)
     this.checkIfTodayTaskExist();
     this.isTodayTaskExist ? (this.hasTask = true) : (this.hasTask = false);
   }

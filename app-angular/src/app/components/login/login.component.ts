@@ -41,14 +41,10 @@ export class LoginComponent implements OnDestroy {
   // ----- Component methods----- //
 
   onSubmitLogin(loginForm: LoginFormInterface) {
-    this.subscriptions.add(this.userService.login(loginForm).subscribe((_observer: UserAndMeta) => {
-      if (_observer.data) {
-        this.isLoginFailed = false;
-        this.user = _observer.data;
-        this.handleLogin(this.user);
-      } else {
-        this.isLoginFailed = true;
-      }
+    this.subscriptions.add(this.userService.login(loginForm).subscribe((_observer: UserInterface) => {
+      this.isLoginFailed = false;
+      this.user = _observer;
+      this.handleLogin(this.user);
     }));
   }
 
