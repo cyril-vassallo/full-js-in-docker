@@ -7,7 +7,7 @@ import {
 import { TaskService } from '../../services/task.service';
 import { UserService } from '../../services/user.service';
 import { GithubService } from '../../services/github.service';
-import { TaskAndMeta, TasksAndMeta } from '../../types/types';
+import { TasksAndMeta } from '../../types/types';
 import { Subscription } from 'rxjs';
 
 
@@ -20,7 +20,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./my-history.component.scss'],
 })
 export class MyHistoryComponent implements OnInit, OnDestroy {
-  titleState: string = 'Login';
 
   isAuthState: boolean = false;
 
@@ -75,7 +74,6 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
 
   validAuthentication(): void {
     this.isAuthState = true;
-    this.titleState = 'My History';
   }
 
   loadUsers(): void {
@@ -97,7 +95,6 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
   }
 
   restStates(): void {
-    this.titleState = 'Login';
     this.isAuthState = false;
     this.isSigningUpState = false;
     this.userState = null;
@@ -196,7 +193,6 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
 
   showSignUp(isShown: boolean): void {
     this.isSigningUpState = isShown;
-    this.titleState = "Sign Up";
   }
 
 }

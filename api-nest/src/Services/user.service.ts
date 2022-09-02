@@ -111,6 +111,10 @@ export class UserService {
       user.description = userDto.description;
     }
 
+    if(userDto.hasOwnProperty('photo')) {
+      user.photo = userDto.photo;
+    }
+
     user.save();
 
     return {
