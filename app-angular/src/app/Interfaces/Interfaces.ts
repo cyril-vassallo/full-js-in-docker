@@ -14,9 +14,9 @@ export interface UserInterface {
     lastName: string;
     email?:string;
     password?:string;
-    job: string;
-    photo: string;
-    description: string;
+    job?: string;
+    photo?: string;
+    description?: string;
 
 }
 
@@ -24,6 +24,14 @@ export interface UserInterface {
 export interface LoginFormInterface {
     email: string;
     password: string;
+}
+
+export interface SignUpFormInterface {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    passwordConfirm: string;
 }
 
 export interface MetaInterface {
@@ -45,8 +53,8 @@ export interface TaskInterface {
 }
 
 export interface GithubInterface {
-    id: string;
-    user: string;
+    id?: string;
+    user?: string;
     owner: string;
     repository: string;
     branch: string;

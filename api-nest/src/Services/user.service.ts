@@ -91,23 +91,23 @@ export class UserService {
 
     let user: UserDocument = await this.userModel.findOne({_id: userDto.id}).exec();
 
-    if(userDto.firstName){
+    if(userDto.hasOwnProperty('firstName')){
       user.firstName = userDto.firstName;
     }
 
-    if(userDto.lastName) {
+    if(userDto.hasOwnProperty('lastName')) {
       user.lastName = userDto.lastName;
     }
 
-    if(userDto.email) {
+    if(userDto.hasOwnProperty('email')) {
       user.email = userDto.email;
     }
 
-    if(userDto.job) {
+    if(userDto.hasOwnProperty('job')) {
       user.job = userDto.job;
     }
 
-    if(userDto.description) {
+    if(userDto.hasOwnProperty('description')) {
       user.description = userDto.description;
     }
 

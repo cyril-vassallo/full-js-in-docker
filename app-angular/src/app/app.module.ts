@@ -22,6 +22,7 @@ import { GithubComponent } from './components/github/github.component';
 import { ParamsComponent } from './components/params/params.component';
 import { NavigationService } from './services/navigation.service';
 import { LoaderComponent } from './components/loader/loader.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
 
 
 
@@ -41,6 +42,7 @@ import { LoaderComponent } from './components/loader/loader.component';
     GithubComponent,
     ParamsComponent,
     LoaderComponent,
+    SignUpComponent,
   ],
   imports: [  
     BrowserModule,

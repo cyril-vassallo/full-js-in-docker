@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { constant } from '../../config/config';
-import { LoginFormInterface, UserInterface } from '../Interfaces/Interfaces';
-import { Observable } from 'rxjs';
-import { UsersAndMeta } from '../types/types';
+import { LoginFormInterface, UserInterface, ErrorInterface } from '../Interfaces/Interfaces';
+import { Observable, catchError, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 
@@ -13,12 +12,18 @@ export class UserService {
 
 
   // path: /user/login
-  public login(loginForm: LoginFormInterface): Observable<UserInterface> {
+  public login(loginForm: LoginFormInterface): Observable<UserInterface|ErrorInterface> {
     return this.http.post<UserInterface>(constant.API_URL + constant.USER + constant.LOGIN, loginForm)
     .pipe(
       map((_observable: any) => {
         return _observable.data as UserInterface;
-      }));
+      }),
+      catchError( (err: unknown) => {
+        const error: ErrorInterface = { status: 404, message: "E-Mail address or password is incorrect !"};
+        return of(error) as Observable<ErrorInterface>
+        }
+      )
+    );
   }
 
   // path: /user

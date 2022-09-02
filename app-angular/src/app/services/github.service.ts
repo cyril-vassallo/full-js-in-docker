@@ -12,7 +12,7 @@ export class GithubService {
 
 
   // path: /github
-  public postGithub(github: GithubInterface): Observable<GithubInterface> {
+  public createOne(github: GithubInterface): Observable<GithubInterface> {
     return this.http.post<GithubInterface>( constant.API_URL + constant.GITHUB, github)
     .pipe(
       map( (_observable: any) => {
@@ -21,14 +21,23 @@ export class GithubService {
     )
   }
 
+  // path: /github
+    public updateOne(github: GithubInterface): Observable<GithubInterface> {
+      return this.http.patch<GithubInterface>( constant.API_URL + constant.GITHUB, github)
+      .pipe(
+        map( (_observable: any) => {
+          return _observable.data as GithubInterface 
+        })
+      )
+    }
+
   // path: /github/user/{:userId}
   public getGithubByUser(user: UserInterface): Observable<GithubInterface|null> {
-    return this.http.get<GithubInterface|null>(constant.API_URL + constant.GITHUB + constant.USER + '/' + user.id).pipe(
-
+    return this.http.get<GithubInterface|null>(constant.API_URL + constant.GITHUB + constant.USER + '/' + user.id)
+    .pipe(
       map((_observable: any) => {
         return _observable.data as GithubInterface;
       }),
-      tap(item => console.log(item)),
       catchError((err: any) => {
         return of(null);
       })

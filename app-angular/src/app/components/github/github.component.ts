@@ -14,6 +14,7 @@ export class GithubComponent implements OnInit {
 
   @Input() user!: UserInterface|null;
   @Input() isFeatureActive: boolean = false;
+  isUserHasGithub : boolean = false;
   githubState: GithubInterface|null = null;
   enabled: boolean = false;
   hasError: boolean = true;
@@ -56,8 +57,15 @@ export class GithubComponent implements OnInit {
   loadUserGithub(): void {
     if(this.user !== null ){
       this.subscriptions.add(this.githubService.getGithubByUser(this.user).subscribe((_observer: GithubInterface|null) => {
-        this.githubState = _observer;
-        this.updateFormValues();
+        if(_observer !== null) {
+          this.githubState = _observer;
+          this.isUserHasGithub = true;
+          this.updateFormValues();
+          this.toggleDisableField(_observer.enabled);
+        }else {
+          this.isUserHasGithub = false;
+          this.toggleDisableField(false);
+        }
       }));
     }
   }
@@ -73,7 +81,12 @@ export class GithubComponent implements OnInit {
       })
     }
 
-    if(this.githubState?.enabled) {
+    const enabled = this.githubState?.enabled
+    if(enabled) this.toggleDisableField(enabled);
+  } 
+
+  toggleDisableField(enabled: boolean) {
+    if(enabled) {
       this.githubForm.controls.owner.enable();
       this.githubForm.controls.repository.enable();
       this.githubForm.controls.branch.enable();
@@ -84,8 +97,8 @@ export class GithubComponent implements OnInit {
       this.githubForm.controls.branch.disable();
       this.githubForm.controls.token.disable();
     }
-
-  } 
+  }
+  
 
   isGithubActive() {
     return this.githubForm.get('enabled')?.getRawValue()
@@ -95,61 +108,64 @@ export class GithubComponent implements OnInit {
     const enabled: boolean = !this.githubForm.controls.enabled.value;
 
     if(enabled) {
-      this.githubForm.controls.owner.enable();
-      this.githubForm.controls.repository.enable();
-      this.githubForm.controls.branch.enable();
-      this.githubForm.controls.token.enable();
-      this.githubForm.controls.enabled.setValue(true)
-    } else {
-      this.githubForm.controls.owner.disable();
-      this.githubForm.controls.repository.disable();
-      this.githubForm.controls.branch.disable();
-      this.githubForm.controls.token.disable();
-      this.githubForm.controls.enabled.setValue(false)
+      this.toggleDisableField(enabled);
+    }
 
-      if(this.githubState !== null && this.githubForm.controls.enabled.value === false ){
-        this.githubState.enabled = this.githubForm.controls.enabled.value;
-        this.updateRepository();
-        this.toggleMessageDisplay(false);
-      } 
+    if(this.githubState !== null && this.githubForm.controls.enabled.value === true ){
+      this.githubState.enabled = false
+      this.updateGithub(this.githubState);
+      this.toggleMessageDisplay(false);
+    } 
 
     }
-  }
+  
 
   checkRepository(): void {
-    if(this.githubState){
-      this.githubState.owner = this.githubForm.controls.owner.value!;
-      this.githubState.repository = this.githubForm.controls.repository.value!;
-      this.githubState.branch = this.githubForm.controls.branch.value!;
-      this.githubState.token = this.githubForm.controls.token.value!;
-      
-      this.subscriptions.add(this.githubService.checkGithubRepository(this.githubState)
-        .subscribe( (_observer: any) => {
-          console.log('CHECK GIT');
-          _observer.status === 404 || _observer.status === 403  ? this.hasError = true : this.hasError = false
-          if(!this.hasError){
-            this.updateRepository();
+    const github: GithubInterface = {
+      owner : this.githubForm.controls.owner.value!,
+      repository : this.githubForm.controls.repository.value!,
+      branch : this.githubForm.controls.branch.value!,
+      token : this.githubForm.controls.token.value!,
+      enabled:  this.githubForm.controls.enabled.value!
+    }
+
+    this.subscriptions.add(this.githubService.checkGithubRepository(github)
+      .subscribe( (_observer: any) => {
+        _observer.status === 404 || _observer.status === 403  ? this.hasError = true : this.hasError = false
+
+        const github: GithubInterface = {
+          user:  this.user?.id,
+          enabled: this.githubForm.controls.enabled.value!,
+          owner: this.githubForm.controls.owner.value!,
+          repository: this.githubForm.controls.repository.value!,
+          branch: this.githubForm.controls.branch.value!,
+          token: this.githubForm.controls.token.value!,
+        }
+
+        if(!this.hasError){
+          if(this.isUserHasGithub) {
+            this.updateGithub(github);
+          }else {
+            this.createGithub(github)
           }
-      }));
-    }
+    
+        }
+    }));
   }
 
-  updateRepository(): void {
-    if (this.githubState && this.user?.id) {
-      
-      this.githubState.user =  this.user?.id;
-      this.githubState.enabled = this.githubForm.controls.enabled.value!;
-      this.githubState.owner = this.githubForm.controls.owner.value!;
-      this.githubState.repository = this.githubForm.controls.repository.value!;
-      this.githubState.branch = this.githubForm.controls.branch.value!;
-      this.githubState.token = this.githubForm.controls.token.value!;
-
-      this.subscriptions.add(this.githubService.postGithub(this.githubState).subscribe( (_observer: GithubInterface) => {
-          console.log('UPDATE GIT')
-          console.log(_observer)
-      }));
-    }
+  updateGithub(github: GithubInterface): void {
+    this.subscriptions.add(this.githubService.updateOne(github).subscribe( (_observer: GithubInterface) => {
+      this.githubState = _observer
+    }));
   }
+
+  createGithub(github: GithubInterface): void {
+    this.subscriptions.add(this.githubService.createOne(github).subscribe( (_observer: GithubInterface) => {
+      this.githubState = _observer;
+      this.isUserHasGithub = true;
+    }));
+  }
+  
 
   toggleMessageDisplay(isDisplayed: boolean): void {
     isDisplayed ? this.isMessageDisplayed = true : this.isMessageDisplayed = false; 

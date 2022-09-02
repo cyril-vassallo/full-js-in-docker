@@ -12,7 +12,7 @@ export class TaskService {
 
 
   // path: /task
-  public postTask(task: TaskInterface): Observable<TaskAndMeta> {
+  public createTask(task: TaskInterface): Observable<TaskAndMeta> {
     return this.http.post<TaskAndMeta>(constant.API_URL + constant.TASK, task);
   }
 

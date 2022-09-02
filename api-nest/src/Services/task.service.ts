@@ -52,7 +52,7 @@ export class TaskService {
           }
         }),
       }
-    })
+    }).reverse();
   }
 
   async findAll(): Promise<TaskInterface[]>{
@@ -80,11 +80,11 @@ export class TaskService {
   async updateOne(taskDto: TaskDto): Promise<TaskInterface> {
     let taskToUpdate = await this.taskModel.findOne({_id: taskDto.id}).exec();
 
-    if(taskDto.list) {
+    if(taskDto.hasOwnProperty('list')) {
       taskToUpdate.list = taskDto.list;
     }
 
-    if(taskDto.commits) {
+    if(taskDto.hasOwnProperty('commits')) {
       taskToUpdate.commits = taskDto.commits.map(commit => {
         return {
           hash :commit.hash, 

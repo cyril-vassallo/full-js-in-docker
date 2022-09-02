@@ -20,11 +20,11 @@ export interface FeaturesInterface {
 }
 
 export interface TaskInterface {
-    id: string;
+    id?: string;
     user: User; 
     date: string,
-    list: string[],
-    commits: CommitInterface[]
+    list?: string[],
+    commits?: CommitInterface[]
 }
 
 export interface CommitInterface {

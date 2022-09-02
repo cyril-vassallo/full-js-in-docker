@@ -52,25 +52,26 @@ export class GithubService {
     }
 
     async updateOne(githubDto: GithubDto): Promise<GithubInterface> {
-        let githubToUpdate = await this.githubModel.findOne({_id: githubDto.id}).exec();
+        let githubToUpdate = await this.githubModel.findOne({user: githubDto.user}).exec();
 
-        if(githubDto.owner) {
+        if(githubDto.hasOwnProperty('owner')) {
           githubToUpdate.owner = githubDto.owner;
         }
     
-        if(githubDto.repository) {
+        if(githubDto.hasOwnProperty('repository')) {
             githubToUpdate.repository = githubDto.repository;
         }
 
-        if(githubDto.branch) {
+        if(githubDto.hasOwnProperty('branch')) {
             githubToUpdate.branch = githubDto.branch;
         }
     
-        if(githubDto.token) {
+        if(githubDto.hasOwnProperty('token')) {
             githubToUpdate.token = githubDto.token;
         }
     
-        if(githubDto.enabled) {
+        if(githubDto.hasOwnProperty('enabled')) {
+            console.log(githubDto.enabled)
             githubToUpdate.enabled = githubDto.enabled;
         }
     

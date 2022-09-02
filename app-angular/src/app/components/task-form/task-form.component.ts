@@ -6,7 +6,8 @@ import {
   CommitInterface,
   UserInterface,
 } from 'src/app/Interfaces/Interfaces';
-import { Subscription } from 'rxjs';
+import { TaskAndMeta } from 'src/app/types/types';
+import { find, Subscription } from 'rxjs';
 import { TaskService } from '../../services/task.service';
 
 
@@ -23,9 +24,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   @Input() tasks: TaskInterface[] | null = null;
   @Input() user: UserInterface | null = null;
   @Input() handleTasksState!: (
-    tasks: TaskInterface[] | null,
-    task: TaskInterface | null,
-    isTodayTaskExist: boolean
+    tasks: TaskInterface[] | null
   ) => void;
 
   task: TaskInterface | null = null;
@@ -49,7 +48,8 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   // ----- Component lifecycle methods ----- //
 
   ngOnInit(): void {
-    this.checkIfTodayTaskExist();
+    this.todayTaskExistChecking();
+    this.updateTask()
     this.isTodayTaskExist ? (this.hasTask = true) : (this.hasTask = false);
   }
 
@@ -60,58 +60,90 @@ export class TaskFormComponent implements OnInit, OnDestroy {
 // ----- Component methods ----- //
 
   onTaskFormSubmit(): void {
-    this.checkIfTodayTaskExist();
-
+    this.todayTaskExistChecking();
+    
     if (!this.isTodayTaskExist) {
       this.initializeNewTask();
     } 
 
     this.updateTaskList();
-
-    if (this.tasks !== null && this.task !== null && !this.isTodayTaskExist) {
-      this.tasks.unshift(this.task);
-      this.hasTask = true;
-    } else if (!this.tasks && this.task !== null) {
-      this.tasks = [this.task];
-    }
-
-    this.handleTasksState(this.tasks, this.task, this.isTodayTaskExist);
-
-    this.resetInputsState();
+    this.updateTask();
   }
 
   onCommitFormSubmit(): void {
-    this.isValidCommit = this.checkIfCommitInputsAreValid();
+    this.checkIfCommitInputsAreValid();
     if (this.isValidCommit) {
-      const commit: CommitInterface = {
-        url: this.commitForm.value.commitUrlInput,
-        hash: this.commitForm.value.commitHashInput,
-      };
-      this.task?.commits?.push(commit);
-      this.handleTasksState(this.tasks, this.task, this.isTodayTaskExist);
+      this.updateCommitsList()
+      this.updateTask();
     } else {
       this.isValidCommit = false;
     }
     this.resetInputsState();
   }
 
-  checkIfTodayTaskExist(): void {
+  todayTaskExistChecking(): void {
     if (this.tasks) {
       const todayTasks: TaskInterface[] = this.tasks.filter((task) => {
         return task.date == this.date;
       });
 
       if (todayTasks.length > 0) {
-        console.log('TASK EXIST');
         this.task = todayTasks[0];
         this.isTodayTaskExist = true;
       }else {
-        console.log('TASK DO NOT EXIST');
         this.isTodayTaskExist = false;
       }
+    } else {
+      this.isTodayTaskExist = false;
     }
-  
   }
+
+  updateTask () :void {
+    switch (this.isTodayTaskExist) {
+      case true:
+        if (this.task !== null) {
+          this.subscriptions.add(this.taskService.updateTask(this.task).subscribe((_observer: TaskAndMeta) => {
+            this.task = _observer.data;
+            this.updateTasksState();
+          }));
+        } 
+        break;
+      case false:
+        if (this.task !== null) {
+          this.subscriptions.add(this.taskService.createTask(this.task).subscribe((_observer: TaskAndMeta) => {
+            this.task = _observer.data;
+            this.updateTasksState();
+          }));
+        }
+        break;
+    }
+  }
+
+  updateTasksState(): void {
+
+    if(this.tasks) {
+      this.tasks = this.tasks.map(task => {
+        if(task.id && task.id === this.task?.id) {
+          return this.task;
+        }else {
+          return task;
+        }
+      });
+    }else if(!this.tasks && this.task) {
+      this.tasks = [this.task];
+    }
+    else{
+      this.tasks = null;
+    }
+
+    if(this.tasks) {
+      this.handleTasksState(this.tasks);
+      this.resetInputsState();
+      this.hasTask = true;
+    }
+  }
+
+
 
   updateTaskList(): void {
     if (
@@ -120,6 +152,15 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     ) {
       this.task.list.push(this.taskForm.value.taskInput);
     }
+  }
+
+  updateCommitsList(): void {
+    const commit: CommitInterface = {
+      url: this.commitForm.value.commitUrlInput,
+      hash: this.commitForm.value.commitHashInput,
+    };
+    
+    this.task?.commits?.push(commit);
   }
 
   initializeNewTask(): void {
@@ -138,8 +179,8 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     this.commitForm.reset();
   }
 
-  checkIfCommitInputsAreValid(): boolean {
-    return (
+  checkIfCommitInputsAreValid(): void {
+    this.isValidCommit =  (
       this.commitForm.value.commitHashInput !== null &&
       this.commitForm.value.commitHashInput !== undefined &&
       this.commitForm.value.commitHashInput !== '' &&
@@ -153,7 +194,6 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     //Mouve to initializeNewTask
     this.subscriptions.add(this.taskService.getLastCreatedTaskId().subscribe(( _observer => {
        this.lastCreatedTaskId  = _observer.data;
-       console.log(this.lastCreatedTaskId)
     })));
   }
 

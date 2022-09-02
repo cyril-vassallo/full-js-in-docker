@@ -8,7 +8,8 @@ import { TaskService } from '../../services/task.service';
 import { UserService } from '../../services/user.service';
 import { GithubService } from '../../services/github.service';
 import { TaskAndMeta, TasksAndMeta } from '../../types/types';
-import { Subscription, of } from 'rxjs';
+import { Subscription } from 'rxjs';
+
 
 
 
@@ -22,6 +23,8 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
   titleState: string = 'Login';
 
   isAuthState: boolean = false;
+
+  isSigningUpState: boolean = false;
 
   userState: UserInterface | null = null;
 
@@ -50,17 +53,16 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
     this.toggleFormState = this.toggleFormState.bind(this);
     this.loadUserTasks = this.loadUserTasks.bind(this);
     this.syncGitTasks = this.syncGitTasks.bind(this)
+    this.showSignUp = this.showSignUp.bind(this);
   }
 
   // ----- Component lifecycle methods ----- //
 
   ngOnInit() {
-    const user: string | null = localStorage.getItem('user');
-    if (user) {
-      this.userState = JSON.parse(user);
-      this.loadUser();
-      this.loadUsers();
-      this.loadUserGithub();
+    const serializedUser: string | null = localStorage.getItem('user')
+    if (serializedUser) {
+      const user: UserInterface = JSON.parse(serializedUser);
+      this.initHistoryFeatureStates(user)
     }
   }
 
@@ -71,24 +73,22 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
 
 // ----- Component methods ----- //
 
-  loadUser(): void {
+  validAuthentication(): void {
     this.isAuthState = true;
     this.titleState = 'My History';
-    this.updateUserState();
-    this.loadUserTasks();
   }
 
   loadUsers(): void {
     this.subscriptions.add(this.userService.getAllUsers().subscribe((_observer: UserInterface[]) => {
       const data = _observer;
-      this.usersState = data.filter((loopUser: UserInterface) => {
-        return loopUser.firstName !== this.userState?.firstName;
+      this.usersState = data.filter((user: UserInterface) => {
+        return user.firstName !== this.userState?.firstName;
       });
     }));
   }
 
   loadUserGithub(): void  {
-    console.log('user github loaded !');
+
     if(this.userState !== null) {
       this.subscriptions.add(this.githubService.getGithubByUser(this.userState).subscribe((_observer: GithubInterface|null) => {
         this.githubState = _observer;
@@ -96,12 +96,17 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
     }
   }
 
-  initStates(): void {
+  restStates(): void {
     this.titleState = 'Login';
     this.isAuthState = false;
+    this.isSigningUpState = false;
     this.userState = null;
+    this.usersState = null;
+    this.teamPartnerState = null;
     this.tasksState = null;
     this.githubState =  null;
+    this.formDisplayState = false;
+
     localStorage.removeItem('user');
   }
 
@@ -118,7 +123,6 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
   }
 
   onClickNavItem(event?: MouseEvent): void {
-    console.log('Clicked nav item! ');
     //TODO: check user.role 
   }
 
@@ -130,67 +134,51 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
 
   login(user: UserInterface | null): void {
     if (user != null) {
-      this.loadUser();
-      this.loadUsers();
+      this.initHistoryFeatureStates(user)
       this.userService.saveUserToLocalStorage(JSON.stringify(user));
     } else {
-      this.initStates();
+      this.restStates();
     }
   }
 
   logout(): void {
-    this.initStates();
+    this.restStates();
   }
 
-  updateUserState() {
-    if (this.userState !== null) {
-      this.userState = this.userState;
+  initHistoryFeatureStates(user: UserInterface): void {
+    this.updateUserState(user);
+    this.validAuthentication();
+    this.loadUsers();
+    this.loadUserTasks(user);
+    this.loadUserGithub();
+  }
+
+  updateUserState(user: UserInterface) {
+    if (user !== null) {
+      this.userState = user;
     } else {
       this.userState = null;
     }
   }
 
-  updateTasksState(
-    tasks: TaskInterface[]|null,
-    task: TaskInterface|null,
-    isTodayTaskExist: boolean
-  ) {
-    switch (isTodayTaskExist) {
-      case true:
-        if (task !== null) {
-          this.subscriptions.add(this.taskService.updateTask(task).subscribe((_observer: TaskAndMeta) => {
-            task.id = _observer.data.id;
-            this.tasksState = tasks;
-          }));
-        } 
-        break
-      case false:
-        if (task !== null) {
-          this.subscriptions.add(this.taskService.postTask(task).subscribe((_observer: TaskAndMeta) => {
-            task.id = _observer.data.id;
-            console.log(task)
-            this.tasksState = tasks;
-            console.log(this.tasksState);
-          }));
-        }
-        break
-    }
+  updateTasksState(tasks: TaskInterface[]|null) {
+    this.tasksState = tasks;
   }
 
   toggleFormState(): void {
     this.formDisplayState = !this.formDisplayState;
   }
 
-  loadUserTasks() {
-    if (this.userState !== null && this.isAuthState) {
-      if (this.userState != this.userState) {
+  loadUserTasks(user : UserInterface | null) {
+    if (this.userState !== null && this.isAuthState && user) {
+      if (this.userState !== user) {
         this.formDisplayState = false;
         this.teamPartnerState = { ...this.userState };
       } else {
         this.teamPartnerState = null;
       }
 
-      this.subscriptions.add(this.taskService.getTasksByUser(this.userState).subscribe((_observer: TasksAndMeta) => {
+      this.subscriptions.add(this.taskService.getTasksByUser(user).subscribe((_observer: TasksAndMeta) => {
         if (_observer.data && _observer.data.length > 0) {
           this.tasksState = _observer.data;
         } else {
@@ -204,6 +192,11 @@ export class MyHistoryComponent implements OnInit, OnDestroy {
     console.log('sync...');
     console.log(this.githubState);
     //TODO: parse all commits and message from github api and update tasksSate
+  }
+
+  showSignUp(isShown: boolean): void {
+    this.isSigningUpState = isShown;
+    this.titleState = "Sign Up";
   }
 
 }

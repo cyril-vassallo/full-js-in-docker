@@ -13,6 +13,8 @@ import { TaskAndMeta } from '../../types/types';
 })
 export class ParamsComponent implements OnInit, OnDestroy {
 
+  readonly DELAY_FOR_LOADER = 1000; // ms
+
   constructor(private userService: UserService, private taskService: TaskService) { }
 
 
@@ -49,7 +51,7 @@ export class ParamsComponent implements OnInit, OnDestroy {
   // ----- Component methods----- //
 
   bindCurrentUserWithForm(): void {
-    if(this.user?.email) {
+    if(this.user?.email && this.user?.job && this.user?.description ) {
       this.userForm.controls.firstName.setValue(this.user?.firstName);
       this.userForm.controls.lastName.setValue(this.user?.lastName)
       this.userForm.controls.email.setValue(this.user?.email);
@@ -76,49 +78,43 @@ export class ParamsComponent implements OnInit, OnDestroy {
         this.isUserUpdated = true;
         setTimeout(() => {
           this.isUserUpdated = false;
-        }, 2000)
+        }, this.DELAY_FOR_LOADER)
       })
   }
 
   onClearTodayTasksClick(): void {
-    console.log("Clearing today Tasks....");
     if(this.user){
       this.subscriptions.add(this.taskService.deleteTodayTask(this.user).subscribe((_observer: TaskAndMeta) => {
         if(_observer?.hasOwnProperty('data')){
-          console.log(_observer.data);
           this.isTodayTaskClearing = true;
           setTimeout(() => {
             this.isTodayTaskClearing = false;
-          }, 2000)
+          }, this.DELAY_FOR_LOADER)
         }
       }));
     }
   }
 
   onClearHistoryClick(): void {
-    console.log("Clearing history....");
     if(this.user){
       this.subscriptions.add(this.taskService.deleteTasksByUser(this.user).subscribe((_observer: TaskAndMeta) => {
         if(_observer?.hasOwnProperty('data')){
-          console.log(_observer.data);
           this.isHistoryClearing = true;
           setTimeout(() => {
             this.isHistoryClearing = false;
-          }, 2000)
+          }, this.DELAY_FOR_LOADER)
         }
       }));
     }
   }
 
   onClearAllAppTasksClick(): void {
-    console.log("Clearing all app Tasks....");
     this.subscriptions.add(this.taskService.deleteAllAppTask().subscribe((_observer: TaskAndMeta) => {
       if(_observer?.hasOwnProperty('data')){
-        console.log(_observer.data);
         this.isAllAppTasksClearing = true;
         setTimeout(() => {
           this.isAllAppTasksClearing = false;
-        }, 2000)
+        }, this.DELAY_FOR_LOADER)
       }
     }));
   }
