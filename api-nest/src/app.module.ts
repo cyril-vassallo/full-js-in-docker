@@ -15,6 +15,7 @@ import { NavigationController } from './Controllers/navigation.controller';
 import { User, UserSchema } from './Schemas/user.schema';
 import { Task, TaskSchema } from './Schemas/task.schema';
 import { Github, GithubSchema } from './Schemas/github.schema';
+import { constants } from './Config/conf';
 
 
 @Module({
@@ -23,7 +24,7 @@ import { Github, GithubSchema } from './Schemas/github.schema';
       isGlobal: true,
       
     }),
-    MongooseModule.forRoot('mongodb://mongo-db:27017/taskiteam'),
+    MongooseModule.forRoot(constants.MONGO_DB),
     MongooseModule.forFeature([
       {name: User.name, schema: UserSchema},
       {name: Task.name, schema: TaskSchema},

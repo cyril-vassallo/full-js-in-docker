@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { constants } from './Config/conf';
 
-const ENV: string = process.env.ENV.toLowerCase();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  if (ENV === 'dev') app.enableCors();
+  if (constants.ENV === 'dev') app.enableCors();
   await app.listen(8080);
 }
 bootstrap();

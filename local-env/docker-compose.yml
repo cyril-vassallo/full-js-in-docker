@@ -12,7 +12,7 @@ services:
       - ${EXPOSE_PORT_MONGO:-27017}:${EXPOSE_PORT_MONGO:-27017}
     volumes:
       - "~/mongodb:/data/db"
-      - "./mongo-db:/usr/www/mongo-db"
+      - "../mongo-db:/usr/www/mongo-db"
     networks:
       - app-fullstack
 
@@ -22,10 +22,11 @@ services:
     working_dir: /usr/www/api
     env_file:
       - .env
+      - ../api-nest/.env
     ports:
       - ${EXPOSE_PORT_NEST:-8080}:${EXPOSE_PORT_NEST:-8080}
     volumes:
-      - "./api-nest:/usr/www/api"
+      - "../api-nest:/usr/www/api"
     command: "/bin/sh install.sh"
     networks:
       - app-fullstack
@@ -39,10 +40,11 @@ services:
     working_dir: /usr/www/app
     env_file:
       - .env
+      - ../app-angular/.env
     ports:
       - ${EXPOSE_PORT_ANGULAR:-4200}:${EXPOSE_PORT_ANGULAR:-4200}
     volumes:
-      - "./app-angular:/usr/www/app/"
+      - "../app-angular:/usr/www/app/"
     command: "/bin/sh  install.sh"
     networks:
       - app-fullstack

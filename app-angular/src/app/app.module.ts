@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { AgGridModule } from 'ag-grid-angular';
 
 import { AppComponent } from './app.component';
 import { MyHistoryComponent } from './pages/my-history/my-history.component';
@@ -50,6 +51,7 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    AgGridModule
   ],
   providers: [UserService, TaskService, GithubService, NavigationService],
   bootstrap: [AppComponent],
